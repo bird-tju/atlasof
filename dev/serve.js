@@ -1,5 +1,5 @@
-const http = require('http');
 const fs = require('fs');
+const http = require('http');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..', 'dist');
@@ -23,10 +23,15 @@ http.createServer((req, res) => {
   if (!fs.existsSync(file) && fs.existsSync(file + '/index.html')) file = file + '/index.html';
   if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
     const fallback = path.join(ROOT, '404.html');
-    res.writeHead(404, { 'content-type': 'text/html; charset=utf-8' });
+    res.writeHead(404, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
     return res.end(fs.existsSync(fallback) ? fs.readFileSync(fallback) : 'not found');
   }
-  res.writeHead(200, { 'content-type': TYPES[path.extname(file)] || 'application/octet-stream' });
+  const ext = path.extname(file);
+  const headers = { 'content-type': TYPES[ext] || 'application/octet-stream' };
+  // HTML must never be reused from cache in development: a stale page would keep
+  // pointing at the previous asset URLs even after a rebuild.
+  headers['cache-control'] = ext === '.html' ? 'no-store, must-revalidate' : 'no-cache';
+  res.writeHead(200, headers);
   fs.createReadStream(file).pipe(res);
 }).listen(PORT, '127.0.0.1', () => {
   console.log('serving http://127.0.0.1:' + PORT + '/');
