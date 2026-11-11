@@ -1,0 +1,7 @@
+node_modules/
+.npm-cache/
+.chrome-profile/
+package-lock.json
+shots/
+*.log
+dist/

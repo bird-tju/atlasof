@@ -1,0 +1,22 @@
+{
+  "name": "cs-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A static, zero-dependency atlas of computer science, plus a from-scratch hardware course.",
+  "type": "commonjs",
+  "scripts": {
+    "check": "node dev/check.js",
+    "hdl": "node dev/hdl-check.js",
+    "smoke": "node dev/smoke.js",
+    "verify": "node dev/verify-progress.js",
+    "shots": "node dev/shoot.js",
+    "build": "node dev/build.js",
+    "serve": "node dev/serve.js",
+    "test": "node dev/check.js && node dev/hdl-check.js",
+    "preview": "node dev/serve.js 4321"
+  },
+  "devDependencies": {
+    "jsdom": "^31.0.0"
+  },
+  "license": "MIT"
+}
