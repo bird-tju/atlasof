@@ -11,6 +11,21 @@ const DIST = path.join(ROOT, 'dist');
 const BASE = '/cs';
 const SITE = 'https://example.com';        // placeholder: replace once a domain exists
 const LANGS = ['en'];   // English only: /cs/… (Chinese, if it returns, goes under /cs/zh/…)
+
+// Content hash of css/js, appended as ?v= so a stale browser cache cannot survive a rebuild
+const crypto = require('crypto');
+function assetVersion() {
+  const parts = [];
+  (function walk(dir) {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (/\.(css|js)$/.test(e.name)) parts.push(fs.readFileSync(full, 'utf8'));
+    }
+  })(path.join(ROOT, 'assets'));
+  return crypto.createHash('sha1').update(parts.join('\n')).digest('hex').slice(0, 10);
+}
+const ASSET_V = assetVersion();
 const ROUTES = [
   '', 'map', 'timeline', 'domains', 'paths', 'progress', 'giants', 'about',
   'intro', 'p1', 'p2', 'alu', 'clock', 'ram', 'machine', 'ml', 'asm', 'cpu',
@@ -95,6 +110,10 @@ function rewrite(html, lang, route) {
   html = html.replace(/href="#\/([^"#]*)(#[^"]*)?"/g, function (m, p, hash) {
     const target = BASE + '/' + (p ? p + '/' : '') + (hash || '');
     return 'href="' + target + '"';
+  });
+  // Cache busting: version every local css/js reference
+  html = html.replace(/(href|src)="(\/cs\/assets\/[^"]*\.(?:css|js))"/g, function (m, attr, url) {
+    return attr + '="' + url + '?v=' + ASSET_V + '"';
   });
   // lang attribute
   html = html.replace(/<html lang="[^"]*"/, '<html lang="' + (lang === 'zh' ? 'zh-CN' : 'en') + '"');
