@@ -73,7 +73,14 @@ CS.addTopics([
     year: 1962,
     tags: ['Paging', 'Isolation', 'Address space'],
     summary: 'Every process believes it owns a whole memory; page tables and page faults hide the fragmentation of physical RAM.',
-    body: ['In 1962 the Manchester Atlas implemented demand paging for the first time: the addresses a program uses are translated by hardware, and only pages actually touched are brought into memory. By the late 1960s virtual memory was standard on mainframes; in the 1980s it reached personal computers.', 'Virtual memory gives three things: isolation (processes cannot see each other’s memory), abstraction (an address space larger than physical RAM) and sharing (several processes mapping the same library). The price is page-table walks and TLB misses. Today containers and virtual machines stack further isolation layers on top of it.'],
+    body: [
+      'Every process on a modern machine behaves as if it owns a clean, contiguous block of memory starting at address zero. No two processes can see each other, none of them knows how much physical RAM exists, and a program can allocate more than the machine actually has. None of that is true at the hardware level: physical memory is shared, fragmented and finite. Virtual memory is the layer of indirection that makes the comfortable story work.',
+      'The mechanism is a translation performed on every memory access. The address a program uses is virtual; the memory management unit splits it into a page number and an offset, looks the page number up in a page table, and produces a physical frame. The page table is itself a tree — usually four levels on x86-64 — so a single lookup can cost several memory reads. That is why CPUs keep a translation cache, the TLB, holding the most recent mappings; a TLB hit costs nothing, a miss costs a walk.',
+      'A page fault is the interesting case. If the table entry says the page is not present, the hardware traps and the kernel decides what to do: read the page from disk, copy it from another process, allocate a fresh zero-filled page, or refuse and deliver a segmentation fault. Demand paging means a program\'s pages are only loaded when touched, which is why a large executable starts instantly — most of it is never read.',
+      'Three properties come out of this, and they are worth separating because they are often conflated. Isolation: a process cannot address another\'s memory, because its page table simply has no entry for it. Abstraction: the address space can exceed physical RAM, with cold pages parked on disk. Sharing: several processes can map the same physical frame, so a shared library occupies one copy of memory rather than one per process.',
+      'Copy-on-write is the trick that makes both fork and shared libraries cheap. When a process forks, the kernel copies neither the data nor the pages — it copies the page table and marks every page read-only in both. The first write to any page traps, the kernel copies that one page, and both processes continue with private copies from then on. A fork that is immediately followed by exec, the common case in Unix, never copies anything at all.',
+      'The costs are the reason this layer is where performance arguments happen. Every TLB miss is a tree walk, and a program that touches memory randomly across a large working set misses constantly; that is what huge pages exist to mitigate, by covering more address space per TLB entry. Page faults are enormously more expensive than TLB misses, so the working set — the pages a program actually touches in a time window — is the quantity that decides whether a machine feels fast or is thrashing.'
+    ],
     milestones: [
       [1962, 'Atlas demand paging', 'The first implementation of virtual memory.', 1],
       [1969, 'Unix virtual memory', 'fork and copy-on-write.'],
@@ -83,7 +90,12 @@ CS.addTopics([
     concepts: [['Page table', 'A structure mapping virtual page numbers to physical frames.'], ['Page fault', 'Raised when a page is not in memory; the OS brings it in.'], ['Copy-on-write', 'After fork parent and child share pages; a write triggers the copy.']],
     people: [['Tom Kilburn', '1921 – 2001', 'Virtual memory and the Atlas operating system.'], ['Maurice Wilkes', '1913 – 2010', 'Led the Atlas computer project.']],
     related: ['processes-threads', 'memory-hierarchy', 'virtualization'],
-    reading: [['Operating System Concepts', 'Silberschatz et al.', '1982'], ['Computer Systems: A Programmer’s Perspective', 'Bryant & O’Hallaron', '2003']],
+    reading: [
+      ['Virtual Memory', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Virtual_memory', 'wiki'],
+      ['Operating Systems: Three Easy Pieces (Memory chapter)', 'Remzi & Andrea Arpaci-Dusseau', '2015', 'https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf', 'book'],
+      ['Intel 64 and IA-32 Architectures Software Developer\'s Manual, Vol. 3A', 'Intel', '2024', 'https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html', 'article'],
+      ['Operating System Concepts', 'Silberschatz et al.', '1983', '', 'book']
+    ],
     practice: 'Write a page-fault simulator: trace an access pattern, count faults for LRU and FIFO, and compare'
   },
 
