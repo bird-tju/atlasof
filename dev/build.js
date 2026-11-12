@@ -10,7 +10,7 @@ const { privacyPage } = require('./privacy');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
-const CONTACT = '';   // e.g. 'hello@atlasof.dev', used on the privacy page
+const CONTACT = process.env.CONTACT_EMAIL || '';
 const SITE = 'https://atlasof.dev';        // the deployed origin
 const ADSENSE_CLIENT = 'ca-pub-1177594928684175';
 const ADSENSE_SCRIPT = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>';
