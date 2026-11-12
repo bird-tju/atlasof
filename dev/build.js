@@ -21,7 +21,7 @@ const ATLASES = [
     tagline: 'A map of computer science',
     card: 'Computer science in 13 domains, 75 topics, 326 milestones — plus a from-scratch hardware course.',
     routes: [
-      '', 'map', 'timeline', 'domains', 'paths', 'progress', 'giants', 'about',
+      '', 'map', 'timeline', 'domains', 'paths', 'progress', 'giants', 'about', 'random',
       'courses/nand2tetris',
       'courses/nand2tetris/intro', 'courses/nand2tetris/gates', 'courses/nand2tetris/adders',
       'courses/nand2tetris/alu', 'courses/nand2tetris/sequential', 'courses/nand2tetris/ram',
@@ -79,6 +79,7 @@ async function load(entry, route) {
     virtualConsole: vc,
     beforeParse(win) {
       win.__ATLAS__ = { route: route, lang: 'en', base: entry.base };
+      win.__BUILDING__ = true;   // keeps /random from navigating away while prerendering
       win.matchMedia = () => ({ matches: false, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
       win.scrollTo = () => {};
       win.IntersectionObserver = function () { return { observe() {}, unobserve() {}, disconnect() {}, takeRecords() { return []; } }; };

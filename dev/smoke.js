@@ -380,7 +380,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
         if (!main) { noMain.push(rel); continue; }
         const text = main[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
         // Placeholder atlases are allowed to be short; real content is not.
-        if (atlas === 'cs' && text.length < 400) thin.push(rel + ' (' + text.length + ')');
+        // The random door is a redirect stub, not an article.
+        const isRedirect = /\/random\/$/.test(rel);
+        if (atlas === 'cs' && !isRedirect && text.length < 400) thin.push(rel + ' (' + text.length + ')');
         if (/\bundefined\b/.test(text)) undefinedPages.push(rel);
         if (/\.(?:css|js)"/.test(html)) unversioned.push(rel);
       }

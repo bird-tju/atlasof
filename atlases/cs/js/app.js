@@ -914,6 +914,15 @@
   }
 
 
+  function viewRandom() {
+    return '<section class="page-head"><div class="wrap">' +
+      '<p class="eyebrow">A random door</p>' +
+      '<h1>Picking a topic…</h1>' +
+      '<p class="page-head-lead">One of the 75 topics, chosen at random. If nothing happens, ' +
+      '<a href="#/">go back to the atlas</a>.</p>' +
+      '</div></section>';
+  }
+
   function viewAbout() {
     return '<section class="page-head">' +
       '<div class="wrap">' +
@@ -1479,10 +1488,12 @@
       route = '';
       title = 'About · CS Atlas';
     } else if (seg[0] === 'random') {
-      var pool = TOPICS;
-      var pick = pool[Math.floor(Math.random() * pool.length)];
-      if (pick) { location.replace('#/topic/' + pick.id); return; }
-      html = viewNotFound();
+      // A real page at /cs/random/ so the link works when prerendered. The redirect
+      // happens after mount, once the topic list exists: during the build we render
+      // the placeholder and let the page redirect itself in the visitor's browser.
+      html = viewRandom();
+      route = 'random';
+      title = 'A random topic · CS Atlas';
     } else {
       html = viewNotFound();
     }
@@ -1583,6 +1594,17 @@
     if (state.route === 'progress') initProgress();
     
     if (state.route === 'hardware') mountLogic();
+    if (state.route === 'random' && !window.__BUILDING__) {
+      var pool = TOPICS;
+      var pick = pool[Math.floor(Math.random() * pool.length)];
+      if (pick) {
+        var base = (window.__ATLAS__ && window.__ATLAS__.base) || '';
+        var target = location.protocol === 'file:'
+          ? '#/topic/' + pick.id
+          : base + '/topic/' + pick.id + '/';
+        location.replace(target);
+      }
+    }
     if (state.route === 'giants') CS.GiantsUI.mount();
     if (document.querySelector('[data-status-topic]')) initTopicStatus();
     observeReveal();
