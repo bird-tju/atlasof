@@ -206,7 +206,7 @@ CS.ClockUI = (function () {
       '' + 'But a CPU must keep a result in a register for the next instruction. What this layer adds is <b>when</b> to update.' + '</p>' +
       '</div></section>' +
 
-      CS.lineNav('clock', 'wrap') +
+      CS.lineNav('sequential', 'wrap') +
 
       '<section class="clock-section"><div class="wrap">' +
 

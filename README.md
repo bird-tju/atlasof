@@ -26,10 +26,25 @@ The site is deliberately boring to run: HTML, CSS and plain JavaScript, no build
 | `/cs/progress/` | Your progress: mastery levels, coverage, review queue, blind spots, next steps |
 | `/cs/giants/` | Open courses: the courses this site is studied alongside |
 | `/cs/about/` | Why it exists, how to use it, editorial rules, licence |
-| `/cs/intro/` | Hardware course prologue: why a machine can be universal |
-| `/cs/p1/` · `/cs/p2/` · `/cs/alu/` · `/cs/clock/` · `/cs/ram/` | Gates → adders → ALU → sequential logic → RAM |
-| `/cs/machine/` · `/cs/ml/` · `/cs/asm/` · `/cs/cpu/` · `/cs/computer/` | Machine spec → machine language → assembler → CPU → the whole computer |
-| `/cs/screen/` · `/cs/input/` · `/cs/logic/` | Screen, keyboard, and the gate reference appendix |
+| `/cs/hardware/` | The hardware course index: fifteen steps from NAND to a computer |
+| `/cs/hardware/intro/` | Why a machine can be universal: the stored program |
+| `/cs/hardware/gates/` | Basic gates from NAND, multiplexers, one bit and sixteen |
+| `/cs/hardware/adders/` | Half adder → full adder → Add16 → Inc16 → ALU |
+| `/cs/hardware/alu/` | The ALU: six control bits, two flags |
+| `/cs/hardware/sequential/` | The clock, the DFF, registers and the PC |
+| `/cs/hardware/ram/` | RAM: from one register to 16K words |
+| `/cs/hardware/machine/` | The Hack specification: memory map, registers |
+| `/cs/hardware/machine-language/` | A and C instructions, sixteen bits at a time |
+| `/cs/hardware/assembler/` | Symbols, labels and the two-pass assembler |
+| `/cs/hardware/cpu/` | Fetch, decode, execute |
+| `/cs/hardware/computer/` | The whole machine, assembled |
+| `/cs/hardware/screen/` | Memory-mapped output |
+| `/cs/hardware/keyboard/` | Memory-mapped input |
+| `/cs/hardware/gate-reference/` | Appendix: six gates, expression / truth table / symbol |
+| `/cs/hardware/layers/` | Appendix: the same NAND at four levels |
+
+Old flat paths (`/cs/p1/`, `/cs/ml/`, …) still resolve: the build writes a small
+redirect page for each, so bookmarks keep working.
 
 ## Repository layout
 

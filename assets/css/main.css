@@ -2509,3 +2509,31 @@ main.view-in { animation: viewIn 0.4s ease both; }
 }
 .lang-banner button:hover { color: var(--text); }
 .lang-banner .lang-yes { border-color: var(--accent); color: var(--accent); }
+
+
+/* ---------- Hardware course index ---------- */
+.hw-grid { display: grid; gap: 10px; margin-top: 8px; }
+.hw-card {
+  display: grid;
+  grid-template-columns: 46px 1fr 20px;
+  align-items: start;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .18s var(--ease), background .18s var(--ease), transform .18s var(--ease);
+}
+.hw-card:hover { border-color: var(--line-2); background: var(--panel-2); transform: translateX(2px); }
+.hw-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--accent); padding-top: 4px; }
+.hw-body { display: block; min-width: 0; }
+.hw-body strong { display: block; font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; }
+.hw-body em { display: block; margin-top: 3px; font-style: normal; font-size: 13.5px; line-height: 1.65; color: var(--text-2); }
+.hw-go { color: var(--text-3); padding-top: 2px; transition: color .18s var(--ease); }
+.hw-card:hover .hw-go { color: var(--accent); }
+@media (max-width: 620px) {
+  .hw-card { grid-template-columns: 30px 1fr; }
+  .hw-go { display: none; }
+}

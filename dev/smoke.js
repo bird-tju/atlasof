@@ -362,6 +362,13 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       const rel = '/' + path.relative(distRoot, path.dirname(file)).replace(/\\/g, '/') + '/';
       // Measure the page body only: the shared header and footer would keep an
       // emptied page above any whole-document threshold.
+      // Redirect stubs are intentionally tiny; they only need a working target.
+      const redirect = html.match(/http-equiv="refresh" content="0; url=([^"]+)"/);
+      if (redirect) {
+        const target = path.join(ROOT, 'dist', redirect[1], 'index.html');
+        if (!fs.existsSync(target)) throw new Error('broken redirect: ' + rel + ' -> ' + redirect[1]);
+        continue;
+      }
       const main = html.match(/<main[\s\S]*?<\/main>/);
       const text = (main ? main[0] : '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
       if (text.length < 400) thin.push(rel + ' (' + text.length + ')');

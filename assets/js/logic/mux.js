@@ -157,7 +157,7 @@ CS.MuxUI = (function () {
       '<h1>' + 'Merge several lines into one, or split one' + '</h1>' +
       '<p class="page-head-lead">' + 'MUX is a selector: pick one of several inputs and connect it to the output. DMUX is the opposite: send one input to a chosen output.' + '</p>' +
       '</div></section>' +
-      CS.lineNav('mux', 'wrap-wide') +
+      CS.lineNav('gates', 'wrap-wide') +
       '<section class="mux-section"><div class="wrap-wide">' + blocks() + '</div></section>';
   }
 

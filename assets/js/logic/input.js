@@ -89,7 +89,7 @@ CS.InputUI = (function () {
       '' + 'while a key is held the word holds that key’s scan code; released, it is 0. All a program does is keep reading it.' + '</p>' +
       '</div></section>' +
 
-      CS.lineNav('input', 'wrap') +
+      CS.lineNav('keyboard', 'wrap') +
 
       '<section class="clock-section"><div class="wrap">' +
 

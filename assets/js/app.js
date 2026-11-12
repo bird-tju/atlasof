@@ -1445,78 +1445,23 @@
       html = viewProgress();
       route = 'progress';
       title = 'My progress · CS Atlas';
-    } else if (seg[0] === 'computer') {
-      html = CS.ComputerUI.view();
-      route = 'logic';
-      title = 'Computer · the whole machine';
-    } else if (seg[0] === 'asm') {
-      html = CS.AsmUI.view();
-      route = 'logic';
-      title = 'Assembly language & assembler · Hack';
-    } else if (seg[0] === 'input') {
-      html = CS.InputUI.view();
-      route = 'logic';
-      title = 'Input · keyboard';
-    } else if (seg[0] === 'screen') {
-      html = CS.ScreenUI.view();
-      route = 'logic';
-      title = 'Output · screen';
-    } else if (seg[0] === 'logic') {
-      html = CS.LogicUI.view();
-      route = 'logic';
-      title = 'Gate reference · CS Atlas';
+    } else if (seg[0] === 'hardware' || HW_LEGACY[seg[0]]) {
+      var slug = hwSlug(seg);
+      if (seg[0] === 'hardware' && !slug) {
+        html = viewHardware();
+        route = 'hardware';
+        title = 'The hardware course · CS Atlas';
+      } else if (HW_PAGES[slug]) {
+        html = CS[HW_PAGES[slug].ui].view();
+        route = 'hardware';
+        title = HW_PAGES[slug].title;
+      } else {
+        html = viewNotFound();
+      }
     } else if (seg[0] === 'giants') {
       html = CS.GiantsUI.view();
       route = 'giants';
-      title = 'Courses · standing on shoulders · CS Atlas'; 
-    } else if (seg[0] === 'p2') {
-      html = CS.P2UI.view();
-      route = 'logic';
-      title = 'Adders · CS Atlas';
-    } else if (seg[0] === 'bits') {
-      html = CS.P2UI.view();
-      route = 'logic';
-      title = 'Adders · CS Atlas';
-    } else if (seg[0] === 'p1' || seg[0] === 'mux') {
-      html = CS.P1UI.view();
-      route = 'logic';
-      title = 'Basic gates · building everything from NAND'; 
-    } else if (seg[0] === 'intro') {
-      html = CS.IntroUI.view();
-      route = 'logic';
-      title = 'Why computers can be universal · CS Atlas';
-    } else if (seg[0] === 'ram') {
-      html = CS.RamUI.view();
-      route = 'logic';
-      title = 'RAM · picking a register by address';
-    } else if (seg[0] === 'machine') {
-      html = CS.MachineUI.view();
-      route = 'logic';
-      title = 'The Hack computer · specification';
-    } else if (seg[0] === 'ml') {
-      html = CS.MLUI.view();
-      route = 'logic';
-      title = 'Machine language · A and C instructions';
-    } else if (seg[0] === 'cpu') {
-      html = CS.CpuUI.view();
-      route = 'logic';
-      title = 'CPU · CS Atlas';
-    } else if (seg[0] === 'clock') {
-      html = CS.ClockUI.view();
-      route = 'logic';
-      title = 'Sequential logic · CS Atlas';
-    } else if (seg[0] === 'alu') {
-      html = CS.AluUI.view();
-      route = 'logic';
-      title = 'ALU · CS Atlas';
-    } else if (seg[0] === 'adder') {
-      html = CS.AdderUI.view();
-      route = 'logic';
-      title = 'Adders · from half adder to 16-bit';
-    } else if (seg[0] === 'layers') {
-      html = CS.LayersUI.view();
-      route = 'logic';
-      title = 'One gate, four layers · CS Atlas';
+      title = 'Courses · standing on shoulders · CS Atlas';
     } else if (seg[0] === 'path' && seg[1]) {
       var p = CS.paths.filter(function (x) { return x.id === seg[1]; })[0];
       if (p) { html = viewPath(p); route = 'paths'; title = p.title + ' · CS Atlas'; }
@@ -1565,30 +1510,72 @@
     }
   }
 
-  var LOGIC_MOUNTS = {
-    intro: ['IntroUI'],
-    p1: ['P1UI', 'MuxUI'],
-    mux: ['P1UI', 'MuxUI'],
-    p2: ['P2UI'],
-    bits: ['P2UI'],
-    alu: ['AluUI'],
-    adder: ['AdderUI'],
-    clock: ['ClockUI'],
-    ram: ['RamUI'],
-    machine: ['MachineUI'],
-    ml: ['MLUI'],
-    asm: ['AsmUI'],
-    cpu: ['CpuUI'],
-    computer: ['ComputerUI'],
-    screen: ['ScreenUI'],
-    input: ['InputUI'],
-    logic: ['LogicUI'],
-    layers: ['LayersUI']
+
+  /* The hardware course lives under #/hardware/<slug>. Slugs are the readable names;
+     the old flat routes (p1, p2, ml, asm, …) stay as aliases so old links keep working. */
+  var HW_PAGES = {
+    'intro':            { ui: 'IntroUI',     title: 'Why computers can be universal · CS Atlas', n: '01', label: 'Why universal?', blurb: 'Why a machine that only adds is not enough, and what a stored program buys.' },
+    'gates':            { ui: 'P1UI',        mounts: ['P1UI', 'MuxUI'], title: 'Basic gates · building everything from NAND', n: '02', label: 'Basic gates', blurb: 'NOT, AND, OR, XOR from NAND; then multiplexers, in one bit and in sixteen.' },
+    'adders':           { ui: 'P2UI',        title: 'Adders: from half adder to ALU · CS Atlas', n: '03', label: 'Adders', blurb: 'Half adder, full adder, 16-bit adder, incrementer, and the ALU that follows.' },
+    'alu':              { ui: 'AluUI',       title: 'ALU · CS Atlas', n: '04', label: 'ALU', blurb: 'Six control bits choose an operation; the flags report zero and negative.' },
+    'sequential':       { ui: 'ClockUI',     title: 'Sequential logic · CS Atlas', n: '05', label: 'Sequential', blurb: 'Combinational logic forgets. A clock and a latch are what let a value persist.' },
+    'ram':              { ui: 'RamUI',       title: 'RAM · picking a register by address', n: '06', label: 'RAM', blurb: 'From one register to 16K words: decoding an address into a load signal.' },
+    'machine':          { ui: 'MachineUI',   title: 'The Hack computer · specification', n: '07', label: 'Spec', blurb: 'What the machine promises: memory map, registers, instruction width.' },
+    'machine-language': { ui: 'MLUI',        title: 'Machine language · A and C instructions', n: '08', label: 'Machine language', blurb: 'Sixteen bits, two formats: address instructions and compute instructions.' },
+    'assembler':        { ui: 'AsmUI',       title: 'Assembly language & assembler · Hack', n: '09', label: 'Assembly', blurb: 'Symbols, labels and two passes: why a forward jump needs the second one.' },
+    'cpu':              { ui: 'CpuUI',       title: 'CPU · CS Atlas', n: '10', label: 'CPU', blurb: 'Fetch, decode, execute: the control bits wired to the parts that obey them.' },
+    'computer':         { ui: 'ComputerUI',  title: 'The whole computer · CS Atlas', n: '11', label: 'Computer', blurb: 'ROM, RAM, CPU and the screen and keyboard mapped into one address space.' },
+    'screen':           { ui: 'ScreenUI',    title: 'Output · screen', n: '12', label: 'Screen', blurb: 'A memory-mapped bitmap: 8K words, and how a program draws into it.' },
+    'keyboard':         { ui: 'InputUI',     title: 'Input · keyboard', n: '13', label: 'Keyboard', blurb: 'One word at address 24576, read in a loop, because there are no interrupts.' },
+    'gate-reference':   { ui: 'LogicUI',     title: 'Gate reference · CS Atlas', n: '', label: 'Gates', blurb: 'Six basic gates, each with its expression, truth table and symbol.' },
+    'layers':           { ui: 'LayersUI',    title: 'One gate, four layers · CS Atlas', n: '', label: 'Layers', blurb: 'The same NAND as algebra, as a gate, as CMOS, and as a relay contact.' }
   };
 
+  var HW_ORDER = ['intro', 'gates', 'adders', 'alu', 'sequential', 'ram', 'machine',
+    'machine-language', 'assembler', 'cpu', 'computer', 'screen', 'keyboard',
+    'gate-reference', 'layers'];
+
+  var HW_LEGACY = {
+    p1: 'gates', mux: 'gates', p2: 'adders', bits: 'adders', adder: 'adders',
+    ml: 'machine-language', asm: 'assembler', clock: 'sequential',
+    logic: 'gate-reference', input: 'keyboard',
+    intro: 'intro', alu: 'alu', ram: 'ram', machine: 'machine', cpu: 'cpu',
+    computer: 'computer', screen: 'screen', layers: 'layers'
+  };
+
+  function hwSlug(seg) {
+    if (seg[0] === 'hardware') return seg[1] || '';
+    return HW_LEGACY[seg[0]] || '';
+  }
+
+  function viewHardware() {
+    var rows = HW_ORDER.map(function (slug) {
+      var pg = HW_PAGES[slug];
+      return '<a class="hw-card" href="#/hardware/' + slug + '">' +
+        '<span class="hw-num">' + (pg.n || '·') + '</span>' +
+        '<span class="hw-body"><strong>' + pg.label + '</strong><em>' + pg.blurb + '</em></span>' +
+        '<span class="hw-go">→</span></a>';
+    }).join('');
+    return '<section class="page-head page-head-hw">' +
+      '<div class="wrap">' +
+      '<p class="eyebrow">The hardware course</p>' +
+      '<h1>From one NAND gate to a working computer</h1>' +
+      '<p class="page-head-lead">Fifteen steps, each adding exactly one idea: gates from NAND, adders from gates, the ALU, ' +
+      'sequential logic, RAM, the machine specification, its language, the assembler, the CPU, and the screen and keyboard ' +
+      'that turn it into something you can play with.</p>' +
+      '</div></section>' +
+      '<section class="section section-tight"><div class="wrap">' +
+      '<div class="hw-grid">' + rows + '</div>' +
+      '<p class="bits-tip">The sequence follows the nand2tetris projects, but the pages are written from scratch: ' +
+      'every chip is introduced as the answer to a problem the previous page left open.</p>' +
+      '</div></section>';
+  }
+
   function mountLogic() {
-    var key = (parseHash()[0] || '');
-    (LOGIC_MOUNTS[key] || []).forEach(function (name) {
+    var slug = hwSlug(parseHash());
+    var page = HW_PAGES[slug];
+    if (!page) return;
+    (page.mounts || [page.ui]).forEach(function (name) {
       var ui = CS[name];
       if (ui && typeof ui.mount === 'function') ui.mount();
     });
@@ -1603,7 +1590,7 @@
     if (state.route === 'timeline') initTimeline();
     if (state.route === 'progress') initProgress();
     
-    if (state.route === 'logic') mountLogic();
+    if (state.route === 'hardware') mountLogic();
     if (state.route === 'giants') CS.GiantsUI.mount();
     if (document.querySelector('[data-status-topic]')) initTopicStatus();
     observeReveal();

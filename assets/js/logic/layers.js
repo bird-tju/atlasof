@@ -89,7 +89,7 @@ CS.LayersUI = (function () {
       '</div>' +
 
       '<div class="layer-back">' +
-      '<a class="text-link" href="#/logic">Back to the gate reference <span>→</span></a>' +
+      '<a class="text-link" href="#/hardware/gate-reference">Back to the gate reference <span>→</span></a>' +
       '</div>' +
 
       '</div></section>';

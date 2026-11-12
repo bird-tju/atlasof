@@ -187,7 +187,7 @@ CS.AsmUI = (function () {
       'It still faces registers, memory and jumps directly, with no functions in between. The program that turns those mnemonics into machine code is the <b>assembler</b>.</p>' +
       '</div></section>' +
 
-      CS.lineNav('asm', 'wrap-wide') +
+      CS.lineNav('assembler', 'wrap-wide') +
 
       '<section class="clock-section"><div class="wrap-wide">' +
 
@@ -255,8 +255,8 @@ CS.AsmUI = (function () {
       '<h2><span class="bits-num">06</span>After translation</h2>' +
       '<pre class="hdl-code">' + 'source (.asm) → assembler → machine code (.hack) → ROM → CPU executes' + '</pre>' +
       '<p>The output is a stream of 16-bit words loaded into ROM in order (starting at address 0); after reset PC = 0 and the CPU runs the first one. ' +
-      'How that loading and running works is on the <a href="#/computer">whole machine</a> page.</p>' +
-      '<p class="bits-tip">That is why the <a href="#/ml">machine language</a> page covers the instruction format first: the assembler only removes symbols; the encoding itself is unchanged.</p>' +
+      'How that loading and running works is on the <a href="#/hardware/computer">whole machine</a> page.</p>' +
+      '<p class="bits-tip">That is why the <a href="#/hardware/machine-language">machine language</a> page covers the instruction format first: the assembler only removes symbols; the encoding itself is unchanged.</p>' +
       '</div>' +
 
       '</div></section>';

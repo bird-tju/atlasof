@@ -397,7 +397,7 @@ CS.P1UI = (function () {
       '' + 'This page follows Project 1: build the four basic gates from NAND, then the multiplexers and demultiplexers, then copy them to 16 bits, then use a multi-bit sel for 4-way and 8-way selection. ' + '' +
       '' + 'Click any row of a truth table or selection table to see where the current flows.' + '</p>' +
       '</div></section>' +
-      CS.lineNav('p1', 'wrap-wide') +
+      CS.lineNav('gates', 'wrap-wide') +
 
       '<section class="mux-section"><div class="wrap-wide">' +
       '<div class="p1-intro">' +

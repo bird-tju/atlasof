@@ -98,7 +98,7 @@ CS.MLUI = (function () {
       'The human-readable form is only mnemonics and symbols; the real machine language is these 0s and 1s.</p>' +
       '</div></section>' +
 
-      CS.lineNav('ml', 'wrap-wide') +
+      CS.lineNav('machine-language', 'wrap-wide') +
 
       '<section class="clock-section"><div class="wrap-wide">' +
 

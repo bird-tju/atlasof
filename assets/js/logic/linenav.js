@@ -5,24 +5,24 @@ CS.lineNav = (function () {
 
   var ITEMS = [
     ['intro', 'Why universal?'],
-    ['p1', 'Basic gates'],
-    ['p2', 'Adders'],
+    ['gates', 'Basic gates'],
+    ['adders', 'Adders'],
     ['alu', 'ALU'],
-    ['clock', 'Sequential'],
+    ['sequential', 'Sequential'],
     ['ram', 'RAM'],
     ['machine', 'Spec'],
-    ['ml', 'Machine language'],
-    ['asm', 'Assembly'],
+    ['machine-language', 'Machine language'],
+    ['assembler', 'Assembly'],
     ['cpu', 'CPU'],
     ['computer', 'Computer'],
     ['screen', 'Screen'],
-    ['input', 'Keyboard'],
-    ['logic', 'Gates']
+    ['keyboard', 'Keyboard'],
+    ['gate-reference', 'Gates']
   ];
 
   return function (current, wrapClass) {
     var links = ITEMS.map(function (item) {
-      var href = '#/' + item[0];
+      var href = '#/hardware/' + item[0];
       return '<a href="' + href + '"' + (item[0] === current ? ' class="is-current" aria-current="page"' : '') + '>' + item[1] + '</a>';
     }).join('<span class="line-sep">→</span>');
 
