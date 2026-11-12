@@ -978,6 +978,7 @@
       list.sort(function (a, b) { return String(a.author).localeCompare(String(b.author)); });
       return '<div class="lib-group" data-domain="' + d.id + '">' +
         '<h2><span class="lib-dot" style="--c:' + d.color + '"></span>' + h(LN(d)) + '<em>' + list.length + '</em></h2>' +
+        '<div class="lib-head"><span>Source</span><span>Author</span><span>Type</span><span>Cited by</span></div>' +
         '<ul class="reading">' + list.map(function (i) {
           var chips = i.topics.slice(0, 4).map(function (t) {
             return '<a class="lib-chip" href="' + topicHref(t) + '">' + h(LN(t)) + '</a>';

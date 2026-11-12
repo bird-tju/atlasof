@@ -2591,3 +2591,46 @@ a.reading-title:hover { color: var(--accent); }
 .lib-type.is-wiki { color: #17a58f; }
 .lib-type.is-course { color: #8b6cf0; }
 .reading li[hidden] { display: none; }
+
+
+/* Library rows: four columns, so author, type and citation line up down the page
+   instead of drifting with the length of each title. */
+.lib-group .reading { border-top: 0; }
+.lib-head,
+.lib-group .reading li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px 82px 232px;
+  gap: 18px;
+  align-items: baseline;
+}
+.lib-head {
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.lib-group .reading li {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  justify-content: initial;
+}
+.lib-group .reading-title { min-width: 0; font-size: 14.5px; }
+.lib-group .reading-meta { text-align: left; white-space: normal; padding-top: 3px; }
+.lib-group .lib-type { margin-top: 0; padding-top: 3px; }
+.lib-group .lib-topics { margin-top: 0; justify-content: flex-end; }
+
+@media (max-width: 900px) {
+  .lib-head { display: none; }
+  .lib-group .reading li {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 14px;
+    padding: 14px 0;
+  }
+  .lib-group .reading-title { grid-column: 1 / -1; }
+  .lib-group .reading-meta { grid-column: 1; }
+  .lib-group .lib-type { grid-column: 2; text-align: right; }
+  .lib-group .lib-topics { grid-column: 1 / -1; justify-content: flex-start; margin-top: 6px; }
+}
