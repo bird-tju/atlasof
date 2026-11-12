@@ -9,8 +9,8 @@
   --text-2: #a8afc2;
   --accent: #7aa2f7;
   --line: rgba(255, 255, 255, 0.08);
-  --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-sans: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
 }
 
 html[data-theme="light"] {
@@ -30,7 +30,7 @@ body {
   align-items: center;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.75 var(--font-sans);
+  font: 16px/1.65 var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 

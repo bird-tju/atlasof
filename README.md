@@ -124,6 +124,18 @@ dark-mode extension has nothing to "fix".
 reload. Asset URLs carry a content hash (`main.css?v=…`), so a reload always
 picks up new CSS; HTML is served with `no-store` by `npm run preview`.
 
+## Typography
+
+Latin-first font stacks: `Inter` if installed, then Segoe UI Variable / Segoe UI on
+Windows, SF on macOS, with the CJK faces (PingFang, YaHei) kept as a last resort so
+stray CJK characters still render. Everything else in the stylesheet assumes Latin
+text: body leading 1.65, prose 1.72 and capped at a 68-character measure, headings
+tracked slightly tight, `text-wrap: balance` on headings and `pretty` on prose.
+
+If English ever looks wrong again, check the platform font first: before this stack
+was reordered, Windows resolved to Microsoft YaHei for Latin text, which is why the
+site "looked Chinese" while every measurement was correct.
+
 ## Licence
 
 Text is shared under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); code under the MIT licence.
