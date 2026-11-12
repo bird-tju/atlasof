@@ -395,6 +395,23 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (unversioned.length) throw new Error('unversioned assets: ' + unversioned.slice(0, 3).join(', '));
   });
 
+  check('share metadata', () => {
+    const distRoot = path.join(ROOT, 'dist');
+    const atlases = fs.readdirSync(distRoot, { withFileTypes: true })
+      .filter((e) => e.isDirectory() && e.name !== 'assets')
+      .map((e) => e.name);
+    for (const a of atlases) {
+      for (const f of ['og.png', 'icon-180.png']) {
+        if (!fs.existsSync(path.join(distRoot, a, f))) throw new Error(a + ': missing ' + f);
+      }
+    }
+    const sample = path.join(distRoot, atlases[0], 'index.html');
+    const html = fs.readFileSync(sample, 'utf8');
+    for (const needle of ['og:image', 'twitter:card', 'theme-color', 'apple-touch-icon']) {
+      if (!html.includes(needle)) throw new Error('head is missing ' + needle);
+    }
+  });
+
   check('not-found page', () => {
     const file = path.join(ROOT, 'dist', '404.html');
     if (!fs.existsSync(file)) throw new Error('dist/404.html missing');

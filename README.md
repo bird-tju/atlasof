@@ -138,6 +138,15 @@ If English ever looks wrong again, check the platform font first: before this st
 was reordered, Windows resolved to Microsoft YaHei for Latin text, which is why the
 site "looked Chinese" while every measurement was correct.
 
+## Sharing and metadata
+
+Each atlas carries its own `og.png` (1200×630) and `icon-180.png` next to its
+`index.html`; the build copies both to `/<atlas>/` and emits `og:image`,
+`twitter:card`, `theme-color` (dark and light) and `apple-touch-icon` for every
+page. The images are generated once by `dev/make-images.js` (needs headless Chrome
+on port 9222) and committed, because they bake in whatever font the generating
+machine resolved.
+
 ## Licence
 
 Text is shared under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); code under the MIT licence.

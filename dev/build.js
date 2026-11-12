@@ -127,13 +127,26 @@ function rewrite(html, entry, route, version) {
 
 function headLinks(entry, route, title, desc) {
   const u = SITE + entry.base + '/' + (route ? route + '/' : '');
+  const img = SITE + entry.base + '/og.png';
+  const icon = entry.base + '/icon-180.png';
   return [
     '<link rel="canonical" href="' + u + '">',
     '<link rel="alternate" hreflang="x-default" href="' + u + '">',
-    '<meta property="og:type" content="article">',
+    '<meta name="theme-color" content="#070910" media="(prefers-color-scheme: dark)">',
+    '<meta name="theme-color" content="#f6f4ee" media="(prefers-color-scheme: light)">',
+    '<link rel="apple-touch-icon" sizes="180x180" href="' + icon + '">',
+    '<meta property="og:type" content="' + (route ? 'article' : 'website') + '">',
+    '<meta property="og:site_name" content="' + entry.title + '">',
     '<meta property="og:title" content="' + title.replace(/"/g, '&quot;') + '">',
     '<meta property="og:url" content="' + u + '">',
-    '<meta property="og:description" content="' + (desc || '').replace(/"/g, '&quot;') + '">'
+    '<meta property="og:description" content="' + (desc || '').replace(/"/g, '&quot;') + '">',
+    '<meta property="og:image" content="' + img + '">',
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:title" content="' + title.replace(/"/g, '&quot;') + '">',
+    '<meta name="twitter:description" content="' + (desc || '').replace(/"/g, '&quot;') + '">',
+    '<meta name="twitter:image" content="' + img + '">'
   ].join('\n');
 }
 
@@ -145,6 +158,8 @@ function portal(atlasList) {
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Atlas — visual maps of big subjects</title>
+<meta name="theme-color" content="#080b12">
+<link rel="apple-touch-icon" sizes="180x180" href="/cs/icon-180.png">
 <meta name="description" content="Interactive, bottom-up atlases of big subjects.">
 <style>body{background:#080b12;color:#e6e9f0;font:16px/1.7 ui-sans-serif,system-ui;margin:0;padding:12vh 8vw}h1{font-size:clamp(30px,5vw,54px);margin:0 0 10px}p{color:#9aa4b8;max-width:60ch}a.card{display:block;margin-top:26px;padding:20px 22px;border:1px solid #232a38;border-radius:12px;color:#e6e9f0;text-decoration:none;max-width:520px}a.card:hover{border-color:#7aa2f7}a.card b{display:block;font-size:19px;margin-bottom:4px}a.card span{color:#9aa4b8;font-size:14px}</style>
 </head><body>
@@ -210,6 +225,13 @@ async function main() {
     for (const sub of ['css', 'js']) {
       const from = path.join(srcDir, sub);
       if (fs.existsSync(from)) copyDir(from, path.join(DIST, entry.base.slice(1), 'assets', sub));
+    }
+    // Social card and touch icon: copied to the atlas root, not under assets/
+    for (const file of ['og.png', 'icon-180.png']) {
+      const from = path.join(srcDir, file);
+      if (fs.existsSync(from)) {
+        fs.copyFileSync(from, path.join(DIST, entry.base.slice(1), file));
+      }
     }
     const version = assetVersion(srcDir);
 
