@@ -1,0 +1,30 @@
+<!doctype html>
+<!-- Math Atlas — placeholder shell. The build prerenders this page to /math/.
+     Add js/ and a data model here when the atlas is written. -->
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Math Atlas · a map of mathematics</title>
+<meta name="description" content="A second atlas: mathematics, from first definitions to the frontier. In progress.">
+<script>
+  try {
+    var t = localStorage.getItem('atlas-theme');
+    if (t !== 'light' && t !== 'dark') {
+      t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<main id="main" class="wrap">
+  <p class="eyebrow">Math Atlas</p>
+  <h1>A map of mathematics</h1>
+  <p class="lead">The second atlas. Structure is in place; the content is being written.</p>
+  <p class="note"><a href="/cs/">← CS Atlas</a> · <a href="/">All atlases</a></p>
+</main>
+</body>
+</html>

@@ -3,7 +3,7 @@ const path = require('path');
 const { JSDOM, VirtualConsole } = require('jsdom');
 
 const ROOT = path.join(__dirname, '..');
-const INDEX = path.join(ROOT, 'index.html');
+const INDEX = path.join(ROOT, 'atlases', 'cs', 'index.html');
 
 const errors = [];
 const passed = [];
@@ -343,39 +343,51 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   /* ---------- build artifacts: no thin pages, no literal 'undefined', sane stars ---------- */
   check('build artifacts', () => {
-    const distRoot = path.join(ROOT, 'dist', 'cs');
+    const distRoot = path.join(ROOT, 'dist');
     if (!fs.existsSync(distRoot)) throw new Error('dist missing: run npm run build first');
-    const pages = [];
-    (function walk(dir) {
-      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-        const full = path.join(dir, e.name);
-        if (e.isDirectory()) walk(full);
-        else if (e.name === 'index.html') pages.push(full);
-      }
-    })(distRoot);
 
+    // Portal: every atlas folder in dist must be linked from the front page.
+    const portal = fs.readFileSync(path.join(distRoot, 'index.html'), 'utf8');
+    const atlasDirs = fs.readdirSync(distRoot, { withFileTypes: true })
+      .filter((e) => e.isDirectory() && e.name !== 'assets')
+      .map((e) => e.name);
+    for (const a of atlasDirs) {
+      if (!portal.includes('href="/' + a + '/"')) throw new Error('portal does not link /' + a + '/');
+    }
+
+    let pages = 0;
     const thin = [];
     const undefinedPages = [];
     const unversioned = [];
-    for (const file of pages) {
-      const html = fs.readFileSync(file, 'utf8');
-      const rel = '/' + path.relative(distRoot, path.dirname(file)).replace(/\\/g, '/') + '/';
-      // Measure the page body only: the shared header and footer would keep an
-      // emptied page above any whole-document threshold.
-      // Redirect stubs are intentionally tiny; they only need a working target.
-      const redirect = html.match(/http-equiv="refresh" content="0; url=([^"]+)"/);
-      if (redirect) {
-        const target = path.join(ROOT, 'dist', redirect[1], 'index.html');
-        if (!fs.existsSync(target)) throw new Error('broken redirect: ' + rel + ' -> ' + redirect[1]);
-        continue;
+    const noMain = [];
+
+    for (const atlas of atlasDirs) {
+      const root = path.join(distRoot, atlas);
+      const files = [];
+      (function walk(dir) {
+        for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+          const full = path.join(dir, e.name);
+          if (e.isDirectory()) walk(full);
+          else if (e.name === 'index.html') files.push(full);
+        }
+      })(root);
+
+      for (const file of files) {
+        pages++;
+        const html = fs.readFileSync(file, 'utf8');
+        const rel = '/' + path.relative(distRoot, path.dirname(file)).replace(/\\/g, '/') + '/';
+        const main = html.match(/<main[\s\S]*?<\/main>/);
+        if (!main) { noMain.push(rel); continue; }
+        const text = main[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+        // Placeholder atlases are allowed to be short; real content is not.
+        if (atlas === 'cs' && text.length < 400) thin.push(rel + ' (' + text.length + ')');
+        if (/\bundefined\b/.test(text)) undefinedPages.push(rel);
+        if (/\.(?:css|js)"/.test(html)) unversioned.push(rel);
       }
-      const main = html.match(/<main[\s\S]*?<\/main>/);
-      const text = (main ? main[0] : '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-      if (text.length < 400) thin.push(rel + ' (' + text.length + ')');
-      if (/\bundefined\b/.test(text)) undefinedPages.push(rel);
-      if (/\.(?:css|js)"/.test(html)) unversioned.push(rel);
     }
-    if (!pages.length) throw new Error('no pages in dist');
+
+    if (!pages) throw new Error('no pages in dist');
+    if (noMain.length) throw new Error('pages without <main>: ' + noMain.slice(0, 3).join(', '));
     if (thin.length) throw new Error('thin pages: ' + thin.slice(0, 5).join(', '));
     if (undefinedPages.length) throw new Error("pages showing 'undefined': " + undefinedPages.slice(0, 5).join(', '));
     if (unversioned.length) throw new Error('unversioned assets: ' + unversioned.slice(0, 3).join(', '));
@@ -384,7 +396,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   check('star ratio', () => {
     const vm = require('vm');
     const fs2 = require('fs');
-    const dir = path.join(ROOT, 'assets', 'js', 'data');
+    const dir = path.join(ROOT, 'atlases', 'cs', 'js', 'data');
     const CS = { topics: [] };
     CS.addTopics = function (list) { CS.topics = CS.topics.concat(list); };
     const sandbox = { window: {}, console };

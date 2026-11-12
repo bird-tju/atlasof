@@ -2,7 +2,7 @@
   "name": "cs-atlas",
   "version": "1.0.0",
   "private": true,
-  "description": "A static, zero-dependency atlas of computer science, plus a from-scratch hardware course.",
+  "description": "Static, zero-dependency atlases of big subjects: computer science today, mathematics next.",
   "type": "commonjs",
   "scripts": {
     "check": "node dev/check.js",

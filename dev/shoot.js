@@ -3,7 +3,7 @@ const path = require('path');
 
 const PORT = 9222;
 const ROOT = path.join(__dirname, '..');
-const BASE = 'file:///' + ROOT.replace(/\\/g, '/') + '/index.html';
+const BASE = 'file:///' + ROOT.replace(/\\/g, '/') + '/atlases/cs/index.html';
 
 async function getTarget() {
   const list = await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json();

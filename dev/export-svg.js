@@ -4,7 +4,7 @@ const http = require('http');
 
 const ROOT = path.join(__dirname, '..');
 const OUT = path.join(ROOT, 'svg');
-const PAGE = 'file:///' + path.join(ROOT, 'index.html').replace(/\\/g, '/') + '#/p1';
+const PAGE = 'file:///' + path.join(ROOT, 'atlases', 'cs', 'index.html').replace(/\\/g, '/') + '#/courses/nand2tetris/gates';
 
 function getJSON(url) {
   return new Promise((resolve, reject) => {

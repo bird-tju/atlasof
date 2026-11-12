@@ -3,7 +3,7 @@ const path = require('path');
 
 const PORT = 9222;
 const ROOT = path.join(__dirname, '..');
-const BASE = 'file:///' + ROOT.replace(/\\/g, '/') + '/index.html';
+const BASE = 'file:///' + ROOT.replace(/\\/g, '/') + '/atlases/cs/index.html';
 const [, , hash = '', name = 'snap', mode = 'full', widthArg = '1440'] = process.argv;
 const WIDTH = Number(widthArg) || 1440;
 const HEIGHT = WIDTH < 720 ? 844 : 1000;

@@ -10,7 +10,7 @@ const vm = require('vm');
 const ROOT = path.join(__dirname, '..');
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext('var window = globalThis; var CS = window.CS = {};\n' + fs.readFileSync(path.join(ROOT, 'assets/js/data/17-hdl.js'), 'utf8'), ctx, { filename: '17-hdl.js' });
+vm.runInContext('var window = globalThis; var CS = window.CS = {};\n' + fs.readFileSync(path.join(ROOT, 'atlases/cs/js/data/17-hdl.js'), 'utf8'), ctx, { filename: '17-hdl.js' });
 const HDL = ctx.CS.hdl;
 
 /* Known chips with pins and widths (chips defined in the snippet are parsed too) */

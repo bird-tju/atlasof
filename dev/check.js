@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const DIR = path.join(__dirname, '..', 'assets', 'js', 'data');
+const DIR = path.join(__dirname, '..', 'atlases', 'cs', 'js', 'data');
 const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.js')).sort((a, b) =>
   a === 'core.js' ? -1 : b === 'core.js' ? 1 : a.localeCompare(b)
 );

@@ -1,8 +1,13 @@
-# CS Atlas
+# Atlas
 
-A static, zero-dependency atlas of computer science — plus a from-scratch hardware course built up from a single NAND gate.
+A static, zero-dependency collection of atlases. Two so far:
 
-The site is **English-only**. Pages are served from `/cs/…`; Chinese, if it ever returns, would live under `/cs/zh/…`.
+- **CS Atlas** at `/cs/` — computer science in 13 domains, 75 topics and 326 milestones, plus a from-scratch hardware course built up from a single NAND gate.
+- **Math Atlas** at `/math/` — a placeholder, structure only.
+
+The front page at `/` is the portal that lists them.
+
+Everything is **English-only**. Each atlas lives under its own base: `/cs/…`, `/math/…`.
 
 Live shape of the content: **13 domains · 75 topics · 326 milestones · 129 people**.
 
@@ -46,19 +51,27 @@ The site is deliberately boring to run: HTML, CSS and plain JavaScript, no build
 ## Repository layout
 
 ```
-index.html            development shell — the build prerenders it, and it also
-                      works as an offline SPA preview (file://, hash routing)
-assets/css/main.css   all styling (dark by default, light theme available)
-assets/js/app.js      shell, routing, views, progress store
-assets/js/i18n.js     tiny compatibility layer (CS.I18N, language fixed to English)
-assets/js/data/       content: core.js, 01–13 domains, 14 learning, 15 courses,
+atlases/cs/           the CS atlas: its own shell, styles, data and pages
+  index.html          SPA shell — the build prerenders it, and it also works
+                      as an offline preview (file://, hash routing)
+  css/main.css        its styling
+  js/app.js           shell, routing, views, progress store
+  js/i18n.js          compatibility layer (CS.I18N, language fixed to English)
+  js/data/            content: core.js, 01–13 domains, 14 learning, 15 courses,
                       17 HDL, 18 open courses
-assets/js/logic/      hardware-course pages and their interactive widgets
+  js/pages/           the hardware course pages and their widgets
+atlases/math/         the math atlas: placeholder shell only
 dev/                  build, static server, data check, HDL check, smoke tests
-dist/                 build output (115 prerendered pages) — generated, not edited
-shots/                screenshots used while reviewing the design (ignored by git)
-svg/                  hand-drawn gate artwork (not referenced by the site)
+dist/                 build output (generated, ignored by git)
+docs/                 design notes and artwork
+shots/                screenshots used while reviewing (ignored by git)
 ```
+
+## Adding an atlas
+
+1. Create `atlases/<id>/` with `index.html` and `css/main.css` (plus `js/` if it needs a runtime).
+2. Add one object to `ATLASES` in `dev/build.js`: `{ id, base, dir, title, tagline, card, routes }`.
+3. `npm run build` — the portal, the sitemap and every page are generated from that list.
 
 ## Commands
 
@@ -75,7 +88,7 @@ npm run preview        # serve dist/ on http://127.0.0.1:4321
 
 ## Adding a topic
 
-Append one object to the matching domain file in `assets/js/data/` and rebuild:
+Append one object to the matching domain file in `atlases/cs/js/data/` and rebuild:
 
 ```js
 {

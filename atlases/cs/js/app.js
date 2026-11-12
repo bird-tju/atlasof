@@ -231,7 +231,7 @@
   }
 
 
-  var THEME_KEY = 'cs-atlas-theme';
+  var THEME_KEY = 'atlas-theme';
   var root = document.documentElement;
 
   function syncThemeButton() {
