@@ -154,6 +154,6 @@ Two licences, split by what is being reused:
 | What | Licence | File |
 | --- | --- | --- |
 | Code — shell, styles, page modules, data files as software, build scripts | MIT | [LICENSE](LICENSE) |
-| Content — topic pages, milestones, course text, about page, social card | CC BY-SA 4.0 | [LICENSE-CONTENT](LICENSE-CONTENT) |
+| Content — topic pages, milestones, course text, about page, social card | CC BY-NC-SA 4.0 | [LICENSE-CONTENT](LICENSE-CONTENT) |
 
-In short: take the engine freely, credit the writing.
+In short: take the engine freely; you may reuse the writing with credit, but not to sell it.

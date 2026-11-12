@@ -1,13 +1,13 @@
-Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
-The written content of the atlases is licensed under CC BY-SA 4.0. The full legal
-text is at:
+The written content of the atlases is licensed under CC BY-NC-SA 4.0. The full
+legal text is at:
 
-  https://creativecommons.org/licenses/by-sa/4.0/legalcode
+  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 A human-readable summary is at:
 
-  https://creativecommons.org/licenses/by-sa/4.0/
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 Copyright (c) 2026 CS Atlas contributors
 
@@ -28,16 +28,26 @@ What is code, and therefore MIT instead
 - the build, check and test scripts under dev/
 
 You can tell the two apart in practice: if you want to reuse the *text* of a
-topic, CC BY-SA applies; if you want to reuse the *engine* that renders it, MIT
-applies.
+topic, CC BY-NC-SA applies; if you want to reuse the *engine* that renders it,
+MIT applies.
 
 If you reuse the content
 ------------------------
 
-- give credit: name the atlas ("CS Atlas") and link back to the page you used
+- **credit**: name the atlas ("CS Atlas") and link back to the page you used
+- **non-commercial**: no use that is primarily intended for commercial advantage
+  or monetary compensation — no ad-supported republishing, no paid courses or
+  books built from it, no bundling into a paid product
+- **share alike**: anything derived from this content must also be
+  CC BY-NC-SA 4.0
 - say what you changed, if you changed it
-- keep the same licence: anything derived from this content must also be
-  CC BY-SA 4.0
 
 Short quotes with a link back do not need to follow the share-alike clause; it
 applies when you republish substantial portions.
+
+Commercial use
+--------------
+
+The licence is non-commercial for everyone except the copyright holder, who may
+monetise the original site. If you want to use the content commercially, ask
+first: open an issue on the repository.
