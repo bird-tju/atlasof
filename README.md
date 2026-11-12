@@ -63,6 +63,8 @@ atlases/cs/           the CS atlas: its own shell, styles, data and pages
 atlases/math/         the math atlas: placeholder shell only
 dev/                  build, static server, data check, HDL check, smoke tests
 dist/                 build output (generated, ignored by git)
+  index.html          the portal
+  404.html            served by the host for unknown paths (self-contained)
 docs/                 design notes and artwork
 shots/                screenshots used while reviewing (ignored by git)
 ```

@@ -156,6 +156,47 @@ ${cards}
 </body></html>`;
 }
 
+
+/* 404: hosts serve this file for any path that does not exist. It is deliberately
+   self-contained — inline styles, no asset requests — so it still renders if the
+   asset host or the path prefix is what went wrong. */
+function notFound(atlasList) {
+  const links = atlasList.map(function (a) {
+    return '<a class="pill" href="' + a.base + '/">' + a.title + '</a>';
+  }).join('');
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="robots" content="noindex">
+<title>404 · that page is not on the map</title>
+<style>
+  :root{--bg:#070910;--text:#e9ebf2;--muted:#a8afc2;--line:rgba(255,255,255,.09);--accent:#7aa2f7;--mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace}
+  @media (prefers-color-scheme: light){:root{--bg:#f6f4ee;--text:#191c24;--muted:#4e5565;--line:rgba(24,28,40,.12);--accent:#2f5fd0}}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:grid;align-items:center;background:var(--bg);color:var(--text);
+       font:16px/1.65 "Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+       -webkit-font-smoothing:antialiased}
+  .wrap{width:min(660px,88vw);margin:0 auto;padding:12vh 0}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+  .code{font-family:var(--mono);font-size:clamp(52px,9vw,96px);line-height:1;letter-spacing:-.04em;margin:0 0 16px;color:var(--accent)}
+  h1{font-size:clamp(24px,3.4vw,34px);line-height:1.2;letter-spacing:-.02em;margin:0 0 14px}
+  p{color:var(--muted);max-width:52ch;margin:0 0 26px}
+  .row{display:flex;flex-wrap:wrap;gap:10px;padding-top:22px;border-top:1px solid var(--line)}
+  .pill{font-family:var(--mono);font-size:12.5px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--text);text-decoration:none}
+  .pill:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head><body>
+<main class="wrap">
+  <p class="eyebrow">Not on the map</p>
+  <p class="code">404</p>
+  <h1>That page is not part of any atlas.</h1>
+  <p>The address may have been mistyped, or the page may have moved when an atlas was restructured. Everything is reachable from the front page.</p>
+  <nav class="row">${links}<a class="pill" href="/">All atlases</a></nav>
+</main>
+</body></html>`;
+}
+
 async function main() {
   rmrf(DIST);
   mkdir(DIST);
@@ -203,6 +244,7 @@ async function main() {
   }
 
   fs.writeFileSync(path.join(DIST, 'index.html'), portal(ATLASES), 'utf8');
+  fs.writeFileSync(path.join(DIST, '404.html'), notFound(ATLASES), 'utf8');
 
   const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +

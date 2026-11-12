@@ -395,6 +395,17 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (unversioned.length) throw new Error('unversioned assets: ' + unversioned.slice(0, 3).join(', '));
   });
 
+  check('not-found page', () => {
+    const file = path.join(ROOT, 'dist', '404.html');
+    if (!fs.existsSync(file)) throw new Error('dist/404.html missing');
+    const html = fs.readFileSync(file, 'utf8');
+    if (!/<main/.test(html)) throw new Error('404 has no <main>');
+    for (const base of ['/cs/', '/math/']) {
+      if (!html.includes('href="' + base + '"')) throw new Error('404 does not link ' + base);
+    }
+    if (/https?:\/\//.test(html.replace(/xmlns="[^"]*"/g, ''))) throw new Error('404 makes external requests');
+  });
+
   check('star ratio', () => {
     const vm = require('vm');
     const fs2 = require('fs');
