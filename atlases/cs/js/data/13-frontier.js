@@ -29,7 +29,14 @@ CS.addTopics([
     year: 1998,
     tags: ['Paxos', 'Raft', 'Quorums'],
     summary: 'Getting machines to agree on one value is the shared core of replicated state machines, distributed databases and blockchains.',
-    body: ['Lamport wrote Paxos in 1989 but it was not published until 1998. Paxos reaches agreement among a majority in two rounds of voting and tolerates a minority of failures. It is famously hard to understand, and real implementations are usually heavily simplified.', 'In 2014 Ongaro and Ousterhout proposed Raft, splitting consensus into leader election, log replication and safety, and putting comprehensibility first. Raft was adopted by etcd, Consul and TiKV. Today consensus algorithms are the invisible skeleton of cloud infrastructure — every configuration change, every failover runs on one.'],
+    body: [
+      'Replicated state machines are the reason consensus exists. If every server starts from the same initial state and applies the same sequence of operations in the same order, all of them end up identical. That turns the hard problem — agreeing on data across machines that fail, delay and reorder — into a narrower one: agree on the order of operations in a log. Consensus algorithms are machines for doing exactly that, one entry at a time.',
+      'The impossibility result sets the boundary. In 1985, Fischer, Lynch and Paterson proved that in an asynchronous network — messages may be arbitrarily delayed but not lost — no deterministic protocol can guarantee both agreement and termination if even one process may crash. Every real algorithm therefore chooses: stay safe always, and accept that under some network conditions the system stalls rather than giving conflicting answers. That is why a consensus cluster can become unavailable but does not silently split.',
+      'The trick that makes safety possible is the quorum. With three servers, any two form a majority, and any two majorities overlap in at least one server. If a value is only committed after a majority acknowledges it, and every new decision must consult a majority, then any new leader necessarily meets a server that remembers the previous decision — and is forced to carry it forward. The cost is symmetric: three servers tolerate one failure, five tolerate two, and two servers are worse than one because neither can form a majority without the other.',
+      'Paxos, written by Lamport in 1989 and published only in 1998, expresses this in two phases. A proposer asks a majority to promise not to accept anything older; once it has that promise, it proposes a value, and a majority accepting it makes it chosen. The protocol is correct and remarkably small, and it is also notoriously difficult to read, in part because the paper presents the result through a parable about a Greek island. Implementations — Multi-Paxos, Cheap Paxos, and Google\'s Chubby — simplify it in ways the original paper does not spell out.',
+      'Raft, published in 2014 by Ongaro and Ousterhout, is the same problem solved under a different constraint: understandability first. It splits the protocol into three separable parts — leader election, log replication, and safety — and adds real restrictions: the leader alone appends entries, log entries flow only in one direction, and only a candidate with an up-to-date log can win an election. Those restrictions give up some of Paxos\'s freedom in exchange for a protocol that a working engineer can implement from the paper.',
+      'What consensus is not: it does not make a cluster fast, and it does not solve distributed transactions. Every write costs a round trip to a majority, so consensus sits at the coordination path rather than the data path — which is why systems such as Kubernetes\' etcd hold configuration and metadata, not user traffic. For the data itself, most designs push bulk work elsewhere and use consensus sparingly, because the algorithm\'s guarantee is expensive by construction.'
+    ],
     milestones: [
       [1989, 'Paxos is written', 'Lamport\'s consensus algorithm.'],
       [1998, 'Paxos is published', 'The paper appears nine years late.', 1],
@@ -39,7 +46,13 @@ CS.addTopics([
     concepts: [['Quorum', 'A majority suffices to commit, tolerating a minority of failures.'], ['Log replication', 'Copy the same sequence of operations to every state machine.'], ['Leader election', 'Choose a new coordinator after the leader fails.']],
     people: [['Leslie Lamport', '1941 – ', 'Author of Paxos.'], ['Diego Ongaro', '1985 – ', 'Co-designer of Raft.']],
     related: ['distributed-systems', 'distributed-databases', 'blockchain'],
-    reading: [['Paxos Made Simple', 'Leslie Lamport', '2001'], ['In Search of an Understandable Consensus Algorithm', 'Ongaro & Ousterhout', '2014']],
+    reading: [
+      ['The Part-Time Parliament', 'Leslie Lamport', '1998', 'https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf', 'paper'],
+      ['In Search of an Understandable Consensus Algorithm (Raft)', 'Diego Ongaro & John Ousterhout', '2014', 'https://raft.github.io/raft.pdf', 'paper'],
+      ['Impossibility of Distributed Consensus with One Faulty Process', 'Fischer, Lynch & Paterson', '1985', 'https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf', 'paper'],
+      ['Consensus (computer science)', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Consensus_(computer_science)', 'wiki'],
+      ['Designing Data-Intensive Applications', 'Martin Kleppmann', '2017', '', 'book']
+    ],
     practice: 'Implement Raft leader election for three nodes and force two failovers, checking the log stays identical'
   },
 
