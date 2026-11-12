@@ -86,6 +86,19 @@ Append one object to the matching domain file in `assets/js/data/` and rebuild:
 The fourth milestone element (`1`) marks it as a highlight for the home page.
 Prerequisites and practice tasks live in `14-learning.js`, courses and labs in `15-courses.js`.
 
+## Troubleshooting
+
+**Accents look orange/brown and the graph looks washed out.** A colour-remapping
+extension is overriding the stylesheet — Dark Reader, Midnight Lizard, or a
+global Stylus/Stylish theme. Disable it for this site (or open the page in a
+private window) and the palette returns to normal. The site ships both a dark and
+a light theme and picks one from the OS colour scheme on first visit, so a
+dark-mode extension has nothing to "fix".
+
+**Colours or layout look stale after a rebuild.** Run `npm run build` again and
+reload. Asset URLs carry a content hash (`main.css?v=…`), so a reload always
+picks up new CSS; HTML is served with `no-store` by `npm run preview`.
+
 ## Licence
 
 Text is shared under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); code under the MIT licence.
