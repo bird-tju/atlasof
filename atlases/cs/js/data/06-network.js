@@ -86,7 +86,14 @@ CS.addTopics([
     year: 1983,
     tags: ['Naming', 'Distributed', 'Governance'],
     summary: 'A globally distributed database that turns names into addresses, and the first battlefield of Internet governance.',
-    body: ['Before DNS, host names and addresses lived in a single hosts file maintained by hand at SRI. That could not scale. In 1983 Mockapetris designed DNS: a distributed, hierarchical naming system delegating from the root through top-level domains to authoritative servers.', 'Queries usually go over UDP port 53, with caches and TTLs trading speed against freshness. DNS also became the first arena of governance: who runs the root zone, how top-level domains are granted, where ICANN’s legitimacy comes from. In 2016 the US Department of Commerce handed over the IANA functions, and DNS entered multistakeholder governance.'],
+    body: [
+      'Before 1983 every host name on the network lived in one file, HOSTS.TXT, edited by hand at SRI and copied around. It worked for a few hundred machines and could not work for a growing network: one administrator, one point of failure, and every change shipped to everyone. DNS replaced the file with a distributed database: nobody holds the whole thing, and every answer is produced by whoever is responsible for that part of the name.',
+      'The name space is a tree, read right to left. The root delegates ".com" to one set of servers, which delegate "example.com" to the servers of whoever registered it, which answer for "www.example.com". A resolver starts at the root and follows those delegations, so adding a domain never requires changing the root — only the zone above it. That is what makes the system scale politically as well as technically.',
+      'Two query styles get confused constantly. A stub resolver on your machine sends a recursive query to a caching resolver and asks it to do the work; that resolver then walks the tree with iterative queries, getting referrals rather than answers at each step. The caching resolver is the piece that makes DNS fast: without it every lookup would start at the root.',
+      'Caching is also where most DNS incidents come from. Every answer carries a TTL, and caches are allowed to serve it until it expires — so a change you make now may not be seen for hours, and a short TTL is how you prepare for a migration. Negative answers are cached too, which is why a broken record can look stuck long after it is fixed.',
+      'The record types are the interface. A and AAAA map names to addresses; CNAME aliases one name to another and cannot coexist with other records at the same name; MX routes mail; NS says who is authoritative; TXT carries arbitrary text and is now used for domain verification and mail policy (SPF, DKIM, DMARC) rather than for notes.',
+      'DNS also became the first arena of Internet governance. Who runs the root, how top-level domains are granted, and where ICANN\'s authority comes from were argued for two decades, and in 2016 the US Department of Commerce handed the IANA functions to a multistakeholder body. The technical design — one root, delegated downward — is what made the political question unavoidable: whoever edits the root can make a name stop existing.'
+    ],
     milestones: [
       [1983, 'The DNS specification', 'Mockapetris designs hierarchical naming.', 1],
       [1984, 'Root servers deployed', 'Thirteen root server addresses.'],
@@ -96,7 +103,12 @@ CS.addTopics([
     concepts: [['Hierarchical naming', 'A tree from the root to top-level domains to authoritative servers.'], ['Recursive and iterative queries', 'The resolver does the work, or each server points to the next.'], ['TTL caching', 'Time to live trades speed against how quickly records update.']],
     people: [['Paul Mockapetris', '1953 – ', 'Designer of DNS.'], ['Jon Postel', '1943 – 1998', 'Founder of IANA and a driver of Internet standardisation.']],
     related: ['tcp-ip', 'www-http', 'cloud-computing'],
-    reading: [['RFC 1034 / 1035', 'Mockapetris', '1987'], ['Networks and States', 'Laura DeNardis', '2014']],
+    reading: [
+      ['RFC 1034: Domain Names — Concepts and Facilities', 'Paul Mockapetris', '1987', 'https://www.rfc-editor.org/rfc/rfc1034', 'paper'],
+      ['Domain Name System', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Domain_Name_System', 'wiki'],
+      ['What is DNS?', 'Cloudflare Learning', '2024', 'https://www.cloudflare.com/learning/dns/what-is-dns/', 'article'],
+      ['DNS and BIND', 'Cricket Liu & Paul Albitz', '1992', '', 'book']
+    ],
     practice: 'Trace a full resolution with dig +trace for one domain and draw the delegation chain from root to authoritative'
   },
 
