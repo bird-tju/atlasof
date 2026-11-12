@@ -501,6 +501,67 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     }
   });
 
+
+  /* Library filter: serve dist on an ephemeral port and click the buttons. The check
+     has to read computed display, not the hidden property: a CSS specificity bug once
+     set the attribute while the row still rendered. */
+  await new Promise((resolve) => {
+    const httpSrv = require('http');
+    const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png', '.svg': 'image/svg+xml' };
+    const server = httpSrv.createServer((req, res) => {
+      const urlPath = decodeURIComponent(req.url.split('?')[0]);
+      let file = path.join(ROOT, 'dist', urlPath);
+      if (urlPath.endsWith('/')) file = path.join(file, 'index.html');
+      if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end('nope'); }
+      res.writeHead(200, { 'content-type': mime[path.extname(file)] || 'application/octet-stream' });
+      fs.createReadStream(file).pipe(res);
+    });
+    server.listen(0, '127.0.0.1', async () => {
+      const port = server.address().port;
+      const url = 'http://127.0.0.1:' + port + '/cs/library/';
+      try {
+        const page = await new Promise((res, rej) => {
+          require('http').get(url, (r) => { let d = ''; r.on('data', (c) => (d += c)); r.on('end', () => res(d)); }).on('error', rej);
+        });
+        const vc2 = new VirtualConsole();
+        vc2.on('jsdomError', () => {});
+        const dom = new (require('jsdom').JSDOM)(page, {
+          url,
+          runScripts: 'dangerously',
+          resources: 'usable',
+          pretendToBeVisual: true,
+          virtualConsole: vc2,
+          beforeParse(win) {
+            win.scrollTo = () => {};
+            win.matchMedia = () => ({ matches: false, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
+            win.IntersectionObserver = function () { return { observe() {}, unobserve() {}, disconnect() {}, takeRecords() { return []; } }; };
+          }
+        });
+        await new Promise((r) => dom.window.addEventListener('load', () => setTimeout(r, 350)));
+        const doc = dom.window.document;
+        const rows = [...doc.querySelectorAll('.lib-group li[data-type]')];
+        const visible = () => rows.filter((li) => dom.window.getComputedStyle(li).display !== 'none');
+
+        check('library filters', () => {
+          if (!rows.length) throw new Error('no library rows');
+          for (const btn of [...doc.querySelectorAll('.lib-filter-btn')]) {
+            btn.click();
+            const type = btn.dataset.type;
+            const shown = visible();
+            const badge = Number(btn.querySelector('em').textContent);
+            if (shown.length !== badge) throw new Error(type + ': ' + shown.length + ' visible, badge ' + badge);
+            const wrong = shown.filter((li) => type !== 'all' && li.dataset.type !== type);
+            if (wrong.length) throw new Error(type + ' shows ' + wrong.length + ' rows of another type');
+          }
+        });
+        dom.window.close();
+      } catch (e) {
+        check('library filters', () => { throw e; });
+      }
+      server.close(() => resolve());
+    });
+  });
+
   console.log('通过：' + passed.length + ' 项');
   if (errors.length) {
     console.log('失败：' + errors.length + ' 项');
