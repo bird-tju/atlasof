@@ -50,8 +50,7 @@
   });
   TOPICS.sort(function (a, b) { return (a.year || 0) - (b.year || 0); });
 
-  var STORE_KEY = 'cs-atlas.progress.v1';
-  var LEGACY_KEY = '{{SECRET_hpkbkgnp}}';
+  var STORE_KEY = 'atlasof.progress.v1';
   var DAY = 86400000;
   var STATUS_META = {
     todo:    { label: 'Not started', short: '—', color: '#6d758a', days: 0 },
@@ -70,11 +69,7 @@
 
   function loadStore() {
     try {
-      var raw = localStorage.getItem(STORE_KEY) || localStorage.getItem(LEGACY_KEY);
-      if (raw) {
-        if (!localStorage.getItem(STORE_KEY)) localStorage.setItem(STORE_KEY, raw);
-        localStorage.removeItem(LEGACY_KEY);
-      }
+      var raw = localStorage.getItem(STORE_KEY);
       return raw ? JSON.parse(raw) : {};
     } catch (e) { return {}; }
   }
@@ -1659,7 +1654,7 @@
           var blob = new Blob([JSON.stringify(store, null, 2)], { type: 'application/json' });
           var a = document.createElement('a');
           a.href = URL.createObjectURL(blob);
-          a.download = 'cs-atlas-progress.json';
+          a.download = 'atlasof-progress.json';
           a.click();
           setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
         } else if (action === 'import') {

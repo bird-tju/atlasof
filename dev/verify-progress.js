@@ -52,7 +52,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await evalJs(`document.querySelectorAll('.status-btn')[2].click()`);
   await sleep(150);
   console.log('after click, active =', await evalJs(`document.querySelector('.status-btn.is-active').textContent`));
-  console.log('store =', await evalJs(`localStorage.getItem('cs-atlas.progress.v1')`));
+  console.log('store =', await evalJs(`localStorage.getItem('atlasof.progress.v1')`));
 
   await cdp.send('Page.reload', { ignoreCache: true });
   await sleep(900);
