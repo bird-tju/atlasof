@@ -29,7 +29,14 @@ CS.addTopics([
     year: 1958,
     tags: ['Neurons', 'Learning', 'The first winter'],
     summary: 'A layer of learnable weights imitating a neuron: the perceptron launched connectionism, and met its first refutation.',
-    body: ['In 1943 McCulloch and Pitts proposed an artificial neuron; in 1958 Rosenblatt built the perceptron: a weighted sum of inputs, a threshold, and weights corrected by mistakes. It could learn any linearly separable problem and was used for simple image recognition.', 'In 1969 Minsky and Papert published Perceptrons, proving that a single layer cannot solve non-linear problems such as XOR. The book is often misread as a refutation of neural networks in general, yet it did hasten connectionism’s first winter. Multi-layer networks and backpropagation had to wait until the 1980s.'],
+    body: [
+      'The perceptron is a line. Its inputs are numbers, each multiplied by a weight, summed, and compared to a threshold; if the sum clears the threshold the output is one, otherwise zero. Training adjusts the weights whenever the output is wrong: nudge each weight toward the direction that would have produced the right answer. That is the whole algorithm, and in 1958 it looked like a plausible model of how a brain might learn.',
+      'The lineage matters. In 1943 McCulloch and Pitts showed that a neuron with a threshold could compute logical functions, so a network of them could in principle compute anything a circuit could. Rosenblatt\'s contribution was not the neuron but the learning rule: a machine that improved itself from examples rather than being wired correctly by hand. The Mark I Perceptron read a 20x20 grid of photocells and learned to distinguish simple shapes.',
+      'The convergence result made it respectable. Novikoff proved in 1962 that if the data can be separated by some hyperplane, the perceptron learning rule will find one in a finite number of mistakes, and the bound depends on how wide the margin is. This is a real theorem, and it is also the source of the field\'s first overreach: the guarantee applies only when a separating hyperplane exists, and says nothing about how long it takes when one does not.',
+      'In 1969 Minsky and Papert published Perceptrons, analysing what a single-layer network can and cannot compute. The XOR case is the cleanest: no single line can separate (0,1) and (1,0) from (0,0) and (1,1), so a one-layer perceptron can never learn it. They went further, showing that certain predicates about connectedness in an image require a number of units that grows with the image size — a formal statement that locality is expensive.',
+      'The book is usually misread in both directions. It did not claim that multi-layer networks are useless; Minsky and Papert explicitly acknowledged that adding layers helps, and their objection was that nobody knew how to train them. That is the actual reason for the winter: the learning rule existed only for the single layer, and no reliable method for assigning error to hidden units existed until backpropagation was popularised in 1986.',
+      'What the episode teaches is about evidence rather than history. A model that learns from data, with a proof of convergence on a restricted class, was read as a model of learning in general — and the correction, when it came, was a theorem about what a single layer cannot represent, not an experiment showing it failing. The current wave of neural networks is not exempt from this pattern; the difference is that today\'s models are large enough that the relevant limits are empirical rather than provable.'
+    ],
     milestones: [
       [1943, 'The McCulloch–Pitts neuron', 'Neural activity described with logic gates.'],
       [1958, 'The perceptron', 'A learnable linear classifier.', 1],
@@ -39,7 +46,12 @@ CS.addTopics([
     concepts: [['Linear classification', 'Separating two classes with a hyperplane.'], ['Weight learning', 'Adjusting weights from errors — the ancestor of gradient descent.'], ['The XOR problem', 'The classic linearly inseparable counter-example.']],
     people: [['Frank Rosenblatt', '1928 – 1971', 'Inventor of the perceptron.'], ['Marvin Minsky', '1927 – 2016', 'Co-author of Perceptrons.']],
     related: ['dartmouth', 'deep-learning', 'statistical-learning'],
-    reading: [['Perceptrons', 'Minsky & Papert', '1969'], ['Principles of Neurodynamics', 'Frank Rosenblatt', '1962']],
+    reading: [
+      ['The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain', 'Frank Rosenblatt', '1958', 'https://blogs.cornell.edu/info2040/files/2012/11/rosenblatt-perceptron.pdf', 'paper'],
+      ['Perceptrons: An Introduction to Computational Geometry', 'Marvin Minsky & Seymour Papert', '1969', '', 'book'],
+      ['Perceptron', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Perceptron', 'wiki'],
+      ['A Logical Calculus of the Ideas Immanent in Nervous Activity', 'McCulloch & Pitts', '1943', 'http://www.cse.chalmers.se/~coquand/AUTOMATA/mcp.pdf', 'paper']
+    ],
     practice: 'Train a perceptron by hand on AND, OR and XOR; show why the third cannot converge'
   },
 
