@@ -428,8 +428,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!fs.existsSync(file)) throw new Error('dist/404.html missing');
     const html = fs.readFileSync(file, 'utf8');
     if (!/<main/.test(html)) throw new Error('404 has no <main>');
-    for (const base of ['/cs/', '/math/']) {
-      if (!html.includes('href="' + base + '"')) throw new Error('404 does not link ' + base);
+    // Every published atlas must be reachable from the 404 page; the list comes from
+    // dist itself, so an atlas that is not built cannot break this check.
+    const atlases = fs.readdirSync(path.join(ROOT, 'dist'), { withFileTypes: true })
+      .filter((e) => e.isDirectory() && e.name !== 'assets')
+      .map((e) => e.name);
+    if (!atlases.length) throw new Error('no atlas built');
+    for (const a of atlases) {
+      if (!html.includes('href="/' + a + '/"')) throw new Error('404 does not link /' + a + '/');
     }
     if (/https?:\/\//.test(html.replace(/xmlns="[^"]*"/g, ''))) throw new Error('404 makes external requests');
   });

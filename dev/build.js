@@ -36,6 +36,7 @@ const ATLASES = [
   {
     id: 'math',
     base: '/math',
+    enabled: false,          // source kept, not published yet
     dir: 'atlases/math',
     title: 'Math Atlas',
     tagline: 'A map of mathematics',
@@ -216,9 +217,12 @@ async function main() {
   rmrf(DIST);
   mkdir(DIST);
 
+  // An atlas can sit in the repo without being published: enabled: false keeps its
+  // source and drops it from the build, the portal, the sitemap and the 404 page.
+  const live = ATLASES.filter(function (a) { return a.enabled !== false; });
   const urls = [];
 
-  for (const entry of ATLASES) {
+  for (const entry of live) {
     const srcDir = path.join(ROOT, entry.dir);
     if (!fs.existsSync(srcDir)) { console.log('skip (no folder):', entry.id); continue; }
 
@@ -265,8 +269,8 @@ async function main() {
     console.log('');
   }
 
-  fs.writeFileSync(path.join(DIST, 'index.html'), portal(ATLASES), 'utf8');
-  fs.writeFileSync(path.join(DIST, '404.html'), notFound(ATLASES), 'utf8');
+  fs.writeFileSync(path.join(DIST, 'index.html'), portal(live), 'utf8');
+  fs.writeFileSync(path.join(DIST, '404.html'), notFound(live), 'utf8');
 
   const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
@@ -293,7 +297,7 @@ async function main() {
     ''
   ].join('\n'), 'utf8');
 
-  console.log('pages:', urls.length, '| atlases:', ATLASES.length, '| dist ready');
+  console.log('pages:', urls.length, '| atlases:', live.length, '| dist ready');
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

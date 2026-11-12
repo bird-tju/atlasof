@@ -1,13 +1,13 @@
 # Atlas
 
-A static, zero-dependency collection of atlases. Two so far:
+A static, zero-dependency collection of atlases. One is published:
 
 - **CS Atlas** at `/cs/` — computer science in 13 domains, 75 topics and 326 milestones, plus a from-scratch hardware course built up from a single NAND gate.
-- **Math Atlas** at `/math/` — a placeholder, structure only.
+- **Math Atlas** — source in `atlases/math/`, held back until it has content (`enabled: false` in `ATLASES`).
 
-The front page at `/` is the portal that lists them.
+The front page at `/` is the portal that lists the published ones.
 
-Everything is **English-only**. Each atlas lives under its own base: `/cs/…`, `/math/…`.
+Everything is **English-only**. Each atlas lives under its own base: `/cs/…` today, `/math/…` when it ships.
 
 Live shape of the content: **13 domains · 75 topics · 326 milestones · 129 people**.
 
@@ -60,7 +60,7 @@ atlases/cs/           the CS atlas: its own shell, styles, data and pages
   js/data/            content: core.js, 01–13 domains, 14 learning, 15 courses,
                       17 HDL, 18 open courses
   js/pages/           the hardware course pages and their widgets
-atlases/math/         the math atlas: placeholder shell only
+atlases/math/         the math atlas: source only, not published (enabled: false)
 dev/                  build, static server, data check, HDL check, smoke tests
 dist/                 build output (generated, ignored by git)
   index.html          the portal
