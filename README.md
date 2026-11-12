@@ -166,9 +166,20 @@ change on our side.
 absolute derives from it — canonical URLs, `og:url`, `og:image`, the sitemap and
 robots.txt — so changing the domain means changing that one line and rebuilding.
 
-The build also emits `dist/privacy/` (the policy page Google AdSense requires, at the
-domain root rather than per atlas) and `dist/ads.txt` (comments only until a
-publisher id exists). The build writes `dist/_headers` (Cloudflare Pages and Netlify both read it):
+The build also emits `dist/privacy/` (the policy page Google AdSense requires, at
+the domain root rather than per atlas) and `dist/ads.txt`, which authorises the
+AdSense seller configured as `ADSENSE_CLIENT` in `dev/build.js`.
+
+One value comes from the build environment rather than the repository:
+
+| Variable | Purpose |
+| --- | --- |
+| `CONTACT_EMAIL` | address shown at the end of the privacy page; unset means no contact line |
+
+Keep it in the host's build settings so the public history never carries a personal
+mailbox.
+
+The build writes `dist/_headers` (Cloudflare Pages and Netlify both read it):
 `/assets/*` is cacheable forever because those URLs carry a content hash, while
 HTML keeps the platform default of revalidating on every request. Only one rule
 sets `Cache-Control`, because the host joins duplicate headers with a comma rather
