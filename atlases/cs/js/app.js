@@ -950,14 +950,13 @@
       (t.reading || []).forEach(function (r) {
         var key = r.title.toLowerCase() + '|' + r.author.toLowerCase();
         if (!byKey[key]) {
-          byKey[key] = { title: r.title, author: r.author, year: r.year, url: r.url, type: r.type, topics: [], domains: {} };
+          byKey[key] = { title: r.title, author: r.author, year: r.year, url: r.url, type: r.type, topics: [], domain: t.domain };
           order.push(key);
         }
         var e = byKey[key];
         if (!e.url && r.url) e.url = r.url;
         if (e.type === 'other' && r.type !== 'other') e.type = r.type;
         e.topics.push(t);
-        e.domains[t.domain] = true;
       });
     });
 
@@ -973,7 +972,7 @@
       '</div>';
 
     var groups = CS.domains.map(function (d) {
-      var list = items.filter(function (i) { return i.domains[d.id]; });
+      var list = items.filter(function (i) { return i.domain === d.id; });
       if (!list.length) return '';
       list.sort(function (a, b) { return String(a.author).localeCompare(String(b.author)); });
       return '<div class="lib-group" data-domain="' + d.id + '">' +
