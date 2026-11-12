@@ -82,7 +82,7 @@ CS.AluUI = (function () {
     var any = state.orBits ? 1 : 0;
     return '<div class="or8-widget">' +
       '<div class="bitrow or8-row">' + bits + '</div>' +
-      '<p class="or8-out mono">Or8Way(...) = ' + any + '　' + (any ? '(at least one bit is 1)' : '(all eight bits are 0)') + '</p>' +
+      '<p class="or8-out mono">Or8Way(...) = ' + any + ' ' + (any ? '(at least one bit is 1)' : '(all eight bits are 0)') + '</p>' +
       '</div>';
   }
 

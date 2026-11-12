@@ -420,9 +420,9 @@ CS.P1UI = (function () {
           '<div class="mux-col mux-about"><p class="aside-h">' + 'How it is wired' + '</p>' +
           '<p class="p1-how">' + g.how + '</p>' +
           '<ul class="mux-points">' +
-          '<li><strong>' + 'Inputs' + '</strong>：' + g.vars.join('、') + '.</li>' +
+          '<li><strong>' + 'Inputs' + '</strong>: ' + g.vars.join(', ') + '.</li>' +
       '<li><strong>' + 'NANDs' + '</strong>' + ': ' + g.nands + '.</li>' +
-          '<li><strong>' + 'Output' + '</strong>：out = ' + g.expr + '。</li>' +
+          '<li><strong>' + 'Output' + '</strong>: out = ' + g.expr + '. </li>' +
           '</ul></div>' +
           '</div>' +
           CS.hdlView(g.id) +

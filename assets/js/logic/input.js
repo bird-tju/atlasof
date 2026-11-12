@@ -24,10 +24,10 @@ CS.InputUI = (function () {
   var state = { code: 0 };
 
   function charOf(code) {
-    if (!code) return '' + '(no key)' + '';
+    if (!code) return '(no key)';
     if (SPECIAL[code]) return SPECIAL[code];
     if (code >= 32 && code < 127) return String.fromCharCode(code);
-    return '' + 'undefined' + '';
+    return '(unassigned)';
   }
 
   function bin16(v) {

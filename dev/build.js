@@ -29,7 +29,7 @@ const ASSET_V = assetVersion();
 const ROUTES = [
   '', 'map', 'timeline', 'domains', 'paths', 'progress', 'giants', 'about',
   'intro', 'p1', 'p2', 'alu', 'clock', 'ram', 'machine', 'ml', 'asm', 'cpu',
-  'computer', 'screen', 'input', 'logic'
+  'computer', 'screen', 'input', 'logic', 'layers', 'adder'
 ];
 
 function rmrf(p) { if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true }); }
@@ -173,7 +173,7 @@ async function main() {
 </head><body>
 <h1>Atlas</h1>
 <p>Visual, bottom-up maps of big subjects. Each atlas is a set of interlinked pages, from first principles to the frontier.</p>
-<a class="card" href="/cs/en/"><b>CS Atlas</b><span>Computer science in 13 domains, 75 topics, 326 milestones — plus a from-scratch hardware course.</span></a>
+<a class="card" href="/cs/"><b>CS Atlas</b><span>Computer science in 13 domains, 75 topics, 326 milestones — plus a from-scratch hardware course.</span></a>
 </body></html>`, 'utf8');
 
   // sitemap (single language)

@@ -48,7 +48,7 @@ CS.hdl = {
 }`
   },
   mux: {
-    title: 'Mux（2:1）',
+    title: 'Mux(2:1)',
     note: 'One sel bit, with a, b and out all 1 bit wide; Mux16 is just sixteen copies of this.',
     code: `CHIP Mux {
   IN a, b, sel;
@@ -61,7 +61,7 @@ CS.hdl = {
 }`
   },
   dmux: {
-    title: 'DMux（1:2）',
+    title: 'DMux(1:2)',
     note: 'Exactly symmetric to Mux: sel chooses which output gets in, and the other is forced to 0.',
     code: `CHIP DMux {
   IN in, sel;

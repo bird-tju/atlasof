@@ -23,7 +23,7 @@
     return Object.assign({}, t, {
       body: t.body || [],
       milestones: (t.milestones || []).map(function (m) {
-        return { year: m[0], title: m[1], text: m[2], star: !!m[3] };
+        return { year: m[0], title: m[1], text: m[2], star: m[3] === 1 || m[3] === true };
       }),
       bodyEn: t.bodyEn || null,
       concepts: (t.concepts || []).map(function (c) { return { name: c[0], text: c[1] }; }),
@@ -1785,7 +1785,7 @@
     var bits = raw.split('#');
     var sub = bits[0];
     var hash = bits[1] ? '#' + bits[1] : '';
-    var base = (window.__ATLAS__.base || '') + '/' + (window.__ATLAS__.lang || 'en') + '/';
+    var base = (window.__ATLAS__.base || '') + '/';
     location.href = base + (sub ? sub + '/' : '') + hash;
   });
 

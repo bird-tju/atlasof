@@ -95,8 +95,8 @@ CS.P2UI = (function () {
       var sum = total & 1;
       carry = total >> 1;
       var y = 12 + i * 34;
-      var head = 'a[' + i + ']=' + ai + '　b[' + i + ']=' + bi;
-      if (i > 0) head += '　c' + i + '=' + ci;
+      var head = 'a[' + i + ']=' + ai + '  b[' + i + ']=' + bi;
+      if (i > 0) head += '  c' + i + '=' + ci;
       var name = i === 0 ? 'HA' : 'FA';
       rows += '<text class="p1-slice-k" x="4" y="' + (y + 20) + '">' + head + '</text>';
       rows += '<path class="p1-w' + (ai || bi || ci ? ' is-on' : '') + '" d="M150 ' + (y + 16) + ' H180"/>';
@@ -262,13 +262,13 @@ CS.P2UI = (function () {
       '<section class="mux-section"><div class="wrap-wide">' +
 
       block({ id: 'half', name: 'HalfAdder', sub: 'half adder', leftTitle: 'Truth table', midTitle: 'Structure',
-        eq: 'sum = a ⊕ b，carry = a ∧ b', hdl: 'halfAdder',
+        eq: 'sum = a ⊕ b, carry = a ∧ b', hdl: 'halfAdder',
         about: '<p class="p1-how">' + 'Adding two 1-bit numbers: XOR gives the sum bit, AND gives the carry.' + '</p>' +
           '<ul class="mux-points"><li><strong>' + 'No carry in' + '</strong>' + ': this is what the lowest bit uses.' + '</li>' +
           '<li><strong>' + 'Two gates' + '</strong>' + ': Xor and And.' + '</li></ul>' }) +
 
       block({ id: 'full', name: 'FullAdder', sub: 'full adder', leftTitle: 'Truth table', midTitle: 'Structure',
-        eq: 'sum = a ⊕ b ⊕ c，carry = (a∧b) ∨ (c∧(a⊕b))', hdl: 'fullAdder',
+        eq: 'sum = a ⊕ b ⊕ c, carry = (a∧b) ∨ (c∧(a⊕b))', hdl: 'fullAdder',
         about: '<p class="p1-how">' + 'Adding three 1-bit values: a, b and the carry c from the bit below.' + '</p>' +
           '<ul class="mux-points"><li><strong>' + 'Carry in' + '</strong>' + ': that is what lets them chain.' + '</li>' +
           '<li><strong>' + 'Five gates' + '</strong>' + ': two Xor, two And, one Or.' + '</li></ul>' }) +

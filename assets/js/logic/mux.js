@@ -110,9 +110,9 @@ CS.MuxUI = (function () {
       '<div class="mux-col mux-about">' +
       '<p class="aside-h">' + 'What it does' + '</p>' +
       '<ul class="mux-points">' +
-      '<li><strong>' + 'sel only selects' + '</strong>：' + 'sel decides the route and takes no part in the computation itself.' + '</li>' +
-      '<li><strong>' + 'The other input is dropped' + '</strong>：' + 'the input that is not selected has no effect on the output.' + '</li>' +
-      '<li><strong>' + 'It can be widened' + '</strong>：' + 'Mux16 is sixteen of these side by side; Mux4Way16 uses two sel bits to choose among four.' + '</li>' +
+      '<li><strong>' + 'sel only selects' + '</strong>: ' + 'sel decides the route and takes no part in the computation itself.' + '</li>' +
+      '<li><strong>' + 'The other input is dropped' + '</strong>: ' + 'the input that is not selected has no effect on the output.' + '</li>' +
+      '<li><strong>' + 'It can be widened' + '</strong>: ' + 'Mux16 is sixteen of these side by side; Mux4Way16 uses two sel bits to choose among four.' + '</li>' +
       '</ul>' +
       '</div>' +
       '</div>' +
@@ -122,7 +122,7 @@ CS.MuxUI = (function () {
       '<div class="mux-block" data-dev="dmux">' +
       '<div class="mux-head">' +
       '<h2>DMUX <span>' + 'demultiplexer 1:2' + '</span></h2>' +
-      '<p class="mux-eq"><span class="mono">a = in ∧ ¬sel，b = in ∧ sel</span> — <strong>' + 'sel=0 sends to a, sel=1 sends to b' + '</strong></p>' +
+      '<p class="mux-eq"><span class="mono">a = in ∧ ¬sel, b = in ∧ sel</span> — <strong>' + 'sel=0 sends to a, sel=1 sends to b' + '</strong></p>' +
       '</div>' +
       '<div class="mux-grid">' +
       '<div class="mux-col"><p class="aside-h">' + 'Selection table' + '</p><div data-slot="table"></div></div>' +
@@ -130,8 +130,8 @@ CS.MuxUI = (function () {
       '<div class="mux-col mux-about">' +
       '<p class="aside-h">' + 'What it does' + '</p>' +
       '<ul class="mux-points">' +
-      '<li><strong>' + 'One in, two out' + '</strong>：' + 'only one output gets in at a time; the other is forced to 0.' + '</li>' +
-      '<li><strong>' + 'The mirror image of MUX' + '</strong>：' + 'MUX picks one line out of several; DMUX sends one line to one of several.' + '</li>' +
+      '<li><strong>' + 'One in, two out' + '</strong>: ' + 'only one output gets in at a time; the other is forced to 0.' + '</li>' +
+      '<li><strong>' + 'The mirror image of MUX' + '</strong>: ' + 'MUX picks one line out of several; DMUX sends one line to one of several.' + '</li>' +
       '<li><strong>' + 'It can be widened' + '</strong>' + ': DMux4Way uses two sel bits to send the input to one of four outputs.' + '</li>' +
       '</ul>' +
       '</div>' +

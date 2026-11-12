@@ -51,7 +51,7 @@ CS.ClockUI = (function () {
     }
     o += '<path class="p1-w is-on" d="' + clk + '"/>';
 
-    // D：0 → 1 → 1 → 0
+    // D: 0 -> 1 -> 1 -> 0
     var d = 'M' + x0 + ' 112 H' + (x0 + 60) + ' V96 H' + (x0 + 132) + ' V112 H' + (x0 + 180) + ' V96 H' + (x0 + 290);
     o += '<path class="p1-w" d="' + d + '"/>';
 

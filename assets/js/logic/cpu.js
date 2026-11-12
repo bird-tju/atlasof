@@ -203,7 +203,7 @@ CS.CpuUI = (function () {
       '<p>Bits 11–6 of a C instruction are <b>in exactly the same order as the ALU’s six control bits</b>:</p>' +
       '<table class="layer-table cpu-map">' +
       '<thead><tr><th>Instruction bit</th><th>Wired to</th><th>Meaning</th></tr></thead><tbody>' +
-      '<tr><td class="mono">bit 12（a）</td><td class="mono">Mux16.sel</td><td>' + "whether the ALU’s y takes A or M" + '</td></tr>' +
+      '<tr><td class="mono">bit 12(a)</td><td class="mono">Mux16.sel</td><td>' + "whether the ALU’s y takes A or M" + '</td></tr>' +
       '<tr><td class="mono">bit 11</td><td class="mono">ALU.zx</td><td>zero x</td></tr>' +
       '<tr><td class="mono">bit 10</td><td class="mono">ALU.nx</td><td>invert x</td></tr>' +
       '<tr><td class="mono">bit 9</td><td class="mono">ALU.zy</td><td>zero y</td></tr>' +

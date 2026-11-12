@@ -176,7 +176,7 @@ CS.MachineUI = (function () {
       '<tr><td class="mono">0 – 16383</td>' + '<td>Data</td><td>R0–R15, variables, the stack</td>' + '</tr>' +
       '<tr><td class="mono">16384 – 24575</td>' + '<td>Screen (8K words)</td><td>Write a 1 to light a pixel</td>' + '</tr>' +
       '<tr><td class="mono">24576</td>' + '<td>Keyboard</td><td>Read the scan code of the key held</td>' + '</tr>' +
-      '<tr><td class="mono">0 – 32767（ROM）</td>' + (EN ? '<td>Instructions</td><td>Read wherever PC points</td>' : '<td>' + 'instruction' + '') + '</tr>' +
+      '<tr><td class="mono">0 – 32767(ROM)</td>' + (EN ? '<td>Instructions</td><td>Read wherever PC points</td>' : '<td>' + 'instruction' + '') + '</tr>' +
       '</tbody></table>' +
       '<p class="bits-tip">' + 'So <code>@SCREEN</code> is just <code>@16384</code> and <code>@KBD</code> is just <code>@24576</code> — predefined symbols in the assembler, not new instructions.' + '</p>' +
       '</div>' +

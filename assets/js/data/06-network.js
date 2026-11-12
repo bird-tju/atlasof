@@ -11,9 +11,9 @@ CS.addTopics([
     body: ['In 1961 Kleinrock analysed packet switching with queueing theory; in 1964 Baran proposed a distributed network for communication under nuclear war. The telephone network set up a dedicated circuit per call; packet switching cuts data into packets, each choosing its own path over shared links.', 'In 1969 ARPANET connected four machines at UCLA, SRI, UCSB and Utah. The design goal was not efficiency but survivability: with no centre, no single failure can take the network down. That choice later decided the topology and the governance of the Internet.'],
     milestones: [
       [1961, 'Kleinrock\'s packet-switching paper', 'Queueing theory applied to packet networks.', 1],
-      [1964, 'Baran\'s distributed network', 'Networks designed for survivability.', 'undefined'],
-      [1969, 'ARPANET\'s first four nodes', 'The ancestor of the Internet.', 'undefined'],
-      [1971, 'Electronic mail', 'The first killer application.', 'undefined']
+      [1964, 'Baran\'s distributed network', 'Networks designed for survivability.'],
+      [1969, 'ARPANET\'s first four nodes', 'The ancestor of the Internet.'],
+      [1971, 'Electronic mail', 'The first killer application.']
     ],
     concepts: [['Packet', 'A message cut into bounded chunks, each transmitted independently.'], ['Store and forward', 'A node receives the whole packet, then picks the next hop.'], ['Distributed routing', 'No central control; each node keeps its own forwarding table.']],
     people: [['Leonard Kleinrock', '1934 – ', 'One of the founders of packet-switching theory.'], ['Paul Baran', '1926 – 2011', 'Proposed the distributed communication network.']],
@@ -32,10 +32,10 @@ CS.addTopics([
     body: ['In 1974 Cerf and Kahn published the design of TCP, whose goal was to interconnect different networks — a network of networks. In 1978 TCP was split into TCP and IP: IP offers connectionless best-effort delivery, and TCP adds retransmission, ordering and congestion control on top.', 'On 1 January 1983 ARPANET switched over to TCP/IP, a date often called the Internet’s birthday. Layering lets the layers below evolve independently: Ethernet, Wi-Fi and fibre all carry IP. And end-to-end congestion control is what kept the whole network stable through exponential growth.'],
     milestones: [
       [1974, 'Cerf and Kahn propose TCP', 'The core protocol for internetworking.', 1],
-      [1978, 'TCP and IP split', 'The layered design settles.', 'undefined'],
-      [1981, 'RFC 791 / 793', 'The formal specifications of IP and TCP.', 'undefined'],
-      [1983, 'ARPANET switches to TCP/IP', 'The Internet\'s birthday.', 'undefined'],
-      [1988, 'Congestion control', 'Van Jacobson keeps the network from collapsing.', 'undefined']
+      [1978, 'TCP and IP split', 'The layered design settles.'],
+      [1981, 'RFC 791 / 793', 'The formal specifications of IP and TCP.'],
+      [1983, 'ARPANET switches to TCP/IP', 'The Internet\'s birthday.'],
+      [1988, 'Congestion control', 'Van Jacobson keeps the network from collapsing.']
     ],
     concepts: [['Layering', 'Link, network, transport and application each mind their own business.'], ['IP addressing', 'Addresses and routing tables carry a packet to its destination network.'], ['Congestion control', 'Adjust the sending rate from packet loss and delay.']],
     people: [['Vint Cerf', '1943 – ', 'Co-designer of TCP/IP.'], ['Bob Kahn', '1938 – ', 'Co-designer of TCP/IP.']],
@@ -54,10 +54,10 @@ CS.addTopics([
     body: ['In 1973 Metcalfe designed Ethernet at Xerox PARC, running at 2.94 Mbps. It used CSMA/CD: listen before sending, back off and retry on collision. In 1980 DEC, Intel and Xerox published the DIX standard; in 1983 IEEE 802.3 standardised it.', 'In the 1990s switches replaced the shared medium, collision domains disappeared, and speeds rose from 10M to 100M, 1G and 10G. Ethernet’s real victory was simplicity: a fixed frame format, and upgrades confined to the physical layer. Today it is not only the LAN but the default interconnect inside data centres.'],
     milestones: [
       [1973, 'Metcalfe designs Ethernet', 'CSMA/CD on a shared bus.', 1],
-      [1980, 'The DIX standard', 'Three companies agree on one specification.', 'undefined'],
-      [1983, 'IEEE 802.3', 'The international standard.', 'undefined'],
-      [1990, 'Switched Ethernet', 'Collision domains disappear.', 'undefined'],
-      [2000, '10 Gigabit and the datacentre', 'Ethernet moves into the backbone.', 'undefined']
+      [1980, 'The DIX standard', 'Three companies agree on one specification.'],
+      [1983, 'IEEE 802.3', 'The international standard.'],
+      [1990, 'Switched Ethernet', 'Collision domains disappear.'],
+      [2000, '10 Gigabit and the datacentre', 'Ethernet moves into the backbone.']
     ],
     concepts: [['CSMA/CD', 'Listen before talking, listen while talking, back off after a collision.'], ['Frame', 'Ethernet’s unit of transmission, carrying source and destination MAC addresses.'], ['Switch', 'Forwards frames by MAC address and splits collision domains.']],
     people: [['Robert Metcalfe', '1946 – ', 'Inventor of Ethernet.'], ['Radia Perlman', '1951 – ', 'Spanning tree protocol, which lets Ethernet be redundant.']],
@@ -76,9 +76,9 @@ CS.addTopics([
     body: ['Before DNS, host names and addresses lived in a single hosts file maintained by hand at SRI. That could not scale. In 1983 Mockapetris designed DNS: a distributed, hierarchical naming system delegating from the root through top-level domains to authoritative servers.', 'Queries usually go over UDP port 53, with caches and TTLs trading speed against freshness. DNS also became the first arena of governance: who runs the root zone, how top-level domains are granted, where ICANN’s legitimacy comes from. In 2016 the US Department of Commerce handed over the IANA functions, and DNS entered multistakeholder governance.'],
     milestones: [
       [1983, 'The DNS specification', 'Mockapetris designs hierarchical naming.', 1],
-      [1984, 'Root servers deployed', 'Thirteen root server addresses.', 'undefined'],
-      [1998, 'ICANN is founded', 'The body for names and addresses.', 'undefined'],
-      [2016, 'The IANA transition', 'Root-zone management becomes multistakeholder.', 'undefined']
+      [1984, 'Root servers deployed', 'Thirteen root server addresses.'],
+      [1998, 'ICANN is founded', 'The body for names and addresses.'],
+      [2016, 'The IANA transition', 'Root-zone management becomes multistakeholder.']
     ],
     concepts: [['Hierarchical naming', 'A tree from the root to top-level domains to authoritative servers.'], ['Recursive and iterative queries', 'The resolver does the work, or each server points to the next.'], ['TTL caching', 'Time to live trades speed against how quickly records update.']],
     people: [['Paul Mockapetris', '1953 – ', 'Designer of DNS.'], ['Jon Postel', '1943 – 1998', 'Founder of IANA and a driver of Internet standardisation.']],
@@ -97,11 +97,11 @@ CS.addTopics([
     body: ['In 1989 Berners-Lee submitted a proposal at CERN: link documents with hypertext, identify resources with URIs, transfer them with HTTP. In 1991 the first website went live at CERN. In 1993 the Mosaic browser put images on the same page as text, and the Web exploded.', 'HTTP was designed to be minimal: a method, headers and a body. State lives on the server; caching, proxies and extensions live in headers. HTTP/2 in 2015 added multiplexing, HTTP/3 in 2022 moved to QUIC — yet the semantics barely changed, which is exactly the strength of layering and backwards compatibility.'],
     milestones: [
       [1989, 'Berners-Lee\'s proposal', 'The starting point of the Web.', 1],
-      [1991, 'The first website', 'Online at CERN.', 'undefined'],
-      [1993, 'The Mosaic browser', 'Inline images bring the Web to everyone.', 'undefined'],
-      [1996, 'HTTP/1.0', 'Standardised.', 'undefined'],
-      [2015, 'HTTP/2', 'Multiplexing and header compression.', 'undefined'],
-      [2022, 'HTTP/3 and QUIC', 'A new transport built on UDP.', 'undefined']
+      [1991, 'The first website', 'Online at CERN.'],
+      [1993, 'The Mosaic browser', 'Inline images bring the Web to everyone.'],
+      [1996, 'HTTP/1.0', 'Standardised.'],
+      [2015, 'HTTP/2', 'Multiplexing and header compression.'],
+      [2022, 'HTTP/3 and QUIC', 'A new transport built on UDP.']
     ],
     concepts: [['URI', 'A uniform resource identifier: a name for every resource.'], ['Hypertext', 'Documents referring to each other through links.'], ['Statelessness', 'Each request stands alone; state is carried by cookies or sessions.']],
     people: [['Tim Berners-Lee', '1955 – ', 'Inventor of the World Wide Web.'], ['Marc Andreessen', '1971 – ', 'Co-founder of Mosaic and Netscape.']],
@@ -120,10 +120,10 @@ CS.addTopics([
     body: ['In 1971 the University of Hawaii’s ALOHAnet linked the islands by radio and designed the first random-access protocol. Cellular phones went commercial in the 1980s, and GSM opened its first digital network in Finland in 1991. In 1997 IEEE 802.11 standardised wireless LANs, and Wi-Fi moved into homes and cafés.', 'Mobile networks change generation roughly every decade: 2G texting, 3G data, 4G video, 5G low latency and massive connection counts. Each generation reallocates spectrum, modulation and architecture. Wireless is harder than wire: attenuation, interference and handover all have to be solved in the protocol.'],
     milestones: [
       [1971, 'ALOHAnet', 'A pioneer of random access over radio.', 1],
-      [1991, 'GSM goes commercial', 'The digital cellular standard.', 'undefined'],
-      [1997, 'IEEE 802.11', 'Wi-Fi is born.', 'undefined'],
-      [2009, '4G LTE', 'Mobile broadband.', 'undefined'],
-      [2019, '5G goes commercial', 'Low latency and massive IoT.', 'undefined']
+      [1991, 'GSM goes commercial', 'The digital cellular standard.'],
+      [1997, 'IEEE 802.11', 'Wi-Fi is born.'],
+      [2009, '4G LTE', 'Mobile broadband.'],
+      [2019, '5G goes commercial', 'Low latency and massive IoT.']
     ],
     concepts: [['Cellular', 'Divide coverage into cells so frequencies can be reused.'], ['Random access', 'Terminals contend for a shared channel and retry after collisions.'], ['Handover', 'Move a connection smoothly from one base station to another as you move.']],
     people: [['Norman Abramson', '1932 – 2020', 'Led ALOHAnet.'], ['Martin Cooper', '1928 – ', 'Made the first handheld mobile phone call.']],

@@ -16,8 +16,8 @@ CS.ComputerUI = (function () {
     var o = '';
     var rows = [
       { cond: 'address[14] = 0', name: 'RAM16K', range: '0 – 16383' },
-      { cond: 'address[14] = 1，address[13] = 0', name: 'Screen', range: '16384 – 24575' },
-      { cond: 'address[14] = 1，address[13] = 1', name: 'Keyboard', range: '24576' }
+      { cond: 'address[14] = 1, address[13] = 0', name: 'Screen', range: '16384 – 24575' },
+      { cond: 'address[14] = 1, address[13] = 1', name: 'Keyboard', range: '24576' }
     ];
     rows.forEach(function (r, i) {
       var y = 40 + i * 54;

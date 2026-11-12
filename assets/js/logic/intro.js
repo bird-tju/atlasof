@@ -186,9 +186,9 @@ CS.IntroUI = (function () {
       '<b>The instruction register (IR)</b> holds the fetched instruction. If fetch and decode happen in different cycles, you need it.' +
       '<p>It has three consequences:</p>' +
       '<ul class="intro-list">' +
-      '<b>No rewiring to change programs</b>: load a new program instead — on ENIAC a new task meant days of rewiring.' +
-      '<b>Programs can modify programs</b>: loaders, compilers and self-modifying code all rest on this.' +
-      '<b>Instructions need a fixed encoding</b>: they share memory with data, so they must be distinguishable and readable by the fetch unit.' +
+      '<li><b>No rewiring to change programs</b>: load a new program instead — on ENIAC a new task meant days of rewiring.</li>' +
+      '<li><b>Programs can modify programs</b>: loaders, compilers and self-modifying code all rest on this.</li>' +
+      '<li><b>Instructions need a fixed encoding</b>: they share memory with data, so they must be distinguishable and readable by the fetch unit.</li>' +
       '</ul>' +
       '<p class="intro-quote">Stored program = programs become data.</p>' +
       '<table class="layer-table intro-map">' +
@@ -215,8 +215,8 @@ CS.IntroUI = (function () {
       '<tr><td>Programs modifiable?</td><td>Yes, instructions are writable</td><td>Instructions are read-only; <b>no self-modification</b></td></tr>' +
       '<tr><td>Typical</td><td>General CPUs, the instruction path of GPUs</td><td>Microcontrollers, DSPs, most embedded processors</td></tr>' +
       '</tbody></table>' +
-      '<b>The von Neumann bottleneck:</b> fetch and load share one bus, so a faster CPU still queues. Harvard splits that path with two memories — the price is read-only instructions, so a program cannot change itself.' +
-      '<b>Which one is Hack?</b> The Hack we build later is <b>Harvard</b>: ROM32K holds only instructions, RAM16K holds only data, and two 15-bit address lines run separately. That lets it fetch and access memory in the same cycle, at the cost of not modifying itself.' +
+      '<div class="intro-callout"><b>The von Neumann bottleneck:</b> fetch and load share one bus, so a faster CPU still queues. Harvard splits that path with two memories — the price is read-only instructions, so a program cannot change itself.</div>' +
+      '<div class="intro-callout"><b>Which one is Hack?</b> The Hack we build later is <b>Harvard</b>: ROM32K holds only instructions, RAM16K holds only data, and two 15-bit address lines run separately. That lets it fetch and access memory in the same cycle, at the cost of not modifying itself.</div>' +
       '<p class="intro-quote">von Neumann: one memory for two things. Harvard: two memories, one thing each.</p>' +
       '</div>' +
 

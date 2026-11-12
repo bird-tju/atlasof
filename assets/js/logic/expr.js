@@ -19,7 +19,7 @@ CS.Expr = (function () {
       if ('&|!^*+~·¬∧∨⊕'.indexOf(c) >= 0) { out.push({ t: 'op', v: ALIAS[c] || c }); i++; continue; }
       var m = /^[A-Za-z][A-Za-z0-9_]*/.exec(s.slice(i));
       if (m) { out.push({ t: 'id', v: m[0] }); i += m[0].length; continue; }
-      throw new Error('' + c + '」');
+      throw new Error('Unexpected character "' + c + '"');
     }
     return out;
   }
@@ -70,7 +70,7 @@ CS.Expr = (function () {
 
     try {
       var ast = expr();
-      if (pos < toks.length) throw new Error('' + (toks[pos].v || toks[pos].t) + '」');
+      if (pos < toks.length) throw new Error('Unexpected token "' + (toks[pos].v || toks[pos].t) + '"');
       if (vars.length > 5) throw new Error('' + vars.length + '');
       vars.sort();
       return { ok: true, ast: ast, vars: vars };

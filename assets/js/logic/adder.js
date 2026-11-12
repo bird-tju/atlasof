@@ -171,61 +171,58 @@ CS.AdderUI = (function () {
     return '<section class="page-head page-head-adder">' +
       '<div class="wrap">' +
       '<p class="eyebrow">Adders, Step by Step</p>' +
-      '' +
-      '' +
-      '' +
+      '<h1>Adders, step by step</h1>' +
+      '<p class="page-head-lead">Four chips, each built on the one before: a half adder, a full adder that accepts a carry, sixteen of them chained, and the incrementer the PC uses.</p>' +
       '</div></section>' +
       CS.lineNav('adder', 'wrap') +
 
       '<section class="adder-section"><div class="wrap">' +
 
       '<div class="adder-block" data-dev="ha">' +
-      '' +
-      '' +
-      '<p class="adder-eq mono">sum = a ⊕ b　　carry = a ∧ b</p>' +
+      '<h2><span class="bits-num">01</span>HalfAdder</h2>' +
+      '<p>Two bits in, a sum bit and a carry out. The sum is XOR, because two ones must wrap to zero; the carry is AND, because it only happens when both are one.</p>' +
+      '<p class="adder-eq mono">sum = a ⊕ b  carry = a ∧ b</p>' +
       '<div class="adder-grid">' +
-      '' +
-      '' +
+      '<div><p class="aside-h">Truth table</p><div data-slot="table"></div></div>' +
+      '<div><p class="aside-h">Symbol</p><div data-slot="sym"></div></div>' +
       '</div>' +
       CS.hdlView('halfAdder') +
-      '' +
+      '<p class="bits-tip">No carry in: this is the chip the lowest bit uses, where nothing arrives from below.</p>' +
       '</div>' +
 
       '<div class="adder-block" data-dev="fa">' +
-      '' +
-      '' +
-      '' +
+      '<h2><span class="bits-num">02</span>FullAdder</h2>' +
+      '<p>Every other bit also receives the carry from the bit below, so the inputs are three: a, b and c.</p>' +
+      '<p class="adder-eq mono">sum = a ⊕ b ⊕ c  carry = majority(a, b, c)</p>' +
       '<div class="adder-grid">' +
-      '' +
-      '' +
+      '<div><p class="aside-h">Truth table</p><div data-slot="table"></div></div>' +
+      '<div><p class="aside-h">Symbol</p><div data-slot="sym"></div></div>' +
       '</div>' +
       CS.hdlView('fullAdder') +
-      '' +
+      '<p class="bits-tip"><b>c is not a control signal</b>: it is data, exactly like a and b, only it comes from the previous stage.</p>' +
       '</div>' +
 
       '<div class="adder-block" data-dev="add">' +
-      '' +
-      '' +
-      '' +
+      '<h2><span class="bits-num">03</span>Add16</h2>' +
+      '<p>Sixteen full adders chained: bit i adds a[i], b[i] and the carry out of bit i−1, and passes its own carry upward.</p>' +
+      '<p class="adder-eq mono">out = a + b, with the carry out of bit 15 dropped</p>' +
       addWidget() +
       CS.hdlView('add16') +
-      '' +
-      '' +
+      '<p class="bits-tip">The carry is a chain, so the top bit is not ready until fifteen carries have rippled through. That is the first real cost of building arithmetic from gates.</p>' +
       '</div>' +
 
       '<div class="adder-block" data-dev="inc">' +
-      '' +
-      '' +
+      '<h2><span class="bits-num">04</span>Inc16</h2>' +
+      '<p>Incrementing is adding one, so it is an Add16 with b hard-wired to 1.</p>' +
       '<p class="adder-eq mono">Inc16(x) = Add16(x, 1)</p>' +
       CS.hdlView('inc16') +
-      '' +
-      '' +
+      '<p class="bits-tip">The PC uses exactly this: after every instruction it adds one, unless a jump loads a new address instead.</p>' +
       '</div>' +
 
       '<div class="adder-block adder-next">' +
-      '' +
-      '' +
-      '' +
+      '<h2>Next: from addition to the ALU</h2>' +
+      '<p>An adder that can also AND its inputs, with a few control bits choosing which operation runs, is the ALU.</p>' +
+      '<p><a class="text-link" href="#/alu">Open the ALU page <span>→</span></a></p>' +
       '</div>' +
 
       '</div></section>';
