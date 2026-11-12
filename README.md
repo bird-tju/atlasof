@@ -54,7 +54,7 @@ svg/                  hand-drawn gate artwork (not referenced by the site)
 npm install            # jsdom, only needed for build and smoke tests
 npm run check          # validate the data files (ids, references, fields)
 npm run hdl            # validate the HDL snippets
-npm run smoke          # 33 headless checks over the built pages
+npm run smoke          # 35 headless checks: routes, interactions, build guards
 npm run build          # prerender dist/ (115 pages)
 npm run preview        # serve dist/ on http://127.0.0.1:4321
 ```

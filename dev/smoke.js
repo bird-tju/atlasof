@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const { JSDOM, VirtualConsole } = require('jsdom');
 
@@ -61,50 +62,50 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const $$ = (s) => Array.prototype.slice.call(doc.querySelectorAll(s));
   const click = (el) => el && el.dispatchEvent(new win.MouseEvent('click', { bubbles: true }));
 
-  check('首页', () => {
+  check('home', () => {
     if (!doc.querySelector('.hero')) throw new Error('no hero');
     if (!doc.querySelector('.hero-map') && !doc.querySelector('#hero-map')) throw new Error('no hero map');
   });
 
-  check('主导航 7 项', () => {
+  check('main nav', () => {
     const links = $$('.site-nav a, .nav-links a, header nav a');
     if (links.length < 6) throw new Error('nav links: ' + links.length);
   });
 
   await go('#/map');
-  check('图谱页', () => {
+  check('atlas graph', () => {
     if (!doc.querySelector('svg')) throw new Error('no svg');
   });
 
   await go('#/timeline');
-  check('时间轴页', () => {
+  check('timeline', () => {
     if (!doc.querySelector('.tl-item, .tl-list, .timeline-item')) throw new Error('no timeline items');
   });
 
   await go('#/domains');
-  check('领域页', () => {
+  check('domains', () => {
     if ($('.index-domain').length < 8) throw new Error('domain cards: ' + $('.index-domain').length);
   });
 
   await go('#/paths');
-  check('路径页', () => {
+  check('paths', () => {
     if (!doc.querySelector('.path-card, .path-list')) throw new Error('no path cards');
   });
 
   await go('#/progress');
-  check('进度页', () => {
+  check('progress', () => {
     if (!doc.querySelector('[data-status-topic], .progress-grid')) throw new Error('no progress');
   });
 
   await go('#/intro');
-  check('引子页', () => {
+  check('hardware intro', () => {
     if ($$('.intro-block').length < 4) throw new Error('intro blocks: ' + $$('.intro-block').length);
     if (!doc.querySelector('.cycle-player')) throw new Error('no cycle player');
   });
 
   /* ---------- Project 1 ---------- */
   await go('#/p1');
-  check('Project 1 结构', () => {
+  check('p1 structure', () => {
     const navCount = doc.querySelectorAll('.line-nav a').length;
     if (navCount !== 14) throw new Error('line-nav: ' + navCount);
     if ($$('.p1-block').length !== 13) throw new Error('p1 blocks: ' + $$('.p1-block').length);
@@ -113,14 +114,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!doc.querySelector('[data-dev="dmux"]')) throw new Error('dmux block missing');
   });
 
-  check('Project 1 真值表交互', () => {
+  check('p1 truth table', () => {
     const xor = doc.querySelector('.p1-block[data-gate="xor"]');
     const rows = xor.querySelectorAll('tr[data-row]');
     click(rows[rows.length - 1]);
     if (!xor.querySelector('.p1-w.is-on')) throw new Error('xor circuit not live');
   });
 
-  check('Project 1 16 位交互', () => {
+  check('p1 16-bit', () => {
     const a16 = doc.querySelector('.p1-block[data-gate="and16"]');
     if (a16.querySelectorAll('.b16-cell').length !== 48) throw new Error('b16 cells');
     const before = a16.querySelector('.b16-row:last-child .b16-hex').textContent;
@@ -129,7 +130,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (before === after) throw new Error('16-bit out unchanged');
   });
 
-  check('Project 1 多路高亮', () => {
+  check('p1 multi-way highlight', () => {
     const m4 = doc.querySelector('.p1-block[data-gate="mux4way16"]');
     click(m4.querySelector('tr[data-sel="2"]'));
     const m4b = doc.querySelector('.p1-block[data-gate="mux4way16"]');
@@ -138,20 +139,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   /* ---------- Project 2 ---------- */
   await go('#/p2');
-  check('Project 2 结构', () => {
+  check('p2 structure', () => {
     if ($$('[data-p2]').length !== 4) throw new Error('p2 blocks: ' + $$('[data-p2]').length);
     ['half', 'full', 'add16', 'inc16'].forEach((id) => {
       if (!doc.querySelector('[data-p2="' + id + '"]')) throw new Error('missing ' + id);
     });
   });
 
-  check('Project 2 真值表', () => {
+  check('p2 truth tables', () => {
     const full = doc.querySelector('[data-p2="full"]');
     click(full.querySelector('tr[data-row="7"]'));
     if (!doc.querySelector('[data-p2="full"]').querySelector('.p1-w.is-on')) throw new Error('full adder not live');
   });
 
-  check('Project 2 Add16 位格', () => {
+  check('p2 add16 cells', () => {
     const a16 = doc.querySelector('[data-p2="add16"]');
     const before = a16.querySelector('.b16-row:last-child .b16-hex').textContent;
     click(a16.querySelector('.b16-cell.is-edit[data-k="addA"][data-bit="0"]'));
@@ -161,14 +162,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   /* ---------- ALU ---------- */
   await go('#/alu');
-  check('ALU 页结构', () => {
+  check('alu structure', () => {
     if (!doc.querySelector('[data-alu-fig] svg')) throw new Error('no alu figure');
     if (!doc.querySelector('.alu-panel')) throw new Error('no alu panel');
     if ($$('.alu-panel tr[data-func]').length !== 18) throw new Error('18 functions');
     if ($$('.alu-panel [data-ctl]').length !== 6) throw new Error('6 control bits');
   });
 
-  check('ALU 交互', () => {
+  check('alu controls', () => {
     const rows = $$('.alu-panel tr[data-func]');
     click(rows[16]);
     const sel = doc.querySelector('.alu-panel tr.is-sel');
@@ -178,20 +179,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!doc.querySelector('.alu-panel .alu-out-val')) throw new Error('panel lost');
   });
 
-  check('ALU HDL 合法', () => {
+  check('alu hdl', () => {
     const code = doc.querySelector('.hdl-code');
     if (!code) throw new Error('no hdl code');
   });
 
   await go('#/clock');
-  check('时序页结构', () => {
+  check('sequential structure', () => {
     const figs = doc.querySelectorAll('[data-fig]').length;
     if (figs !== 5) throw new Error('figures: ' + figs);
     if (!doc.querySelector('.clk-widget[data-w="reg"]')) throw new Error('no register widget');
     if (!doc.querySelector('.clk-widget[data-w="pc"]')) throw new Error('no pc widget');
   });
 
-  check('Register 交互', () => {
+  check('register', () => {
     const reg = () => doc.querySelector('.clk-widget[data-w="reg"]');
     click(reg().querySelector('.b16-cell.is-edit[data-bit="0"]'));
     click(reg().querySelector('[data-toggle="regLoad"]'));
@@ -201,7 +202,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (out !== '0x0001') throw new Error('reg out=' + out);
   });
 
-  check('PC 优先级', () => {
+  check('pc priority', () => {
     const pc = () => doc.querySelector('.clk-widget[data-w="pc"]');
     const hex = () => {
       const rows = pc().querySelectorAll('.b16-row');
@@ -220,14 +221,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   /* ---------- RAM ---------- */
   await go('#/ram');
-  check('RAM 页结构', () => {
+  check('ram structure', () => {
     if (!doc.querySelector('[data-fig="ram"] svg')) throw new Error('no ram figure');
     const hdlCount = doc.querySelectorAll('.hdl-block').length;
     if (hdlCount !== 5) throw new Error('ram hdl blocks: ' + hdlCount);
     if ($('.layer-table tbody tr').length < 9) throw new Error('ram tables');
   });
 
-  check('RAM 演示', () => {
+  check('ram demo', () => {
     const w = () => doc.querySelector('.clk-widget[data-w="ram"]');
     if (!w()) throw new Error('no ram widget');
     click(w().querySelectorAll('.ram-slot')[3]);
@@ -243,13 +244,13 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   await go('#/logic');
-  check('门参考', () => {
+  check('gate reference', () => {
     if ($('.ref-col.ref-name').length < 6) throw new Error('gate cards: ' + $('.ref-col.ref-name').length);
     if ($('.ref-sym svg').length < 6) throw new Error('gate symbols: ' + $('.ref-sym svg').length);
   });
 
   await go('#/machine');
-  check('Hack 计算机页', () => {
+  check('computer', () => {
     const figs = doc.querySelectorAll('[data-fig]');
     if (figs.length !== 6) throw new Error('figures: ' + figs.length);
     const blocks = doc.querySelectorAll('.clock-block').length;
@@ -259,7 +260,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   await go('#/ml');
-  check('机器语言页', () => {
+  check('machine language', () => {
     const word = doc.querySelector('.ml-word code');
     if (!word || word.textContent.length !== 16) throw new Error('builder word: ' + (word && word.textContent));
     const bits = doc.querySelectorAll('.ml-bit').length;
@@ -269,7 +270,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (doc.querySelector('[data-ml-asm]')) throw new Error('translator should be removed');
   });
 
-  check('机器语言交互', () => {
+  check('machine language decode', () => {
     const chip = doc.querySelector('[data-dest="A"]');
     click(chip);
     const word = doc.querySelector('.ml-word code').textContent;
@@ -282,7 +283,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   await go('#/screen');
-  check('输出页', () => {
+  check('screen', () => {
     if (!doc.querySelector('.scr-grid')) throw new Error('no screen grid');
     const cells = doc.querySelectorAll('.scr-cell').length;
     if (cells !== 32 * 16) throw new Error('cells: ' + cells);
@@ -293,7 +294,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   await go('#/input');
-  check('输入页', () => {
+  check('input', () => {
     if (!doc.querySelector('.kb-grid')) throw new Error('no keyboard');
     const keys = doc.querySelectorAll('.kb-key').length;
     if (keys < 30) throw new Error('keys: ' + keys);
@@ -306,7 +307,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   await go('#/computer');
-  check('整机页', () => {
+  check('whole machine', () => {
     const figs = doc.querySelectorAll('[data-fig]').length;
     if (figs < 2) throw new Error('figures: ' + figs);
     const hdls = doc.querySelectorAll('.hdl-block').length;
@@ -314,7 +315,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   await go('#/asm');
-  check('汇编器页', () => {
+  check('assembler', () => {
     const ta = doc.querySelector('[data-asm]');
     if (!ta) throw new Error('no asm textarea');
     const out = doc.querySelector('[data-asm-out]');
@@ -328,7 +329,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   await go('#/cpu');
-  check('CPU 页', () => {
+  check('cpu', () => {
     const blocks = doc.querySelectorAll('.cpu-block').length;
     if (blocks !== 7) throw new Error('cpu blocks: ' + blocks);
     if (!doc.querySelector('.cpu-section .p1-svg')) throw new Error('no computer figure');
@@ -336,8 +337,71 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   await go('#/giants');
-  check('公开课页', () => {
+  check('open courses', () => {
     if ($$('.giant-card').length < 1) throw new Error('no giant cards');
+  });
+
+  /* ---------- build artifacts: no thin pages, no literal 'undefined', sane stars ---------- */
+  check('build artifacts', () => {
+    const distRoot = path.join(ROOT, 'dist', 'cs');
+    if (!fs.existsSync(distRoot)) throw new Error('dist missing: run npm run build first');
+    const pages = [];
+    (function walk(dir) {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, e.name);
+        if (e.isDirectory()) walk(full);
+        else if (e.name === 'index.html') pages.push(full);
+      }
+    })(distRoot);
+
+    const thin = [];
+    const undefinedPages = [];
+    const unversioned = [];
+    for (const file of pages) {
+      const html = fs.readFileSync(file, 'utf8');
+      const rel = '/' + path.relative(distRoot, path.dirname(file)).replace(/\\/g, '/') + '/';
+      // Measure the page body only: the shared header and footer would keep an
+      // emptied page above any whole-document threshold.
+      const main = html.match(/<main[\s\S]*?<\/main>/);
+      const text = (main ? main[0] : '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (text.length < 400) thin.push(rel + ' (' + text.length + ')');
+      if (/\bundefined\b/.test(text)) undefinedPages.push(rel);
+      if (/\.(?:css|js)"/.test(html)) unversioned.push(rel);
+    }
+    if (!pages.length) throw new Error('no pages in dist');
+    if (thin.length) throw new Error('thin pages: ' + thin.slice(0, 5).join(', '));
+    if (undefinedPages.length) throw new Error("pages showing 'undefined': " + undefinedPages.slice(0, 5).join(', '));
+    if (unversioned.length) throw new Error('unversioned assets: ' + unversioned.slice(0, 3).join(', '));
+  });
+
+  check('star ratio', () => {
+    const vm = require('vm');
+    const fs2 = require('fs');
+    const dir = path.join(ROOT, 'assets', 'js', 'data');
+    const CS = { topics: [] };
+    CS.addTopics = function (list) { CS.topics = CS.topics.concat(list); };
+    const sandbox = { window: {}, console };
+    sandbox.window.CS = CS;
+    sandbox.CS = CS;
+    vm.createContext(sandbox);
+    const files = fs2.readdirSync(dir).filter((f) => f.endsWith('.js'))
+      .sort((a, b) => (a === 'core.js' ? -1 : b === 'core.js' ? 1 : a.localeCompare(b)));
+    for (const f of files) {
+      vm.runInContext('var window = globalThis; var CS = window.CS;\n' + fs2.readFileSync(path.join(dir, f), 'utf8'), sandbox, { filename: f });
+    }
+    let total = 0;
+    let starred = 0;
+    for (const t of CS.topics) {
+      for (const m of t.milestones || []) {
+        total++;
+        if (m[3] === 1 || m[3] === true) starred++;
+      }
+    }
+    if (!total) throw new Error('no milestones');
+    const ratio = starred / total;
+    if (ratio < 0.05 || ratio > 0.4) {
+      throw new Error('starred ' + starred + '/' + total + ' = ' + ratio.toFixed(2) + ', expected 0.05-0.40');
+    }
   });
 
   console.log('通过：' + passed.length + ' 项');
