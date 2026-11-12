@@ -8,7 +8,14 @@ CS.addTopics([
     year: 1970,
     tags: ['Tables', 'Algebra', 'Independence'],
     summary: 'Data as two-dimensional tables and queries as relational algebra: Codd’s model gave databases a mathematical foundation.',
-    body: ['In 1970 Codd at IBM published a paper proposing to represent data as relations — tables — and describe queries in first-order logic. Hierarchical and network databases before it forced programmers to navigate physical structure; the relational model separated what you want from how to get it.', 'In 1974 the System R prototype delivered SQL and query optimisation; in 1979 Oracle shipped the first commercial relational database. The model survived the objection that it could not be as fast as network databases, and won on optimisers and transaction support. Today almost every data system inherits its interface in some form.'],
+    body: [
+      'Before 1970, a database was a physical structure you navigated. In a hierarchical or network database, the program walked pointers from parent records to children, which meant the program knew the layout of the data and broke whenever the layout changed. Codd\'s paper proposed something radical: describe data as relations — sets of tuples — and let a separate component decide how to find them.',
+      'Two ideas carry the model. The first is that a relation is a set, with no order among rows and no order among columns; primary and foreign keys express relationships by value rather than by pointer. The second is that queries can be written in relational algebra or first-order logic, which gives them a formal meaning independent of any machine. That is why a relational query can be optimised: the optimiser is free to reorder joins and rewrite a query precisely because the semantics does not depend on the execution order.',
+      'Data independence is the practical payoff, and it comes in two layers. Physical independence means changing indexes or storage layout does not change queries. Logical independence means adding a column or splitting a table can be hidden behind a view. Network databases had neither, so every schema change rippled into application code — the same coupling that makes undocumented schemas painful today.',
+      'The objection in the 1970s was performance: navigating pointers is obviously faster than joining tables, so the model looked like an academic luxury. The answer was the query optimiser. System R, the IBM prototype finished in 1974, showed that a cost-based optimiser choosing among access paths usually beat hand-written navigation, because it considered plans a human would not bother to enumerate. Oracle shipped a commercial version in 1979, and the argument was settled by measurement rather than by theory.',
+      'Transactions are the other half of the story. The relational model did not require ACID properties, but the systems that implemented it did, and the combination — declarative queries plus atomic, isolated transactions — turned out to be exactly what business applications needed. SQL was standardised by ANSI in 1986, which cemented the interface even as implementations diverged.',
+      'The model\'s limits are real: it is awkward for deeply nested or graph-shaped data, rigid schemas slow down fast-moving development, and a single node has a ceiling. Those are the pressures that produced the NoSQL movement, and the reason relational systems did not disappear is that the pressures turned out to be narrower than the slogan suggested. Most of the trade-offs NoSQL offered are now available inside relational engines, which is a stronger outcome than either side expected.'
+    ],
     milestones: [
       [1970, 'Codd\'s relational model', 'Tables, relational algebra and data independence.', 1],
       [1974, 'System R', 'A prototype of SQL and query optimisation.'],
@@ -18,7 +25,12 @@ CS.addTopics([
     concepts: [['Relation', 'A table of rows and columns, mathematically a set of tuples.'], ['Relational algebra', 'An algebra of selection, projection, join and the rest.'], ['Data independence', 'Logical structure separated from physical storage, so applications survive storage changes.']],
     people: [['Edgar F. Codd', '1923 – 2003', 'Proposed the relational model.'], ['Donald Chamberlin', '1944 – ', 'Co-designer of SQL.']],
     related: ['sql', 'transactions', 'nosql'],
-    reading: [['The Relational Model for Database Management', 'Edgar F. Codd', '1990'], ['Database System Concepts', 'Silberschatz et al.', '1997']],
+    reading: [
+      ['A Relational Model of Data for Large Shared Data Banks', 'E. F. Codd', '1970', 'https://www.seas.upenn.edu/~zives/03f/cis550/codd.pdf', 'paper'],
+      ['Relational model', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Relational_model', 'wiki'],
+      ['A Critique of the SQL Database Language', 'C. J. Date', '1983', '', 'paper'],
+      ['Database System Concepts', 'Silberschatz et al.', '1983', '', 'book']
+    ],
     practice: 'Take a spreadsheet and express five of its questions as relational algebra, then as SQL — compare which one hid the work'
   },
 
@@ -73,7 +85,14 @@ CS.addTopics([
     year: 2006,
     tags: ['Key-value', 'Documents', 'Eventual consistency'],
     summary: 'When volume, concurrency or schema flexibility outgrew the relational model, a family of non-relational databases appeared.',
-    body: ['In the mid-2000s Google’s BigTable (2006) and Amazon’s Dynamo (2007) showed another path: key-value stores, column families, eventual consistency and horizontal scale. In 2009 MongoDB and Redis brought documents and in-memory structures into the mainstream, and “NoSQL” became a slogan.', 'NoSQL is not one technology but a set of trades: give up a rigid schema and cross-row transactions for elasticity and throughput. Engineering soon found that most applications still wanted transactions and queries, and NewSQL and a relational revival followed. Today “NoSQL” names a family of data models rather than a rejection of SQL.'],
+    body: [
+      'The pressure came from a specific place. By the mid-2000s the largest web companies were storing data at a volume and request rate that one relational server could not carry, and the standard answer — buy a bigger machine — had a price ceiling. Google\'s BigTable (2006) and Amazon\'s Dynamo (2007) described alternatives built for clusters from the start: partition the data across many cheap machines, replicate it, and accept that a partition may be temporarily unreachable.',
+      'Dynamo\'s contribution was the trade-off made explicit. If a network partition separates two replicas, the system must choose between refusing writes (consistency) or accepting them and reconciling later (availability). Dynamo chose availability with eventual consistency, plus consistent hashing to spread keys and vector clocks to detect conflicting versions. That choice — usually summarised as the CAP theorem — is the intellectual core of the movement, even though CAP is often quoted more strictly than it was proved.',
+      'The data models diverged from there. Key-value stores (Redis, DynamoDB) treat the world as a dictionary. Document stores (MongoDB, CouchDB) keep nested JSON-like structures and query inside them. Column-family stores (BigTable, Cassandra, HBase) group columns into families for wide sparse rows. Graph databases (Neo4j) make edges first-class for traversal. Each model makes one access pattern cheap and others awkward.',
+      'The slogan oversold it. "NoSQL" was a conference hashtag before it was a category, and it bundled two unrelated claims: use a non-relational data model, and scale horizontally by giving up transactions. The first is a genuine design choice with real advantages for nested or graph data. The second turned out to be a cost most applications could not actually afford — without cross-row transactions, application code has to implement reconciliation, and that work is rarely cheaper than the constraint it replaced.',
+      'The correction arrived from both directions. Relational engines adopted the features that made NoSQL attractive: JSON columns, sharding, and distributed consensus for replication. Systems labelled NewSQL — Spanner, CockroachDB, VoltDB — kept SQL and transactions while scaling across machines, which required solving clock synchronisation or consensus underneath. Meanwhile the NoSQL stores added indexes, query languages and multi-document transactions of their own.',
+      'What remains is a clearer map. "NoSQL" now names a family of data models rather than a rejection of SQL, and the useful question is no longer which camp you are in but which access pattern dominates: point lookups, nested documents, wide sparse rows, or traversals. The relational model\'s answer — one general structure plus an optimiser — is still the better default, and the specialised models are worth their cost when one shape clearly dominates.'
+    ],
     milestones: [
       [2006, 'BigTable', 'Column families and distributed indexes.'],
       [2007, 'Dynamo', 'Eventual consistency and consistent hashing.', 1],
@@ -82,8 +101,13 @@ CS.addTopics([
     ],
     concepts: [['Key-value store', 'The simplest model: one key, one value.'], ['Document database', 'Stores semi-structured data as JSON/BSON documents.'], ['Eventual consistency', 'Replicas diverge for a while, then converge once writes stop.']],
     people: [['Jeff Dean', '1968 – ', 'A driving force behind BigTable, MapReduce and Spanner.'], ['Sanjay Ghemawat', '1968 – ', 'BigTable and the Google File System.']],
-    related: ['big-data', 'distributed-databases', 'transactions'],
-    reading: [['NoSQL Distilled', 'Sadalage & Fowler', '2012'], ['Database System Concepts', 'Silberschatz et al.', '1997']],
+    related: ['relational-model', 'big-data', 'distributed-databases', 'transactions'],
+    reading: [
+      ['Bigtable: A Distributed Storage System for Structured Data', 'Chang et al., Google', '2006', 'https://research.google/pubs/pub27898/', 'paper'],
+      ['Dynamo: Amazon\'s Highly Available Key-value Store', 'DeCandia et al., Amazon', '2007', 'https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf', 'paper'],
+      ['NoSQL', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/NoSQL', 'wiki'],
+      ['Designing Data-Intensive Applications', 'Martin Kleppmann', '2017', '', 'book']
+    ],
     practice: 'Model one feature (a comment thread) in a relational schema and in a document store, then list what each makes hard'
   },
 
