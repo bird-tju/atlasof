@@ -30,7 +30,7 @@
       conceptsEn: (t.conceptsEn || []).map(function (c) { return { name: c[0], text: c[1] }; }),
       people: (t.people || []).map(function (p) { return { name: p[0], life: p[1], role: p[2] }; }),
       peopleEn: (t.peopleEn || []).map(function (p) { return { name: p[0], life: p[1], role: p[2] }; }),
-      reading: (t.reading || []).map(function (r) { return { title: r[0], author: r[1], year: r[2] }; }),
+      reading: (t.reading || []).map(function (r) { return { title: r[0], author: r[1], year: r[2], url: r[3] || '' }; }),
       readingEn: (t.readingEn || []).map(function (r) { return { title: r[0], author: r[1], year: r[2] }; }),
       related: t.related || [],
       tags: t.tags || [],
@@ -734,7 +734,9 @@
 
     if (readingList.length) {
       sec('reading', 'Further reading', '<ul class="reading">' + readingList.map(function (r) {
-        return '<li><span class="reading-title">' + h(r.title) + '</span>' +
+        return '<li>' + (r.url
+            ? '<a class="reading-title" href="' + h(r.url) + '" target="_blank" rel="noopener">' + h(r.title) + ' <span class="reading-out">↗</span></a>'
+            : '<span class="reading-title">' + h(r.title) + '</span>') +
           '<span class="reading-meta">' + h(r.author) + (r.year ? ' · ' + yearLabel(r.year) : '') + '</span></li>';
       }).join('') + '</ul>');
     }
@@ -908,6 +910,56 @@
       '</div></section>';
   }
 
+
+  /* Everything cited anywhere in the atlas, gathered in one place. Built from the
+     per-topic reading lists, so a new citation appears here without extra work. */
+  function viewLibrary() {
+    var byKey = {};
+    var order = [];
+    TOPICS.forEach(function (t) {
+      (t.reading || []).forEach(function (r) {
+        var key = r.title.toLowerCase() + '|' + r.author.toLowerCase();
+        if (!byKey[key]) {
+          byKey[key] = { title: r.title, author: r.author, year: r.year, url: r.url, topics: [], domains: {} };
+          order.push(key);
+        }
+        var e = byKey[key];
+        if (!e.url && r.url) e.url = r.url;
+        e.topics.push(t);
+        e.domains[t.domain] = true;
+      });
+    });
+
+    var items = order.map(function (k) { return byKey[k]; });
+    var withLink = items.filter(function (i) { return i.url; }).length;
+
+    var groups = CS.domains.map(function (d) {
+      var list = items.filter(function (i) { return i.domains[d.id]; });
+      if (!list.length) return '';
+      list.sort(function (a, b) { return String(a.author).localeCompare(String(b.author)); });
+      return '<div class="lib-group">' +
+        '<h2><span class="lib-dot" style="--c:' + d.color + '"></span>' + h(LN(d)) + '<em>' + list.length + '</em></h2>' +
+        '<ul class="reading">' + list.map(function (i) {
+          var chips = i.topics.slice(0, 4).map(function (t) {
+            return '<a class="lib-chip" href="' + topicHref(t) + '">' + h(LN(t)) + '</a>';
+          }).join('');
+          return '<li>' + (i.url
+            ? '<a class="reading-title" href="' + h(i.url) + '" target="_blank" rel="noopener">' + h(i.title) + ' <span class="reading-out">↗</span></a>'
+            : '<span class="reading-title">' + h(i.title) + '</span>') +
+            '<span class="reading-meta">' + h(i.author) + (i.year ? ' · ' + yearLabel(i.year) : '') + '</span>' +
+            '<span class="lib-topics">' + chips + '</span></li>';
+        }).join('') + '</ul></div>';
+    }).join('');
+
+    return '<section class="page-head">' +
+      '<div class="wrap">' +
+      '<p class="eyebrow">Library</p>' +
+      '<h1>Sources behind the atlas</h1>' +
+      '<p class="page-head-lead">Every paper, book, course and reference cited on a topic page, gathered by domain. ' +
+      items.length + ' entries, ' + withLink + ' with a direct link. A topic page links back to what it cites; this page links forward.</p>' +
+      '</div></section>' +
+      '<section class="section section-tight"><div class="wrap">' + groups + '</div></section>';
+  }
 
   function viewRandom() {
     return '<section class="page-head"><div class="wrap">' +
@@ -1482,6 +1534,10 @@
       html = viewAbout();
       route = '';
       title = 'About · CS Atlas';
+    } else if (seg[0] === 'library') {
+      html = viewLibrary();
+      route = 'library';
+      title = 'Library · sources behind the atlas';
     } else if (seg[0] === 'random') {
       // A real page at /cs/random/ so the link works when prerendered. The redirect
       // happens after mount, once the topic list exists: during the build we render

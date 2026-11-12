@@ -27,7 +27,7 @@ const ATLASES = [
     tagline: 'A map of computing',
     card: 'Computer science in 13 domains, 75 topics, 326 milestones — plus a from-scratch hardware course.',
     routes: [
-      '', 'map', 'timeline', 'domains', 'paths', 'progress', 'giants', 'about', 'random',
+      '', 'map', 'timeline', 'domains', 'paths', 'progress', 'giants', 'about', 'random', 'library',
       'courses/nand2tetris',
       'courses/nand2tetris/intro', 'courses/nand2tetris/gates', 'courses/nand2tetris/adders',
       'courses/nand2tetris/alu', 'courses/nand2tetris/sequential', 'courses/nand2tetris/ram',

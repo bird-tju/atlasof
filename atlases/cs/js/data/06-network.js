@@ -8,7 +8,14 @@ CS.addTopics([
     year: 1961,
     tags: ['Decentralised', 'Survivability', 'Prehistory of the Net'],
     summary: 'Cut messages into pieces and route each one: packet switching keeps a network alive when nodes fail, and made the Internet decentralised.',
-    body: ['In 1961 Kleinrock analysed packet switching with queueing theory; in 1964 Baran proposed a distributed network for communication under nuclear war. The telephone network set up a dedicated circuit per call; packet switching cuts data into packets, each choosing its own path over shared links.', 'In 1969 ARPANET connected four machines at UCLA, SRI, UCSB and Utah. The design goal was not efficiency but survivability: with no centre, no single failure can take the network down. That choice later decided the topology and the governance of the Internet.'],
+    body: [
+      'A telephone call reserves a path: the exchange keeps a circuit open for the whole conversation, even when nobody is speaking. That is fine for voice and ruinous for data, which arrives in bursts — a terminal waiting for a reply holds a circuit open to send nothing. Packet switching starts from the opposite assumption: links are shared, and nobody owns a path.',
+      'A message is cut into packets, each small enough to fit a link, each carrying the address of its destination. A node receives a whole packet, stores it, and forwards it to the next hop chosen from its own table. Packets from the same message may take different routes and arrive out of order. Nothing is reserved; capacity is used only while bits are moving.',
+      'The design is usually explained by survivability. Baran\'s 1964 RAND study did argue that a network with no centre could route around destroyed nodes, and that context — Cold War, nuclear attack — is why the idea was funded at all. But the deeper argument is statistical: bursty traffic multiplexed across shared links wastes far less capacity than circuits held open, and queueing theory (Kleinrock, 1961) told you how much delay to expect in exchange.',
+      'The costs are real and they never went away. Delay varies with load, so packets arrive with jitter; the network may drop a packet under congestion and report nothing; order is not preserved; and no bandwidth is guaranteed. Every later protocol is a patch for one of these — TCP adds sequence numbers and retransmission, congestion control decides how fast to send, and real-time audio needs priority queues precisely because best effort is not good enough.',
+      'In 1969 ARPANET put four nodes online — UCLA, SRI, UCSB and Utah — behind small computers called IMPs that did the store-and-forward work, so the mainframes only ever saw a clean interface. The first attempt to log in from UCLA to SRI crashed the SRI machine after two letters: "LO". The operators retyped "LOGIN" and it worked, which is a fair summary of the decade.',
+      'What survived is not a detail but an assumption: the network owns nothing, guarantees nothing, and forwards what it can. Everything layered on top — IP, TCP, HTTP — is built by parties that agree on formats rather than on a shared operator. That is why the same design could grow from four nodes to every device on earth without a central authority deciding who may join.'
+    ],
     milestones: [
       [1961, 'Kleinrock\'s packet-switching paper', 'Queueing theory applied to packet networks.', 1],
       [1964, 'Baran\'s distributed network', 'Networks designed for survivability.'],
@@ -18,7 +25,13 @@ CS.addTopics([
     concepts: [['Packet', 'A message cut into bounded chunks, each transmitted independently.'], ['Store and forward', 'A node receives the whole packet, then picks the next hop.'], ['Distributed routing', 'No central control; each node keeps its own forwarding table.']],
     people: [['Leonard Kleinrock', '1934 – ', 'One of the founders of packet-switching theory.'], ['Paul Baran', '1926 – 2011', 'Proposed the distributed communication network.']],
     related: ['tcp-ip', 'ethernet', 'dns'],
-    reading: [['Computer Networks', 'Tanenbaum & Wetherall', '1981'], ['A Brief History of the Internet', 'John Naughton', '2012']],
+    reading: [
+      ['On Distributed Communications', 'Paul Baran, RAND', '1964', 'https://www.rand.org/pubs/research_memoranda/RM3420.html'],
+      ['A Protocol for Packet Network Intercommunication', 'Vint Cerf & Bob Kahn', '1974', 'https://www.cs.princeton.edu/courses/archive/fall06/cos561/papers/cerf74.pdf'],
+      ['Packet switching', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Packet_switching'],
+      ['A Brief History of the Internet', 'Internet Society', '1997', 'https://www.internetsociety.org/internet/history-internet/brief-history-internet/'],
+      ['Computer Networks', 'Tanenbaum & Wetherall', '1981']
+    ],
     practice: 'Simulate a 6-node network where one node fails mid-transfer; show the packets rerouting'
   },
 
