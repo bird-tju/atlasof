@@ -8,7 +8,14 @@ CS.addTopics([
     year: 1963,
     tags: ['CAD', 'Direct manipulation', 'Constraints'],
     summary: 'Drawing on screen with a light pen and manipulating shapes directly: Sketchpad made the computer an interactive design tool for the first time.',
-    body: ['In 1963 Sutherland’s doctoral thesis demonstrated Sketchpad: draw lines and circles on a CRT with a light pen, keep geometric relations through constraint solving, and copy, scale and even simulate physics. It is regarded as the beginning of interactive computer graphics and of CAD.', 'Sketchpad mattered beyond drawing: it showed a person could hold a conversation with a computer by direct manipulation instead of submitting batch jobs. Constraints, objects, primitives and views entered every graphics system afterwards. Sutherland went on to ARPANET and virtual reality, pressing the same idea of human–computer symbiosis.'],
+    body: [
+      'In 1963 a computer was something you submitted work to and collected output from, hours or days later. Ivan Sutherland\'s doctoral thesis at MIT demonstrated the opposite: a person sitting at a display, drawing with a light pen, watching shapes respond immediately. Sketchpad is usually described as the first CAD system, but its real claim is that it made the computer conversational.',
+      'The technical core was the constraint system. A drawing was not a collection of pixels but a set of objects under relations: these two lines are parallel, this point lies on that circle, this segment has a fixed length. When the user dragged a point, the system re-solved the constraints and updated everything that depended on it. That is a different kind of interaction from painting — the user manipulates a model, and the picture is a view of the model.',
+      'Several ideas now standard in graphics appeared together in that one program. Master definitions and instances, so a repeated part could be edited once and appear everywhere. A light pen for direct selection rather than typed commands. Nested coordinate transformations, so a component could be moved by editing its transform. Even a physics-like simulation of spring constants, so shapes settled into equilibrium — an early hint that interaction could be simulated rather than drawn.',
+      'The hardware was barely adequate, which is why the ideas took decades to become ordinary. Sketchpad ran on the TX-2, a machine with a few hundred kilobytes of memory, and the constraint solver was limited to small drawings; a version for a general-purpose machine was not feasible for years. The concepts outlived the implementation and were rediscovered as machines caught up — in CAD in the 1970s, in desktop publishing in the 1980s, in every direct-manipulation interface since.',
+      'Sutherland\'s own next steps follow the same idea. He moved to ARPA, where he funded graphics and networking research including the earliest ARPANET work; in 1968 he published "A Head-Mounted Three Dimensional Display", proposing that a computer could present a world rather than a page. The continuity matters: the thesis, the funding and the head-mounted display are all arguments that the computer\'s job is to extend what a person can manipulate.',
+      'The lesson for interface design is not that Sketchpad got everything right. It is that direct manipulation requires an explicit model: constraints, objects and views, not just a canvas. Interfaces that feel immediate but have no underlying structure break the moment the user wants to change something the tool did not anticipate. That distinction between a drawing and a model is still the dividing line between tools people trust and tools people fight.'
+    ],
     milestones: [
       [1963, 'Sketchpad', 'Interactive graphics and constraint solving.', 1],
       [1964, 'Sutherland joins ARPA', 'He pushes graphics and networking research.'],
@@ -17,7 +24,12 @@ CS.addTopics([
     concepts: [['Direct manipulation', 'The user acts on objects on screen and sees the result immediately.'], ['Constraint solving', 'Maintain relationships between shapes through geometric constraints.'], ['Light pen', 'An early on-screen pointing device.']],
     people: [['Ivan Sutherland', '1938 – ', 'A pioneer of Sketchpad and head-mounted displays.'], ['Douglas Engelbart', '1925 – 2013', 'Inventor of the mouse and of hypertext.']],
     related: ['gui-hci', 'rendering', 'vr-ar'],
-    reading: [['Sketchpad: A Man-Machine Graphical Communication System', 'Ivan Sutherland', '1963'], ['Man-Computer Symbiosis', 'J. C. R. Licklider', '1960']],
+    reading: [
+      ['Sketchpad: A Man-Machine Graphical Communication System', 'Ivan Sutherland', '1963', 'https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-574.pdf', 'paper'],
+      ['A Head-Mounted Three Dimensional Display', 'Ivan Sutherland', '1968', 'https://www.cs.unc.edu/~azuma/ARpresence.pdf', 'paper'],
+      ['Sketchpad', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Sketchpad', 'wiki'],
+      ['The Design of Everyday Things', 'Don Norman', '1988', '', 'book']
+    ],
     practice: 'Build a tiny constraint solver: two segments that must stay perpendicular while you drag one endpoint'
   },
 

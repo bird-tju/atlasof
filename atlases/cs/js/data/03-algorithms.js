@@ -29,7 +29,14 @@ CS.addTopics([
     year: 1945,
     tags: ['Divide and conquer', 'Comparison', 'Engineering'],
     summary: 'Sorting was the first battlefield of algorithmics: merge sort, quicksort and Timsort condense divide-and-conquer, randomness and engineering trade-offs.',
-    body: ['In 1945 von Neumann wrote down merge sort; in 1960 Hoare proposed quicksort. Quicksort is O(n log n) on average but O(n²) in the worst case, which is why random pivots and median-of-three became standard tricks. In 1964 heapsort pushed the worst case down to O(n log n) as well.', 'Comparison sorting has a lower bound of Ω(n log n); to go faster you must exploit the data itself. Counting, radix and bucket sorts finish in linear time on integers or on a uniform distribution. Real sorting must also weigh caches, stability and partially sorted input — Timsort is exactly that combination of engineering concerns, and Python and Java both adopted it.'],
+    body: [
+      'Sorting was the first problem algorithmics treated as a science rather than a craft, because it is the rare case where the question has a provable answer. Any algorithm that learns about the data only by comparing pairs must make at least about n log n comparisons in the worst case. That lower bound is the reason sorting is taught first: it shows what a proof about an algorithm looks like, and it tells you exactly what you must give up to go faster.',
+      'The two classic divide-and-conquer answers differ in where the work happens. Merge sort splits the array in half, sorts each half, then merges — the splitting is trivial and the combining is the work, and the cost is predictable plus a second array. Quicksort partitions around a pivot so that the array is nearly sorted relative to that pivot, then recurses; the combining is free and the partitioning is the work, and it sorts in place. Both are O(n log n) on average and both rest on the same idea, arranged differently.',
+      'Quicksort\'s weakness is worth understanding precisely. Its worst case is O(n²), and it happens when the pivot is consistently the smallest or largest element — which is exactly what a sorted or reverse-sorted input does to a naive first-element pivot. Randomising the pivot, or taking the median of three, makes the bad case astronomically unlikely rather than impossible. Heapsort, described by Williams in 1964, removes the worst case entirely while keeping O(1) extra space, at the cost of worse cache behaviour.',
+      'Beating the lower bound requires not comparing. Counting sort assumes small integer keys and counts occurrences; radix sort processes one digit at a time and needs no comparisons between keys; bucket sort assumes a roughly uniform distribution and places elements into ranges. Each is linear in the number of elements, and each is a promise about the data rather than about the algorithm. Choosing one is a statement that the keys are known to be small integers or well distributed.',
+      'Real sorting engines are not one algorithm. Timsort, designed by Tim Peters for Python in 2002 and later adopted by Java and Android, detects already-sorted runs, merges them in a balanced way, and switches to insertion sort for short runs — so partly sorted input, the common case in practice, costs far less than the worst case. Stability matters for the same reason: if equal elements keep their relative order, you can sort by one key and then another to get a multi-key result, which is why merge sort and Timsort are stable and plain quicksort is not.',
+      'Searching follows from the same logic. Linear search needs no assumptions and pays n. Binary search needs sorted data and pays log n, which is why sorting is often a one-time cost paid to make many later lookups cheap — the reason databases keep indexes. Hash tables give expected constant-time lookup with no ordering assumption at all; balanced trees give logarithmic lookup and keep the order, which is what range queries need. The choice between them is a choice about which operations you will perform often.'
+    ],
     milestones: [
       [1945, 'Merge sort', 'von Neumann implements it on the EDVAC.'],
       [1960, 'Quicksort', 'Hoare\'s in-place divide and conquer.', 1],
@@ -39,7 +46,12 @@ CS.addTopics([
     concepts: [['Divide and conquer', 'Split the problem into subproblems, solve recursively, then merge.'], ['Comparison lower bound', 'A comparison sort needs at least Ω(n log n) comparisons.'], ['Stability', 'Equal elements keep their relative order after sorting.']],
     people: [['Tony Hoare', '1934 – ', 'Quicksort and Hoare logic.'], ['John von Neumann', '1903 – 1957', 'Merge sort and the stored-program computer.']],
     related: ['algorithm-analysis', 'data-structures', 'dynamic-programming'],
-    reading: [['Introduction to Algorithms, Part II', 'Cormen et al.', '1990'], ['Programming Pearls', 'Jon Bentley', '1986']],
+    reading: [
+      ['Quicksort', 'C. A. R. Hoare', '1961', 'https://academic.oup.com/comjnl/article/5/1/10/395338', 'paper'],
+      ['Sorting algorithm', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Sorting_algorithm', 'wiki'],
+      ['Introduction to Algorithms', 'Cormen et al.', '1990', '', 'book'],
+      ['Timsort', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Timsort', 'wiki']
+    ],
     practice: 'Implement three-way quicksort and compare it with the built-in sort on data with many duplicate keys'
   },
 
