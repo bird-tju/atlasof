@@ -1,7 +1,7 @@
 window.CS = window.CS || {};
 CS.tools = CS.tools || {};
 CS.tools['boolean-algebra'] = {
-  href: '#/hardware/gate-reference',
+  href: '#/courses/nand2tetris/gate-reference',
   title: (typeof window !== 'undefined' && window.CS && CS.I18N && CS.I18N.lang === 'en') ? 'Gate reference' : '',
   desc: (typeof window !== 'undefined' && window.CS && CS.I18N && CS.I18N.lang === 'en') ? 'Basic gates (AND, OR, NAND…): expression, truth table and symbol side by side' : ''
 };
@@ -107,7 +107,7 @@ CS.LogicUI = (function () {
       'Click any row of a truth table and the pin values on the symbol follow.' + '</p>' +
       '<p class="ref-scope">' + 'The “basic gates” here are the <strong>digital-logic</strong> view: AND, OR and NOT are the primitives, with NAND and NOR listed for their universality. ' +
       'In Boolean algebra the primitives are ∧, ∨ and ¬; in CMOS they are NAND, NOR and the inverter — an AND is usually NAND plus inverter.' +
-      '<a href="#/hardware/layers">' + 'The same gate at four levels →' + '</a></p>' +
+      '<a href="#/courses/nand2tetris/abstraction-levels">' + 'The same gate at four levels →' + '</a></p>' +
       '</div></section>' +
       CS.lineNav('gate-reference', 'wrap-wide') +
       '<section class="ref-section"><div class="wrap-wide">' +

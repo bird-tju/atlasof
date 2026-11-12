@@ -1445,9 +1445,9 @@
       html = viewProgress();
       route = 'progress';
       title = 'My progress · CS Atlas';
-    } else if (seg[0] === 'hardware' || HW_LEGACY[seg[0]]) {
+    } else if (seg[0] === 'courses' && seg[1] === 'nand2tetris') {
       var slug = hwSlug(seg);
-      if (seg[0] === 'hardware' && !slug) {
+      if (!slug) {
         html = viewHardware();
         route = 'hardware';
         title = 'The hardware course · CS Atlas';
@@ -1528,30 +1528,22 @@
     'screen':           { ui: 'ScreenUI',    title: 'Output · screen', n: '12', label: 'Screen', blurb: 'A memory-mapped bitmap: 8K words, and how a program draws into it.' },
     'keyboard':         { ui: 'InputUI',     title: 'Input · keyboard', n: '13', label: 'Keyboard', blurb: 'One word at address 24576, read in a loop, because there are no interrupts.' },
     'gate-reference':   { ui: 'LogicUI',     title: 'Gate reference · CS Atlas', n: '', label: 'Gates', blurb: 'Six basic gates, each with its expression, truth table and symbol.' },
-    'layers':           { ui: 'LayersUI',    title: 'One gate, four layers · CS Atlas', n: '', label: 'Layers', blurb: 'The same NAND as algebra, as a gate, as CMOS, and as a relay contact.' }
+    'abstraction-levels': { ui: 'LayersUI',    title: 'One gate, four layers · CS Atlas', n: '', label: 'Layers', blurb: 'The same NAND as algebra, as a gate, as CMOS, and as a relay contact.' }
   };
 
   var HW_ORDER = ['intro', 'gates', 'adders', 'alu', 'sequential', 'ram', 'machine',
     'machine-language', 'assembler', 'cpu', 'computer', 'screen', 'keyboard',
-    'gate-reference', 'layers'];
-
-  var HW_LEGACY = {
-    p1: 'gates', mux: 'gates', p2: 'adders', bits: 'adders', adder: 'adders',
-    ml: 'machine-language', asm: 'assembler', clock: 'sequential',
-    logic: 'gate-reference', input: 'keyboard',
-    intro: 'intro', alu: 'alu', ram: 'ram', machine: 'machine', cpu: 'cpu',
-    computer: 'computer', screen: 'screen', layers: 'layers'
-  };
+    'gate-reference', 'abstraction-levels'];
 
   function hwSlug(seg) {
-    if (seg[0] === 'hardware') return seg[1] || '';
-    return HW_LEGACY[seg[0]] || '';
+    if (seg[0] === 'courses' && seg[1] === 'nand2tetris') return seg[2] || '';
+    return '';
   }
 
   function viewHardware() {
     var rows = HW_ORDER.map(function (slug) {
       var pg = HW_PAGES[slug];
-      return '<a class="hw-card" href="#/hardware/' + slug + '">' +
+      return '<a class="hw-card" href="#/courses/nand2tetris/' + slug + '">' +
         '<span class="hw-num">' + (pg.n || '·') + '</span>' +
         '<span class="hw-body"><strong>' + pg.label + '</strong><em>' + pg.blurb + '</em></span>' +
         '<span class="hw-go">→</span></a>';

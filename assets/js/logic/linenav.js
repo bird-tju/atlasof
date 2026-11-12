@@ -22,7 +22,7 @@ CS.lineNav = (function () {
 
   return function (current, wrapClass) {
     var links = ITEMS.map(function (item) {
-      var href = '#/hardware/' + item[0];
+      var href = '#/courses/nand2tetris/' + item[0];
       return '<a href="' + href + '"' + (item[0] === current ? ' class="is-current" aria-current="page"' : '') + '>' + item[1] + '</a>';
     }).join('<span class="line-sep">→</span>');
 

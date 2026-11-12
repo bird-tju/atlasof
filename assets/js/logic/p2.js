@@ -296,7 +296,7 @@ CS.P2UI = (function () {
       '<p>' + 'In binary, <code>65536 − X = (65535 − X) + 1</code>. Since 65535 is all ones (<code>0xFFFF</code>), subtracting X from it is exactly <b>inverting every bit (~X)</b>.' + '</p>' +
       '<p class="intro-quote">Negation = invert every bit, then add 1. That is two’s complement — it removes the need for a whole subtractor and lets the same Add16 handle both addition and subtraction.</p>' +
       '<p>In the ALU, subtraction needs only three control bits: <code>nx=1</code> (invert x), <code>f=1</code> (add), <code>no=1</code> (invert the output) — ' +
-      'the <a href="#/hardware/alu">ALU page</a> has the full derivation.</p>' +
+      'the <a href="#/courses/nand2tetris/alu">ALU page</a> has the full derivation.</p>' +
       '</div>' +
 
       '</div></section>';

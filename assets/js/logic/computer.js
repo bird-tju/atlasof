@@ -69,7 +69,7 @@ CS.ComputerUI = (function () {
       '<tr><td class="mono">Memory</td><td>Data + screen + keyboard</td><td>Built on this page</td></tr>' +
       '</tbody></table>' +
       '<p class="bits-tip">The whole machine is six wires: <code>pc</code>, <code>instruction</code>, <code>addressM</code>, <code>outM</code>, <code>writeM</code>, <code>inM</code>.' +
-      'This is the <b>Harvard architecture</b> from the <a href="#/hardware/intro">prologue</a>: ROM32K and Memory are two separate memories with separate address lines, so one cycle can fetch and access memory at the same time.</p>' +
+      'This is the <b>Harvard architecture</b> from the <a href="#/courses/nand2tetris/intro">prologue</a>: ROM32K and Memory are two separate memories with separate address lines, so one cycle can fetch and access memory at the same time.</p>' +
       '</div>' +
 
       '<div class="clock-block">' +

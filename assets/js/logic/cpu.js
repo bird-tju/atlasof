@@ -192,8 +192,8 @@ CS.CpuUI = (function () {
       '<code>d1~d3</code> throw the output switch (unload into A, D, or through Memory into RAM); ' +
       '<code>j1~j3</code> read the sign and zero flags of the result and decide whether the PC track takes the default next stop (+1) or turns to a new station (a jump).' +
       '</div>' +
-      '<p class="bits-tip">The <b>format</b> (how A and C instructions are written) is on the <a href="#/hardware/machine-language">machine language</a> page; ' +
-      'what the machine promises externally is on the <a href="#/hardware/machine">Hack computer</a> page. This page cares about one thing: <b>how those bits become wires</b>.</p>' +
+      '<p class="bits-tip">The <b>format</b> (how A and C instructions are written) is on the <a href="#/courses/nand2tetris/machine-language">machine language</a> page; ' +
+      'what the machine promises externally is on the <a href="#/courses/nand2tetris/machine">Hack computer</a> page. This page cares about one thing: <b>how those bits become wires</b>.</p>' +
       '<div class="clock-figure" data-fig="iface">' + cpuIfaceSvg() + '</div>' +
       panel() +
       '</div>' +

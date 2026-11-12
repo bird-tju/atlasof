@@ -28,12 +28,14 @@ function assetVersion() {
 const ASSET_V = assetVersion();
 const ROUTES = [
   '', 'map', 'timeline', 'domains', 'paths', 'progress', 'giants', 'about',
-  'hardware',
-  'hardware/intro', 'hardware/gates', 'hardware/adders', 'hardware/alu',
-  'hardware/sequential', 'hardware/ram', 'hardware/machine',
-  'hardware/machine-language', 'hardware/assembler', 'hardware/cpu',
-  'hardware/computer', 'hardware/screen', 'hardware/keyboard',
-  'hardware/gate-reference', 'hardware/layers'
+  'courses/nand2tetris',
+  'courses/nand2tetris/intro', 'courses/nand2tetris/gates', 'courses/nand2tetris/adders',
+  'courses/nand2tetris/alu', 'courses/nand2tetris/sequential', 'courses/nand2tetris/ram',
+  'courses/nand2tetris/machine', 'courses/nand2tetris/machine-language',
+  'courses/nand2tetris/assembler', 'courses/nand2tetris/cpu',
+  'courses/nand2tetris/computer', 'courses/nand2tetris/screen',
+  'courses/nand2tetris/keyboard', 'courses/nand2tetris/gate-reference',
+  'courses/nand2tetris/abstraction-levels'
 ];
 
 function rmrf(p) { if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true }); }
@@ -140,31 +142,6 @@ function headLinks(route, lang, title, desc) {
 }
 
 
-// Old flat paths still resolve: each one becomes a tiny page that forwards to the
-// new location, so bookmarks and any external links keep working.
-const LEGACY_REDIRECTS = {
-  intro: 'hardware/intro', p1: 'hardware/gates', mux: 'hardware/gates',
-  p2: 'hardware/adders', bits: 'hardware/adders', adder: 'hardware/adders',
-  alu: 'hardware/alu', clock: 'hardware/sequential', ram: 'hardware/ram',
-  machine: 'hardware/machine', ml: 'hardware/machine-language',
-  asm: 'hardware/assembler', cpu: 'hardware/cpu', computer: 'hardware/computer',
-  screen: 'hardware/screen', input: 'hardware/keyboard',
-  logic: 'hardware/gate-reference', layers: 'hardware/layers'
-};
-
-function redirectPage(to) {
-  const url = BASE + '/' + to + '/';
-  return '<!doctype html>\n<html lang="en"><head><meta charset="utf-8">' +
-    '<title>Moved · CS Atlas</title>' +
-    '<link rel="canonical" href="' + SITE + url + '">' +
-    '<meta name="robots" content="noindex">' +
-    '<meta http-equiv="refresh" content="0; url=' + url + '">' +
-    '<script>location.replace(' + JSON.stringify(url) + ');</script>' +
-    '</head><body style="font:16px system-ui;padding:10vh 8vw">' +
-    '<p>This page moved to <a href="' + url + '">' + url + '</a>.</p>' +
-    '</body></html>';
-}
-
 async function main() {
   rmrf(DIST);
   mkdir(DIST);
@@ -192,14 +169,6 @@ async function main() {
     }
   }
   console.log('');
-
-  // Legacy redirects for the pages that used to live at the top level
-  for (const oldRoute of Object.keys(LEGACY_REDIRECTS)) {
-    const dir = path.join(DIST, 'cs', oldRoute);
-    mkdir(dir);
-    fs.writeFileSync(path.join(dir, 'index.html'), redirectPage(LEGACY_REDIRECTS[oldRoute]), 'utf8');
-  }
-  console.log('redirects:', Object.keys(LEGACY_REDIRECTS).length);
 
   // Root landing page: list every atlas
   fs.writeFileSync(path.join(DIST, 'index.html'), `<!doctype html>

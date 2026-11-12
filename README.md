@@ -26,25 +26,22 @@ The site is deliberately boring to run: HTML, CSS and plain JavaScript, no build
 | `/cs/progress/` | Your progress: mastery levels, coverage, review queue, blind spots, next steps |
 | `/cs/giants/` | Open courses: the courses this site is studied alongside |
 | `/cs/about/` | Why it exists, how to use it, editorial rules, licence |
-| `/cs/hardware/` | The hardware course index: fifteen steps from NAND to a computer |
-| `/cs/hardware/intro/` | Why a machine can be universal: the stored program |
-| `/cs/hardware/gates/` | Basic gates from NAND, multiplexers, one bit and sixteen |
-| `/cs/hardware/adders/` | Half adder → full adder → Add16 → Inc16 → ALU |
-| `/cs/hardware/alu/` | The ALU: six control bits, two flags |
-| `/cs/hardware/sequential/` | The clock, the DFF, registers and the PC |
-| `/cs/hardware/ram/` | RAM: from one register to 16K words |
-| `/cs/hardware/machine/` | The Hack specification: memory map, registers |
-| `/cs/hardware/machine-language/` | A and C instructions, sixteen bits at a time |
-| `/cs/hardware/assembler/` | Symbols, labels and the two-pass assembler |
-| `/cs/hardware/cpu/` | Fetch, decode, execute |
-| `/cs/hardware/computer/` | The whole machine, assembled |
-| `/cs/hardware/screen/` | Memory-mapped output |
-| `/cs/hardware/keyboard/` | Memory-mapped input |
-| `/cs/hardware/gate-reference/` | Appendix: six gates, expression / truth table / symbol |
-| `/cs/hardware/layers/` | Appendix: the same NAND at four levels |
-
-Old flat paths (`/cs/p1/`, `/cs/ml/`, …) still resolve: the build writes a small
-redirect page for each, so bookmarks keep working.
+| `/cs/courses/nand2tetris/` | The hardware course index: fifteen steps from NAND to a computer |
+| `/cs/courses/nand2tetris/intro/` | Why a machine can be universal: the stored program |
+| `/cs/courses/nand2tetris/gates/` | Basic gates from NAND, multiplexers, one bit and sixteen |
+| `/cs/courses/nand2tetris/adders/` | Half adder → full adder → Add16 → Inc16 → ALU |
+| `/cs/courses/nand2tetris/alu/` | The ALU: six control bits, two flags |
+| `/cs/courses/nand2tetris/sequential/` | The clock, the DFF, registers and the PC |
+| `/cs/courses/nand2tetris/ram/` | RAM: from one register to 16K words |
+| `/cs/courses/nand2tetris/machine/` | The Hack specification: memory map, registers |
+| `/cs/courses/nand2tetris/machine-language/` | A and C instructions, sixteen bits at a time |
+| `/cs/courses/nand2tetris/assembler/` | Symbols, labels and the two-pass assembler |
+| `/cs/courses/nand2tetris/cpu/` | Fetch, decode, execute |
+| `/cs/courses/nand2tetris/computer/` | The whole machine, assembled |
+| `/cs/courses/nand2tetris/screen/` | Memory-mapped output |
+| `/cs/courses/nand2tetris/keyboard/` | Memory-mapped input |
+| `/cs/courses/nand2tetris/gate-reference/` | Appendix: six gates, expression / truth table / symbol |
+| `/cs/courses/nand2tetris/abstraction-levels/` | Appendix: the same NAND at four levels |
 
 ## Repository layout
 

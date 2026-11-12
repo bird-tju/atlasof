@@ -97,14 +97,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!doc.querySelector('[data-status-topic], .progress-grid')) throw new Error('no progress');
   });
 
-  await go('#/intro');
+  await go('#/courses/nand2tetris/intro');
   check('hardware intro', () => {
     if ($$('.intro-block').length < 4) throw new Error('intro blocks: ' + $$('.intro-block').length);
     if (!doc.querySelector('.cycle-player')) throw new Error('no cycle player');
   });
 
   /* ---------- Project 1 ---------- */
-  await go('#/p1');
+  await go('#/courses/nand2tetris/gates');
   check('p1 structure', () => {
     const navCount = doc.querySelectorAll('.line-nav a').length;
     if (navCount !== 14) throw new Error('line-nav: ' + navCount);
@@ -138,7 +138,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   /* ---------- Project 2 ---------- */
-  await go('#/p2');
+  await go('#/courses/nand2tetris/adders');
   check('p2 structure', () => {
     if ($$('[data-p2]').length !== 4) throw new Error('p2 blocks: ' + $$('[data-p2]').length);
     ['half', 'full', 'add16', 'inc16'].forEach((id) => {
@@ -161,7 +161,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   /* ---------- ALU ---------- */
-  await go('#/alu');
+  await go('#/courses/nand2tetris/alu');
   check('alu structure', () => {
     if (!doc.querySelector('[data-alu-fig] svg')) throw new Error('no alu figure');
     if (!doc.querySelector('.alu-panel')) throw new Error('no alu panel');
@@ -184,7 +184,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!code) throw new Error('no hdl code');
   });
 
-  await go('#/clock');
+  await go('#/courses/nand2tetris/sequential');
   check('sequential structure', () => {
     const figs = doc.querySelectorAll('[data-fig]').length;
     if (figs !== 5) throw new Error('figures: ' + figs);
@@ -220,7 +220,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   });
 
   /* ---------- RAM ---------- */
-  await go('#/ram');
+  await go('#/courses/nand2tetris/ram');
   check('ram structure', () => {
     if (!doc.querySelector('[data-fig="ram"] svg')) throw new Error('no ram figure');
     const hdlCount = doc.querySelectorAll('.hdl-block').length;
@@ -243,13 +243,13 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (w().querySelector('.p2-out b').textContent !== '0x0001') throw new Error('load=0 should not write');
   });
 
-  await go('#/logic');
+  await go('#/courses/nand2tetris/gate-reference');
   check('gate reference', () => {
     if ($('.ref-col.ref-name').length < 6) throw new Error('gate cards: ' + $('.ref-col.ref-name').length);
     if ($('.ref-sym svg').length < 6) throw new Error('gate symbols: ' + $('.ref-sym svg').length);
   });
 
-  await go('#/machine');
+  await go('#/courses/nand2tetris/machine');
   check('computer', () => {
     const figs = doc.querySelectorAll('[data-fig]');
     if (figs.length !== 6) throw new Error('figures: ' + figs.length);
@@ -259,7 +259,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (tables < 6) throw new Error('spec tables: ' + tables);
   });
 
-  await go('#/ml');
+  await go('#/courses/nand2tetris/machine-language');
   check('machine language', () => {
     const word = doc.querySelector('.ml-word code');
     if (!word || word.textContent.length !== 16) throw new Error('builder word: ' + (word && word.textContent));
@@ -282,7 +282,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!w2.startsWith('1110101010')) throw new Error('comp not applied: ' + w2);
   });
 
-  await go('#/screen');
+  await go('#/courses/nand2tetris/screen');
   check('screen', () => {
     if (!doc.querySelector('.scr-grid')) throw new Error('no screen grid');
     const cells = doc.querySelectorAll('.scr-cell').length;
@@ -293,7 +293,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (after !== before + 1) throw new Error('word table not updated');
   });
 
-  await go('#/input');
+  await go('#/courses/nand2tetris/keyboard');
   check('input', () => {
     if (!doc.querySelector('.kb-grid')) throw new Error('no keyboard');
     const keys = doc.querySelectorAll('.kb-key').length;
@@ -306,7 +306,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (v2[1] !== '0') throw new Error('release: ' + v2.join('/'));
   });
 
-  await go('#/computer');
+  await go('#/courses/nand2tetris/computer');
   check('whole machine', () => {
     const figs = doc.querySelectorAll('[data-fig]').length;
     if (figs < 2) throw new Error('figures: ' + figs);
@@ -314,7 +314,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (hdls < 2) throw new Error('hdl blocks: ' + hdls);
   });
 
-  await go('#/asm');
+  await go('#/courses/nand2tetris/assembler');
   check('assembler', () => {
     const ta = doc.querySelector('[data-asm]');
     if (!ta) throw new Error('no asm textarea');
@@ -328,7 +328,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!out2.includes('2 instructions')) throw new Error('not re-assembled');
   });
 
-  await go('#/cpu');
+  await go('#/courses/nand2tetris/cpu');
   check('cpu', () => {
     const blocks = doc.querySelectorAll('.cpu-block').length;
     if (blocks !== 7) throw new Error('cpu blocks: ' + blocks);
