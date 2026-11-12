@@ -18,7 +18,7 @@ const ATLASES = [
     base: '/cs',
     dir: 'atlases/cs',
     title: 'CS Atlas',
-    tagline: 'A map of computer science',
+    tagline: 'A map of computing',
     card: 'Computer science in 13 domains, 75 topics, 326 milestones — plus a from-scratch hardware course.',
     routes: [
       '', 'map', 'timeline', 'domains', 'paths', 'progress', 'giants', 'about', 'random',

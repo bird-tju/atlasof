@@ -1,0 +1,10 @@
+copy: make the brand line match the hero
+
+The nav subtitle said 'A map of computer science' while the hero said 'A map of
+computing', so one screen carried two names, and the subtitle repeated the CS
+already present in 'CS ATLAS'.
+
+The brand line is now 'A map of computing' — the wider umbrella the content
+actually covers (architecture, systems, engineering, a hardware course). The
+<title> and meta description keep 'computer science', which is what people search
+for. Smoke asserts both halves so neither drifts again.

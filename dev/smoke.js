@@ -395,6 +395,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (unversioned.length) throw new Error('unversioned assets: ' + unversioned.slice(0, 3).join(', '));
   });
 
+  check('brand line', () => {
+    const home = fs.readFileSync(path.join(ROOT, 'dist', 'cs', 'index.html'), 'utf8');
+    if (!/<em>A map of computing<\/em>/.test(home)) throw new Error('brand subtitle is not "A map of computing"');
+    if (!/<title>CS Atlas · A map of computer science<\/title>/.test(home)) throw new Error('title lost the searchable term');
+  });
+
   check('share metadata', () => {
     const distRoot = path.join(ROOT, 'dist');
     const atlases = fs.readdirSync(distRoot, { withFileTypes: true })
