@@ -12,6 +12,8 @@ const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const CONTACT = '';   // e.g. 'hello@atlasof.dev', used on the privacy page
 const SITE = 'https://atlasof.dev';        // the deployed origin
+const ADSENSE_CLIENT = 'ca-pub-1177594928684175';
+const ADSENSE_SCRIPT = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>';
 
 /* One entry per atlas. Adding an atlas = adding one object here plus its folder. */
 const ATLASES = [
@@ -149,7 +151,8 @@ function headLinks(entry, route, title, desc) {
     '<meta name="twitter:card" content="summary_large_image">',
     '<meta name="twitter:title" content="' + title.replace(/"/g, '&quot;') + '">',
     '<meta name="twitter:description" content="' + (desc || '').replace(/"/g, '&quot;') + '">',
-    '<meta name="twitter:image" content="' + img + '">'
+    '<meta name="twitter:image" content="' + img + '">',
+    ADSENSE_SCRIPT
   ].join('\n');
 }
 
@@ -171,6 +174,7 @@ function portal(atlasList) {
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Interactive, bottom-up atlases of big subjects.">
 <style>body{background:#080b12;color:#e6e9f0;font:16px/1.7 ui-sans-serif,system-ui;margin:0;padding:12vh 8vw}h1{font-size:clamp(30px,5vw,54px);margin:0 0 10px}p{color:#9aa4b8;max-width:60ch}a.card{display:block;margin-top:26px;padding:20px 22px;border:1px solid #232a38;border-radius:12px;color:#e6e9f0;text-decoration:none;max-width:520px}a.card:hover{border-color:#7aa2f7}a.card b{display:block;font-size:19px;margin-bottom:4px}a.card span{color:#9aa4b8;font-size:14px}</style>
+${ADSENSE_SCRIPT}
 </head><body>
 <main>
 <h1>Atlas</h1>
@@ -211,6 +215,7 @@ function notFound(atlasList) {
   .pill{font-family:var(--mono);font-size:12.5px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--text);text-decoration:none}
   .pill:hover{border-color:var(--accent);color:var(--accent)}
 </style>
+${ADSENSE_SCRIPT}
 </head><body>
 <main class="wrap">
   <p class="eyebrow">Not on the map</p>
@@ -280,17 +285,11 @@ async function main() {
 
   // Privacy policy at the domain root: ad networks expect one URL for the whole site.
   mkdir(path.join(DIST, 'privacy'));
-  fs.writeFileSync(path.join(DIST, 'privacy', 'index.html'), privacyPage(SITE, CONTACT), 'utf8');
+  fs.writeFileSync(path.join(DIST, 'privacy', 'index.html'), privacyPage(SITE, CONTACT, ADSENSE_SCRIPT), 'utf8');
   urls.push({ base: '', route: 'privacy' });
 
-  // ads.txt: comments only until a publisher id exists. A comments-only ads.txt is
-  // valid and says "nobody is authorised to sell this inventory yet".
-  fs.writeFileSync(path.join(DIST, 'ads.txt'), [
-    '# Authorised digital sellers for atlasof.dev',
-    '# Replace the commented line below with the entry AdSense gives you, then rebuild.',
-    '# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0',
-    ''
-  ].join('\n'), 'utf8');
+  // IAB ads.txt: Google AdSense is authorised to sell inventory on this domain.
+  fs.writeFileSync(path.join(DIST, 'ads.txt'), 'google.com, pub-1177594928684175, DIRECT, f08c47fec0942fa0\n', 'utf8');
 
   fs.writeFileSync(path.join(DIST, 'index.html'), portal(live), 'utf8');
   fs.writeFileSync(path.join(DIST, '404.html'), notFound(live), 'utf8');

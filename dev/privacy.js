@@ -4,7 +4,7 @@
    requests, so it renders even if a path prefix is what went wrong.
 
    Contact is optional; leave it empty until there is a mailbox to point at. */
-function privacyPage(site, contact) {
+function privacyPage(site, contact, adsenseScript) {
   const contactHtml = contact
     ? '<p>Questions about this page: <a href="mailto:' + contact + '">' + contact + '</a>.</p>'
     : '';
@@ -34,6 +34,7 @@ function privacyPage(site, contact) {
   .back{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:13px}
   .updated{font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 0 26px}
 </style>
+${adsenseScript || ''}
 </head><body>
 <main class="wrap">
   <p class="eyebrow">Privacy</p>

@@ -463,7 +463,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     for (const a of atlases) {
       if (!html.includes('href="/' + a + '/"')) throw new Error('404 does not link /' + a + '/');
     }
-    if (/https?:\/\//.test(html.replace(/xmlns="[^"]*"/g, ''))) throw new Error('404 makes external requests');
+    // The AdSense tag is the one permitted third-party request; everything else
+    // on this page stays self-contained so a broken asset path cannot take it down.
+    const stripped = html
+      .replace(/xmlns="[^"]*"/g, '')
+      .replace(/<script async src="https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-[0-9]+" crossorigin="anonymous"><\/script>/g, '');
+    if (/https?:\/\//.test(stripped)) throw new Error('404 makes external requests');
   });
 
   check('star ratio', () => {
