@@ -976,7 +976,7 @@
       if (!list.length) return '';
       list.sort(function (a, b) { return String(a.author).localeCompare(String(b.author)); });
       return '<div class="lib-group" data-domain="' + d.id + '">' +
-        '<h2><span class="lib-dot" style="--c:' + d.color + '"></span>' + h(LN(d)) + '<em>' + list.length + '</em></h2>' +
+        '<h2><span class="lib-dot" style="--c:' + d.color + '"></span>' + h(LN(d)) + '<em aria-label="' + list.length + ' sources">' + list.length + '</em></h2>' +
         '<div class="lib-head"><span>Source</span><span>Author</span><span>Type</span><span>Cited by</span></div>' +
         '<ul class="reading">' + list.map(function (i) {
           var chips = i.topics.slice(0, 4).map(function (t) {
@@ -1695,6 +1695,11 @@
           if (on) shown++;
         });
         group.hidden = shown === 0;
+        var count = group.querySelector('h2 em');
+        if (count) {
+          count.textContent = shown;
+          count.setAttribute('aria-label', shown + (shown === 1 ? ' source' : ' sources'));
+        }
       });
     });
   }

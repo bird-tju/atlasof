@@ -552,6 +552,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
             if (shown.length !== badge) throw new Error(type + ': ' + shown.length + ' visible, badge ' + badge);
             const wrong = shown.filter((li) => type !== 'all' && li.dataset.type !== type);
             if (wrong.length) throw new Error(type + ' shows ' + wrong.length + ' rows of another type');
+            // group counts must follow the filter too
+            for (const group of [...doc.querySelectorAll('.lib-group')]) {
+              if (group.hidden) continue;
+              const rowsInGroup = [...group.querySelectorAll('li[data-type]')]
+                .filter((li) => dom.window.getComputedStyle(li).display !== 'none').length;
+              const label = Number(group.querySelector('h2 em').textContent);
+              if (label !== rowsInGroup) throw new Error(type + ': group says ' + label + ' but shows ' + rowsInGroup);
+            }
           }
         });
         dom.window.close();
