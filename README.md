@@ -81,7 +81,8 @@ shots/                screenshots used while reviewing (ignored by git)
 npm install            # jsdom, only needed for build and smoke tests
 npm run check          # validate the data files (ids, references, fields)
 npm run hdl            # validate the HDL snippets
-npm run smoke          # 35 headless checks: routes, interactions, build guards
+npm run links          # probe every external link, report dead ones
+npm run smoke          # 40 headless checks: routes, interactions, build guards
 npm run build          # prerender dist/ (115 pages)
 npm run preview        # serve dist/ on http://127.0.0.1:4321
 ```

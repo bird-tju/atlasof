@@ -26,11 +26,11 @@ CS.addTopics([
     people: [['Leonard Kleinrock', '1934 – ', 'One of the founders of packet-switching theory.'], ['Paul Baran', '1926 – 2011', 'Proposed the distributed communication network.']],
     related: ['tcp-ip', 'ethernet', 'dns'],
     reading: [
-      ['On Distributed Communications', 'Paul Baran, RAND', '1964', 'https://www.rand.org/pubs/research_memoranda/RM3420.html'],
-      ['A Protocol for Packet Network Intercommunication', 'Vint Cerf & Bob Kahn', '1974', 'https://www.cs.princeton.edu/courses/archive/fall06/cos561/papers/cerf74.pdf'],
-      ['Packet switching', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Packet_switching'],
-      ['A Brief History of the Internet', 'Internet Society', '1997', 'https://www.internetsociety.org/internet/history-internet/brief-history-internet/'],
-      ['Computer Networks', 'Tanenbaum & Wetherall', '1981']
+      ['On Distributed Communications', 'Paul Baran, RAND', '1964', 'https://www.rand.org/pubs/research_memoranda/RM3420.html', 'paper'],
+      ['A Protocol for Packet Network Intercommunication', 'Vint Cerf & Bob Kahn', '1974', 'https://www.cs.princeton.edu/courses/archive/fall06/cos561/papers/cerf74.pdf', 'paper'],
+      ['Packet switching', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Packet_switching', 'wiki'],
+      ['A Brief History of the Internet', 'Internet Society', '1997', 'https://www.internetsociety.org/internet/history-internet/brief-history-internet/', 'article'],
+      ['Computer Networks', 'Tanenbaum & Wetherall', '1981', '', 'book']
     ],
     practice: 'Simulate a 6-node network where one node fails mid-transfer; show the packets rerouting'
   },

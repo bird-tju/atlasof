@@ -30,7 +30,7 @@
       conceptsEn: (t.conceptsEn || []).map(function (c) { return { name: c[0], text: c[1] }; }),
       people: (t.people || []).map(function (p) { return { name: p[0], life: p[1], role: p[2] }; }),
       peopleEn: (t.peopleEn || []).map(function (p) { return { name: p[0], life: p[1], role: p[2] }; }),
-      reading: (t.reading || []).map(function (r) { return { title: r[0], author: r[1], year: r[2], url: r[3] || '' }; }),
+      reading: (t.reading || []).map(function (r) { var e = { title: r[0], author: r[1], year: r[2], url: r[3] || '', type: r[4] || '' }; e.type = inferReadingType(e); return e; }),
       readingEn: (t.readingEn || []).map(function (r) { return { title: r[0], author: r[1], year: r[2] }; }),
       related: t.related || [],
       tags: t.tags || [],
@@ -737,7 +737,7 @@
         return '<li>' + (r.url
             ? '<a class="reading-title" href="' + h(r.url) + '" target="_blank" rel="noopener">' + h(r.title) + ' <span class="reading-out">↗</span></a>'
             : '<span class="reading-title">' + h(r.title) + '</span>') +
-          '<span class="reading-meta">' + h(r.author) + (r.year ? ' · ' + yearLabel(r.year) : '') + '</span></li>';
+          '<span class="reading-meta">' + h(r.author) + (r.year ? ' · ' + yearLabel(r.year) : '') + ' · ' + readingTypeLabel(r.type) + '</span></li>';
       }).join('') + '</ul>');
     }
 
@@ -913,6 +913,36 @@
 
   /* Everything cited anywhere in the atlas, gathered in one place. Built from the
      per-topic reading lists, so a new citation appears here without extra work. */
+  /* Most reading lists predate the type field. Rather than hand-classify 150 entries
+     now, infer from what the entry looks like; an explicit fifth element always wins. */
+
+  function inferReadingType(r) {
+    if (r.type && r.type !== 'other') return r.type;
+    var title = String(r.title || '');
+    var author = String(r.author || '');
+    var year = parseInt(r.year, 10);
+    if (/wikipedia/i.test(author) || /wikipedia/i.test(title)) return 'wiki';
+    if (/course|lecture/i.test(title) || /MIT|Stanford|Berkeley/i.test(author)) return 'course';
+    if (/(et al\.|Press|Publishing|O'Reilly|Cormen|Silberschatz|Hennessy|Patterson|Bryant|Tanenbaum|Jech|Cover|Hofstadter|Knuth|Aho|Hopcroft|Ullman|Stallings|Rosen|Sipser)/i.test(author)) return 'book';
+    if (/^(On|A|An|The) /.test(title) && !/&|et al\./.test(author) && (!year || year < 1990)) return 'paper';
+    if (year && year < 1995) return 'book';
+    return 'other';
+  }
+
+  var READING_TYPES = [
+    ['paper', 'Paper'],
+    ['book', 'Book'],
+    ['wiki', 'Encyclopedia'],
+    ['article', 'Article'],
+    ['course', 'Course'],
+    ['other', 'Other']
+  ];
+
+  function readingTypeLabel(type) {
+    var hit = READING_TYPES.filter(function (t) { return t[0] === type; })[0];
+    return (hit || READING_TYPES[READING_TYPES.length - 1])[1];
+  }
+
   function viewLibrary() {
     var byKey = {};
     var order = [];
@@ -920,33 +950,43 @@
       (t.reading || []).forEach(function (r) {
         var key = r.title.toLowerCase() + '|' + r.author.toLowerCase();
         if (!byKey[key]) {
-          byKey[key] = { title: r.title, author: r.author, year: r.year, url: r.url, topics: [], domains: {} };
+          byKey[key] = { title: r.title, author: r.author, year: r.year, url: r.url, type: r.type, topics: [], domains: {} };
           order.push(key);
         }
         var e = byKey[key];
         if (!e.url && r.url) e.url = r.url;
+        if (e.type === 'other' && r.type !== 'other') e.type = r.type;
         e.topics.push(t);
         e.domains[t.domain] = true;
       });
     });
 
     var items = order.map(function (k) { return byKey[k]; });
-    var withLink = items.filter(function (i) { return i.url; }).length;
+    var counts = {};
+    items.forEach(function (i) { counts[i.type] = (counts[i.type] || 0) + 1; });
+
+    var filterBar = '<div class="lib-filter" role="group" aria-label="Filter by source type">' +
+      '<button type="button" class="lib-filter-btn is-on" data-type="all">All<em>' + items.length + '</em></button>' +
+      READING_TYPES.filter(function (t) { return counts[t[0]]; }).map(function (t) {
+        return '<button type="button" class="lib-filter-btn" data-type="' + t[0] + '">' + t[1] + '<em>' + counts[t[0]] + '</em></button>';
+      }).join('') +
+      '</div>';
 
     var groups = CS.domains.map(function (d) {
       var list = items.filter(function (i) { return i.domains[d.id]; });
       if (!list.length) return '';
       list.sort(function (a, b) { return String(a.author).localeCompare(String(b.author)); });
-      return '<div class="lib-group">' +
+      return '<div class="lib-group" data-domain="' + d.id + '">' +
         '<h2><span class="lib-dot" style="--c:' + d.color + '"></span>' + h(LN(d)) + '<em>' + list.length + '</em></h2>' +
         '<ul class="reading">' + list.map(function (i) {
           var chips = i.topics.slice(0, 4).map(function (t) {
             return '<a class="lib-chip" href="' + topicHref(t) + '">' + h(LN(t)) + '</a>';
           }).join('');
-          return '<li>' + (i.url
+          return '<li data-type="' + i.type + '">' + (i.url
             ? '<a class="reading-title" href="' + h(i.url) + '" target="_blank" rel="noopener">' + h(i.title) + ' <span class="reading-out">↗</span></a>'
             : '<span class="reading-title">' + h(i.title) + '</span>') +
             '<span class="reading-meta">' + h(i.author) + (i.year ? ' · ' + yearLabel(i.year) : '') + '</span>' +
+            '<span class="lib-type is-' + i.type + '">' + readingTypeLabel(i.type) + '</span>' +
             '<span class="lib-topics">' + chips + '</span></li>';
         }).join('') + '</ul></div>';
     }).join('');
@@ -955,10 +995,12 @@
       '<div class="wrap">' +
       '<p class="eyebrow">Library</p>' +
       '<h1>Sources behind the atlas</h1>' +
-      '<p class="page-head-lead">Every paper, book, course and reference cited on a topic page, gathered by domain. ' +
-      items.length + ' entries, ' + withLink + ' with a direct link. A topic page links back to what it cites; this page links forward.</p>' +
+      '<p class="page-head-lead">Every paper, book, encyclopedia entry and article cited on a topic page, gathered by domain. ' +
+      items.length + ' entries. Filter by type, or jump to the topic that cites a source.</p>' +
       '</div></section>' +
-      '<section class="section section-tight"><div class="wrap">' + groups + '</div></section>';
+      '<section class="section section-tight"><div class="wrap">' +
+      filterBar + groups +
+      '</div></section>';
   }
 
   function viewRandom() {
@@ -1635,6 +1677,28 @@
     });
   }
 
+  function initLibraryFilter() {
+    var bar = document.querySelector('.lib-filter');
+    if (!bar) return;
+    bar.addEventListener('click', function (e) {
+      var btn = e.target.closest('.lib-filter-btn');
+      if (!btn) return;
+      var type = btn.dataset.type;
+      bar.querySelectorAll('.lib-filter-btn').forEach(function (b) {
+        b.classList.toggle('is-on', b === btn);
+      });
+      document.querySelectorAll('.lib-group').forEach(function (group) {
+        var shown = 0;
+        group.querySelectorAll('li[data-type]').forEach(function (li) {
+          var on = type === 'all' || li.dataset.type === type;
+          li.hidden = !on;
+          if (on) shown++;
+        });
+        group.hidden = shown === 0;
+      });
+    });
+  }
+
   function mount() {
     if (state.route === 'home') {
       var hm = document.getElementById('hero-map');
@@ -1657,6 +1721,7 @@
       }
     }
     if (state.route === 'giants') CS.GiantsUI.mount();
+    if (state.route === 'library') initLibraryFilter();
     if (document.querySelector('[data-status-topic]')) initTopicStatus();
     observeReveal();
     initToc();

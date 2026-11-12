@@ -16,7 +16,8 @@
     "build": "node dev/build.js",
     "serve": "node dev/serve.js",
     "test": "node dev/check.js && node dev/hdl-check.js",
-    "preview": "node dev/serve.js 4321"
+    "preview": "node dev/serve.js 4321",
+    "links": "node dev/check-links.js"
   },
   "devDependencies": {
     "jsdom": "^31.0.0"
