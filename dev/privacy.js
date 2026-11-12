@@ -52,16 +52,16 @@ ${adsenseScript || ''}
   <p>Clearing site data in your browser deletes both.</p>
 
   <h2>What is not collected</h2>
-  <p>No analytics, no tracking pixels, no fingerprinting, no cross-site identifiers. The site loads no third-party fonts or scripts of its own.</p>
+  <p>No analytics of our own, no tracking pixels, no fingerprinting, no cross-site identifiers, and no third-party fonts. The only third-party request the site makes is Google's advertising script, described under Advertising below.</p>
 
   <h2>Hosting</h2>
   <p>The site is served by a hosting provider acting as a content delivery network. Like any web server it receives your IP address, the page you asked for and your user agent, and it may keep request logs for security and abuse prevention. Those logs belong to the provider, not to us.</p>
 
   <h2>Advertising</h2>
-  <p>This site may display advertising through Google AdSense. If and when ads are enabled:</p>
+  <p>The site displays advertising through Google AdSense. That means:</p>
   <ul>
     <li>Google and its partners may use cookies or similar technologies to serve ads based on your prior visits to this and other sites.</li>
-    <li>Where the law requires it — for example in the European Economic Area and the United Kingdom — a consent message appears first, and no advertising cookies are set until you choose.</li>
+    <li>Where the law requires it — in the European Economic Area and the United Kingdom — Google shows a consent message first, and personalised ads are not served unless you agree.</li>
     <li>You can opt out of personalised advertising in <a href="https://adssettings.google.com/" rel="noopener">Google Ad Settings</a>, or manage cookies in your browser.</li>
     <li>Google's own practices are described on the <a href="https://policies.google.com/technologies/partner-sites" rel="noopener">Google privacy and terms</a> page.</li>
   </ul>
