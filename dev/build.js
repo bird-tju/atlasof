@@ -9,7 +9,7 @@ const { JSDOM, VirtualConsole } = require('jsdom');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
-const SITE = 'https://example.com';        // placeholder: replace once a domain exists
+const SITE = 'https://atlasof.dev';        // the deployed origin
 
 /* One entry per atlas. Adding an atlas = adding one object here plus its folder. */
 const ATLASES = [
@@ -161,6 +161,12 @@ function portal(atlasList) {
 <title>Atlas — visual maps of big subjects</title>
 <meta name="theme-color" content="#080b12">
 <link rel="apple-touch-icon" sizes="180x180" href="/cs/icon-180.png">
+<link rel="canonical" href="${SITE}/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Atlas — visual maps of big subjects">
+<meta property="og:url" content="${SITE}/">
+<meta property="og:description" content="Interactive, bottom-up atlases of big subjects.">
+<meta name="twitter:card" content="summary">
 <meta name="description" content="Interactive, bottom-up atlases of big subjects.">
 <style>body{background:#080b12;color:#e6e9f0;font:16px/1.7 ui-sans-serif,system-ui;margin:0;padding:12vh 8vw}h1{font-size:clamp(30px,5vw,54px);margin:0 0 10px}p{color:#9aa4b8;max-width:60ch}a.card{display:block;margin-top:26px;padding:20px 22px;border:1px solid #232a38;border-radius:12px;color:#e6e9f0;text-decoration:none;max-width:520px}a.card:hover{border-color:#7aa2f7}a.card b{display:block;font-size:19px;margin-bottom:4px}a.card span{color:#9aa4b8;font-size:14px}</style>
 </head><body>

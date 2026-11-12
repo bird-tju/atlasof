@@ -162,8 +162,9 @@ for Cloudflare Pages:
 it every build resolves jsdom fresh and a major release can break the build with no
 change on our side.
 
-Before the first deploy, change `SITE` in `dev/build.js` to the real domain and
-rebuild — canonical URLs, `og:url`, the sitemap and robots.txt all derive from it.
+`SITE` in `dev/build.js` is the deployed origin (`https://atlasof.dev`). Everything
+absolute derives from it — canonical URLs, `og:url`, `og:image`, the sitemap and
+robots.txt — so changing the domain means changing that one line and rebuilding.
 
 The build writes `dist/_headers` (Cloudflare Pages and Netlify both read it):
 `/assets/*` is cacheable forever because those URLs carry a content hash, while

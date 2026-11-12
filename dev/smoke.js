@@ -423,6 +423,26 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (cacheLines.length !== 1) throw new Error('Cache-Control set ' + cacheLines.length + ' times');
   });
 
+  check('canonical on every page', () => {
+    const distRoot = path.join(ROOT, 'dist');
+    const files = [path.join(distRoot, 'index.html')];
+    (function walk(d) {
+      for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+        const p = path.join(d, e.name);
+        if (e.isDirectory()) { if (e.name !== 'assets') walk(p); }
+        else if (e.name === 'index.html') files.push(p);
+      }
+    })(distRoot);
+    const bad = [];
+    for (const f of files) {
+      const html = fs.readFileSync(f, 'utf8');
+      const m = html.match(/<link rel="canonical" href="([^"]+)"/);
+      if (!m) bad.push(path.relative(distRoot, f) + ' (none)');
+      else if (!/^https:\/\//.test(m[1])) bad.push(path.relative(distRoot, f) + ' (not absolute)');
+    }
+    if (bad.length) throw new Error('canonical missing: ' + bad.slice(0, 3).join(', '));
+  });
+
   check('not-found page', () => {
     const file = path.join(ROOT, 'dist', '404.html');
     if (!fs.existsSync(file)) throw new Error('dist/404.html missing');
