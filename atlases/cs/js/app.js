@@ -956,7 +956,7 @@
       '<h2>'+'How it is built'+'</h2>' +
       '<p>'+'Plain HTML, CSS and JavaScript: no build step, no external dependencies, no tracking. The graph is inline SVG with a deterministic ring-cluster layout; the timeline and search are generated in the browser. The whole site works offline by opening index.html.'+'</p>' +
       '<h2>'+'Licence'+'</h2>' +
-      '<p>'+'Text is shared under '+'<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>'+'. Code is under the MIT licence.'+'</p>' +
+      '<p>'+'The writing is shared under '+'<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>'+' — reuse it, credit it, keep the same licence. The code behind the site is MIT.'+'</p>' +
       '</div>' +
       '<aside class="about-side">' +
       '<div class="aside-block"><p class="aside-h">'+'Numbers'+'</p>' +

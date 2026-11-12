@@ -1,0 +1,43 @@
+Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+
+The written content of the atlases is licensed under CC BY-SA 4.0. The full legal
+text is at:
+
+  https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+A human-readable summary is at:
+
+  https://creativecommons.org/licenses/by-sa/4.0/
+
+Copyright (c) 2026 CS Atlas contributors
+
+What counts as content
+----------------------
+
+- every topic page: summary, body paragraphs, milestones, concepts, people and
+  practice tasks
+- the hardware course pages: their explanations, figures and captions
+- the about page, the domain and path introductions, the course notes
+- the social card image (og.png)
+
+What is code, and therefore MIT instead
+--------------------------------------
+
+- the site shell (index.html), stylesheets, page modules and data files as
+  software
+- the build, check and test scripts under dev/
+
+You can tell the two apart in practice: if you want to reuse the *text* of a
+topic, CC BY-SA applies; if you want to reuse the *engine* that renders it, MIT
+applies.
+
+If you reuse the content
+------------------------
+
+- give credit: name the atlas ("CS Atlas") and link back to the page you used
+- say what you changed, if you changed it
+- keep the same licence: anything derived from this content must also be
+  CC BY-SA 4.0
+
+Short quotes with a link back do not need to follow the share-alike clause; it
+applies when you republish substantial portions.

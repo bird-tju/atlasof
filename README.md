@@ -149,4 +149,11 @@ machine resolved.
 
 ## Licence
 
-Text is shared under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); code under the MIT licence.
+Two licences, split by what is being reused:
+
+| What | Licence | File |
+| --- | --- | --- |
+| Code — shell, styles, page modules, data files as software, build scripts | MIT | [LICENSE](LICENSE) |
+| Content — topic pages, milestones, course text, about page, social card | CC BY-SA 4.0 | [LICENSE-CONTENT](LICENSE-CONTENT) |
+
+In short: take the engine freely, credit the writing.
