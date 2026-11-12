@@ -278,6 +278,21 @@ async function main() {
   fs.writeFileSync(path.join(DIST, 'robots.txt'),
     'User-agent: *\nAllow: /\n\nSitemap: ' + SITE + '/sitemap.xml\n', 'utf8');
 
+
+  // Host cache policy. Assets carry a content hash in the query string, so they can
+  // be cached forever; HTML keeps the platform default (revalidate every time).
+  // Only one rule sets Cache-Control, because Cloudflare joins duplicate headers
+  // with a comma instead of letting the last rule win.
+  fs.writeFileSync(path.join(DIST, '_headers'), [
+    '/*',
+    '  X-Content-Type-Options: nosniff',
+    '  Referrer-Policy: strict-origin-when-cross-origin',
+    '',
+    '/assets/*',
+    '  Cache-Control: public, max-age=31536000, immutable',
+    ''
+  ].join('\n'), 'utf8');
+
   console.log('pages:', urls.length, '| atlases:', ATLASES.length, '| dist ready');
 }
 

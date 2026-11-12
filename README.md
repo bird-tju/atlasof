@@ -147,6 +147,30 @@ page. The images are generated once by `dev/make-images.js` (needs headless Chro
 on port 9222) and committed, because they bake in whatever font the generating
 machine resolved.
 
+## Deploying
+
+The output in `dist/` is plain static files; any host works. The configuration used
+for Cloudflare Pages:
+
+| Setting | Value |
+| --- | --- |
+| Build command | `npm ci && npm run build` |
+| Output directory | `dist` |
+| Node version | 22 |
+
+`npm ci` requires `package-lock.json`, which is committed for that reason: without
+it every build resolves jsdom fresh and a major release can break the build with no
+change on our side.
+
+Before the first deploy, change `SITE` in `dev/build.js` to the real domain and
+rebuild — canonical URLs, `og:url`, the sitemap and robots.txt all derive from it.
+
+The build writes `dist/_headers` (Cloudflare Pages and Netlify both read it):
+`/assets/*` is cacheable forever because those URLs carry a content hash, while
+HTML keeps the platform default of revalidating on every request. Only one rule
+sets `Cache-Control`, because the host joins duplicate headers with a comma rather
+than letting the last rule win.
+
 ## Licence
 
 Two licences, split by what is being reused:

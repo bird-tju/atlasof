@@ -412,6 +412,17 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     }
   });
 
+  check('host headers', () => {
+    const file = path.join(ROOT, 'dist', '_headers');
+    if (!fs.existsSync(file)) throw new Error('dist/_headers missing');
+    const txt = fs.readFileSync(file, 'utf8');
+    if (!/^\/assets\/\*/m.test(txt)) throw new Error('no /assets/* rule');
+    if (!/immutable/.test(txt)) throw new Error('assets are not marked immutable');
+    // Only one rule may set Cache-Control: the host joins duplicates with a comma.
+    const cacheLines = txt.split('\n').filter((l) => /^\s*Cache-Control:/i.test(l));
+    if (cacheLines.length !== 1) throw new Error('Cache-Control set ' + cacheLines.length + ' times');
+  });
+
   check('not-found page', () => {
     const file = path.join(ROOT, 'dist', '404.html');
     if (!fs.existsSync(file)) throw new Error('dist/404.html missing');
