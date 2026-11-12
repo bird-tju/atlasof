@@ -4,6 +4,9 @@
   "private": true,
   "description": "Static, zero-dependency atlases of big subjects: computer science today, mathematics next.",
   "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "check": "node dev/check.js",
     "hdl": "node dev/hdl-check.js",

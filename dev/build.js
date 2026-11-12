@@ -6,9 +6,11 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { JSDOM, VirtualConsole } = require('jsdom');
+const { privacyPage } = require('./privacy');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
+const CONTACT = '';   // e.g. 'hello@atlasof.dev', used on the privacy page
 const SITE = 'https://atlasof.dev';        // the deployed origin
 
 /* One entry per atlas. Adding an atlas = adding one object here plus its folder. */
@@ -174,6 +176,7 @@ function portal(atlasList) {
 <h1>Atlas</h1>
 <p>Visual, bottom-up maps of big subjects. Each atlas is a set of interlinked pages, from first principles to the frontier.</p>
 ${cards}
+<p style="margin-top:34px;font-size:13px;color:#6d758a"><a href="/privacy/" style="color:#9aa4b8">Privacy</a></p>
 </main>
 </body></html>`;
 }
@@ -274,6 +277,20 @@ async function main() {
     }
     console.log('');
   }
+
+  // Privacy policy at the domain root: ad networks expect one URL for the whole site.
+  mkdir(path.join(DIST, 'privacy'));
+  fs.writeFileSync(path.join(DIST, 'privacy', 'index.html'), privacyPage(SITE, CONTACT), 'utf8');
+  urls.push({ base: '', route: 'privacy' });
+
+  // ads.txt: comments only until a publisher id exists. A comments-only ads.txt is
+  // valid and says "nobody is authorised to sell this inventory yet".
+  fs.writeFileSync(path.join(DIST, 'ads.txt'), [
+    '# Authorised digital sellers for atlasof.dev',
+    '# Replace the commented line below with the entry AdSense gives you, then rebuild.',
+    '# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0',
+    ''
+  ].join('\n'), 'utf8');
 
   fs.writeFileSync(path.join(DIST, 'index.html'), portal(live), 'utf8');
   fs.writeFileSync(path.join(DIST, '404.html'), notFound(live), 'utf8');

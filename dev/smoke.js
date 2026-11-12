@@ -349,7 +349,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     // Portal: every atlas folder in dist must be linked from the front page.
     const portal = fs.readFileSync(path.join(distRoot, 'index.html'), 'utf8');
     const atlasDirs = fs.readdirSync(distRoot, { withFileTypes: true })
-      .filter((e) => e.isDirectory() && e.name !== 'assets')
+      .filter((e) => e.isDirectory() && !['assets', 'privacy'].includes(e.name))
       .map((e) => e.name);
     for (const a of atlasDirs) {
       if (!portal.includes('href="/' + a + '/"')) throw new Error('portal does not link /' + a + '/');
@@ -404,7 +404,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   check('share metadata', () => {
     const distRoot = path.join(ROOT, 'dist');
     const atlases = fs.readdirSync(distRoot, { withFileTypes: true })
-      .filter((e) => e.isDirectory() && e.name !== 'assets')
+      .filter((e) => e.isDirectory() && !['assets', 'privacy'].includes(e.name))
       .map((e) => e.name);
     for (const a of atlases) {
       for (const f of ['og.png', 'icon-180.png']) {
@@ -457,7 +457,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     // Every published atlas must be reachable from the 404 page; the list comes from
     // dist itself, so an atlas that is not built cannot break this check.
     const atlases = fs.readdirSync(path.join(ROOT, 'dist'), { withFileTypes: true })
-      .filter((e) => e.isDirectory() && e.name !== 'assets')
+      .filter((e) => e.isDirectory() && !['assets', 'privacy'].includes(e.name))
       .map((e) => e.name);
     if (!atlases.length) throw new Error('no atlas built');
     for (const a of atlases) {
