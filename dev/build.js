@@ -10,6 +10,8 @@ const { privacyPage } = require('./privacy');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
+// Contact address for the privacy page. Read from the environment so the repo does
+// not carry a personal mailbox: set CONTACT_EMAIL in the host's build settings.
 const CONTACT = process.env.CONTACT_EMAIL || '';
 const SITE = 'https://atlasof.dev';        // the deployed origin
 const ADSENSE_CLIENT = 'ca-pub-1177594928684175';
