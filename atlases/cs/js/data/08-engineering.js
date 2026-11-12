@@ -8,7 +8,14 @@ CS.addTopics([
     year: 1968,
     tags: ['Scale', 'Method', 'Structure'],
     summary: 'Hardware got faster while software got harder to deliver; the 1968 “software crisis” gave birth to software engineering.',
-    body: ['Through the 1960s large software projects ran over budget, slipped or failed outright. In 1968 NATO held a conference in Garmisch, Germany, that put the term “software engineering” on the table, hoping to bring engineering discipline to software. That same year Dijkstra published his short note “Go To Statement Considered Harmful”, arguing for structured control flow over arbitrary jumps.', 'The crisis was not a one-off but the normal condition of scale: requirements change, people leave, systems age. It produced lifecycle models, structured methods, modularity and eventually the agile movement. Every change of methodology is really an answer to the same question: how do you keep software written by many hands understandable over time?'],
+    body: [
+      'The crisis was arithmetically inevitable. Hardware capability grew exponentially through the 1960s while the cost of writing software stayed roughly proportional to the number of people doing it, and people do not scale exponentially. Projects that had been feasible with ten programmers became necessary at a hundred, and at that size the failure modes changed completely: nobody could hold the system in their head, so coordination cost grew faster than output.',
+      'The symptoms were consistent enough to name. Projects ran over budget by multiples rather than percentages; deliveries slipped by years; systems were abandoned after being paid for. The failures were not caused by bad programmers — the same people succeeded on smaller systems — but by scale, changing requirements and the absence of any shared vocabulary for designing something large. That last gap is what a discipline was supposed to fill.',
+      'In October 1968 NATO convened a working conference at Garmisch, Germany, and deliberately used the phrase "software engineering" as a provocation: the point was that software production ought to resemble engineering, with established methods, measurable quality and professional responsibility. The conference proceedings read like a diagnosis, not a solution — participants disagreed about whether the problem was technique, management or the nature of the medium.',
+      'The same year produced the most influential single argument about structure. Dijkstra\'s two-page note "Go To Statement Considered Harmful" claimed that the quality of a program depends on how well its progress can be described independently of its execution order, and that unrestricted jumps destroy that property. The debate that followed was not about style. It was about whether control flow could be reasoned about at all, and it pushed the field toward structured programming, then toward modular decomposition.',
+      'The response took two shapes. Structured methods — top-down design, data flow diagrams, formal lifecycle phases — tried to make large systems plannable in advance, and produced the waterfall model and its documentation gates. Iterative methods tried the opposite: accept that requirements will change, and shorten the loop between deciding and finding out. The two traditions have argued ever since, and the argument is visible on this site\'s pages for waterfall and agile.',
+      'The useful reading is that the crisis never ended, it normalised. Requirements still change, people still leave, systems still age; the difference is that the industry now has vocabulary for the problem and a menu of responses. The question posed at Garmisch — how do you keep software written by many hands understandable over time — is still the correct question, and no methodology has made it disappear.'
+    ],
     milestones: [
       [1968, 'The NATO software engineering conference', 'The moment the discipline is named.', 1],
       [1968, 'Dijkstra on goto', 'A manifesto for structured programming.'],
@@ -17,7 +24,12 @@ CS.addTopics([
     concepts: [['The software crisis', 'Cost, schedule and quality that consistently miss what was promised.'], ['Structured programming', 'Organising control flow with sequence, selection and iteration only.'], ['Brooks’s law', 'Adding people to a late project makes it later.']],
     people: [['Fred Brooks', '1931 – 2022', 'Author of The Mythical Man-Month; managed IBM OS/360.'], ['Edsger Dijkstra', '1930 – 2002', 'A pioneer of structured programming and algorithm design.']],
     related: ['waterfall', 'agile', 'algol'],
-    reading: [['The Mythical Man-Month', 'Fred Brooks', '1975'], ['Notes on Structured Programming', 'Edsger Dijkstra', '1968']],
+    reading: [
+      ['Software Engineering Techniques (NATO conference report)', 'J. N. Buxton & B. Randell (eds.)', '1969', 'http://homepages.cs.ncl.ac.uk/brian.randell/NATO/nato1969.PDF', 'paper'],
+      ['Go To Statement Considered Harmful', 'Edsger W. Dijkstra', '1968', 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf', 'paper'],
+      ['The Software Crisis', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Software_crisis', 'wiki'],
+      ['The Mythical Man-Month', 'Fred Brooks', '1975', '', 'book']
+    ],
     practice: 'Take a real project’s bug list and classify each bug by which phase should have caught it — then say what you would change'
   },
 
@@ -49,7 +61,14 @@ CS.addTopics([
     year: 2001,
     tags: ['Iteration', 'Feedback', 'Collaboration'],
     summary: 'Responding to change over following a plan: agile turned delivery into short, runnable iterations.',
-    body: ['In the 1990s XP, Scrum and Crystal each explored lightweight processes. In 2001 seventeen practitioners met at Snowbird, Utah, and published the Agile Manifesto: individuals and interactions, working software, customer collaboration and responding to change, valued above process, documentation, contracts and plans.', 'The core of agile is a shorter feedback loop: two-week iterations, continuous integration, automated tests, pair programming. It is not “no process” but a smaller, more adjustable one. Twenty-odd years on agile is mainstream, and often criticised as ritualised — stand-ups and boards standing in for real autonomy and experiment.'],
+    body: [
+      'Agile began as a reaction, not a methodology. Through the 1990s a group of practitioners — Beck with Extreme Programming, Schwaber and Beedle with Scrum, Cockburn with Crystal — had each arrived at the same suspicion: the document-heavy, plan-first process that dominated large organisations was producing paper rather than working software. In February 2001 seventeen of them met at Snowbird, Utah, and wrote four sentences.',
+      'The manifesto\'s form matters as much as its content. It states four preferences — individuals and interactions over processes and tools, working software over comprehensive documentation, customer collaboration over contract negotiation, responding to change over following a plan — each explicitly acknowledging that the right-hand items have value. That qualifier is what turned a slogan into something implementable, and it is also what most of the later ritual forgot.',
+      'The mechanism underneath is a shorter feedback loop, and everything else follows from it. Two-week iterations mean requirements are re-examined while the cost of changing them is still small. Continuous integration means integration problems surface in minutes rather than at a quarterly merge. Automated tests mean refactoring is safe, which is what makes incremental design possible at all. Pair programming trades typing speed for review that happens before the mistake ships.',
+      'That is why agile is not "no process". It is a smaller process with higher frequency: less up-front design, more frequent correction, and a deliberate bet that the cost of rework is lower than the cost of being wrong for a year. The bet fails when iterations are too long to correct anything, when tests are missing so change is unsafe, or when the customer is a proxy who cannot actually make decisions.',
+      'Scaling is where the theory strains. The manifesto was written by and for small co-located teams; large organisations adopted the vocabulary while keeping the structures that make autonomy impossible. The result is what critics call "agile in name only": daily stand-ups that are status reports to a manager, story points used as a productivity metric, and sprints treated as two-week waterfalls with a fixed scope.',
+      'The honest summary is that agile delivered on its technical claims and disappointed on its organisational ones. Continuous integration, automated testing and incremental delivery are now simply how good software is built. Self-organising teams and genuine customer collaboration remain rare, not because the ideas failed but because they require giving up control that most organisations are unwilling to give up.'
+    ],
     milestones: [
       [1999, 'Extreme Programming Explained', 'Kent Beck systematises XP.'],
       [2001, 'The Agile Manifesto', 'A reaction against document-heavy process, written at Snowbird.', 1],
@@ -59,7 +78,12 @@ CS.addTopics([
     concepts: [['Iteration', 'Deliver a runnable increment inside a fixed time box.'], ['User story', 'Describe a requirement from the user’s point of view so it can be prioritised.'], ['Continuous integration', 'Merge code often and build and test it automatically.']],
     people: [['Kent Beck', '1961 – ', 'Extreme programming and test-driven development.'], ['Jeff Sutherland', '1941 – ', 'Co-creator of Scrum.']],
     related: ['waterfall', 'open-source', 'version-control'],
-    reading: [['Manifesto for Agile Software Development', 'Beck et al.', '2001'], ['Extreme Programming Explained', 'Kent Beck', '1999']],
+    reading: [
+      ['Manifesto for Agile Software Development', 'Beck et al.', '2001', 'https://agilemanifesto.org/', 'article'],
+      ['Extreme Programming Explained', 'Kent Beck', '1999', '', 'book'],
+      ['Agile software development', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Agile_software_development', 'wiki'],
+      ['The Scrum Guide', 'Schwaber & Sutherland', '2020', 'https://scrumguides.org/scrum-guide.html', 'article']
+    ],
     practice: 'Run a two-week iteration on your own project: board, daily notes, review — and record what the process did not catch'
   },
 
