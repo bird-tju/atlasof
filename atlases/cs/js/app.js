@@ -1243,13 +1243,25 @@
       k = k2;
       apply();
     }
-    function reset() {
+    /* The focused domain lives in the URL (/cs/map/ai/) so that going back, reloading
+       or sharing the link restores the same view. replaceState is used rather than
+       assigning location.hash: a hash change would re-render the whole page and throw
+       away the zoom we just set. */
+    function setAddress(id) {
+      if (!history.replaceState) return;
+      var base = (window.__ATLAS__ && window.__ATLAS__.base) || '';
+      var url = base + '/map/' + (id && id !== 'all' ? id + '/' : '');
+      history.replaceState(null, '', url);
+    }
+
+    function reset(skipAddress) {
       k = 1; tx = 0; ty = 0; apply();
       document.querySelectorAll('.map-domain').forEach(function (b) { b.classList.toggle('is-active', b.dataset.focus === 'all'); });
       svg.classList.remove('is-filtered');
       svg.querySelectorAll('.node, .hub, .edge').forEach(function (el) { el.classList.remove('is-dim', 'is-lit'); });
       status.textContent = DOMAINS.length + ' domains · ' + TOPICS.length + ' topics';
       if (tip) tip.hidden = true;
+      if (!skipAddress) setAddress('all');
     }
     function focusDomain(id) {
       var hub = g.hubs.filter(function (x) { return x.d.id === id; })[0];
@@ -1273,6 +1285,7 @@
       });
       status.textContent = LN(hub.d) + ' · ' + hub.list.length + ' topics';
       if (tip) tip.hidden = true;
+      setAddress(id);
     }
 
     var drag = null;
@@ -1383,6 +1396,19 @@
         if (id === 'all') reset(); else focusDomain(id);
       });
     });
+    /* Apply the domain named in the route, if any: /cs/map/ai/ opens focused on AI. */
+    var wanted = (function () {
+      if (window.__ATLAS__ && window.__ATLAS__.route) {
+        var parts = String(window.__ATLAS__.route).split('/');
+        return parts[1] || '';
+      }
+      var raw = location.hash.replace(/^#\/?/, '').split('?')[0].split('/');
+      return raw[0] === 'map' ? (raw[1] || '') : '';
+    })();
+    if (wanted && DOMAINS.filter(function (d) { return d.id === wanted; }).length) {
+      focusDomain(wanted);
+    }
+
     document.querySelectorAll('[data-zoom]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var z = btn.dataset.zoom;

@@ -260,6 +260,8 @@ async function main() {
       const data = await probeData(entry);
       routes = routes.concat(
         data.domains.map(function (id) { return 'domain/' + id; }),
+        // A focused view of the atlas graph: /cs/map/ai/ opens with AI selected.
+        data.domains.map(function (id) { return 'map/' + id; }),
         data.topics.map(function (id) { return 'topic/' + id; }),
         data.paths.map(function (id) { return 'path/' + id; })
       );

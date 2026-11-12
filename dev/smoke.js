@@ -401,6 +401,17 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!/<title>CS Atlas · A map of computer science<\/title>/.test(home)) throw new Error('title lost the searchable term');
   });
 
+  check('map focus restore', () => {
+    // /cs/map/<domain>/ must prerender with that domain already selected, so a reader
+    // who clicks a node and comes back lands on the same view.
+    const file = path.join(ROOT, 'dist', 'cs', 'map', 'ai', 'index.html');
+    if (!fs.existsSync(file)) throw new Error('dist/cs/map/ai/index.html missing');
+    const html = fs.readFileSync(file, 'utf8');
+    if (!/"route":"map\/ai"/.test(html)) throw new Error('route not injected');
+    const active = html.match(/<button[^>]*class="[^"]*map-domain[^"]*is-active[^"]*"[^>]*>|<button[^>]*is-active[^"]*"[^>]*>/);
+    if (!active || !/data-focus="ai"/.test(active[0])) throw new Error('AI is not the active filter in the prerendered page');
+  });
+
   check('share metadata', () => {
     const distRoot = path.join(ROOT, 'dist');
     const atlases = fs.readdirSync(distRoot, { withFileTypes: true })
