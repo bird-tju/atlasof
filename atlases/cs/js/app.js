@@ -1,5 +1,9 @@
-/* ============================================================
-   ============================================================ */
+/**
+ * [INPUT]: depends on window.CS, DOM data, and HTML elements (#main, #search, #nav, etc.)
+ * [OUTPUT]: provides routing, interactive views, map engine, search, and progress tracking
+ * [POS]: main runtime orchestrator of atlases/cs, connects data models to DOM
+ * [PROTOCOL]: Update this header on change, then check GEMINI.md
+ */
 (function () {
   'use strict';
 
@@ -297,7 +301,7 @@
     var out = scored.slice(0, 14).map(function (x) { return x.t; });
 
     DOMAINS.forEach(function (d) {
-      if (d.name.toLowerCase().indexOf(query) >= 0 || d.en.toLowerCase().indexOf(query) >= 0) {
+      if (d.name.toLowerCase().indexOf(query) >= 0 || (d.short && d.short.toLowerCase().indexOf(query) >= 0) || (d.blurb && d.blurb.toLowerCase().indexOf(query) >= 0)) {
         out.push(d);
       }
     });
@@ -319,24 +323,23 @@
     var query = q.trim();
 
     if (!results.length) {
-      searchResults.innerHTML = '' + h(q) + '';
+      searchResults.innerHTML = '<p class="s-empty">No results for “' + h(query) + '”</p>';
       searchCount.textContent = '';
       return;
     }
 
     var html = '';
-    if (!query) html += '';
     html += results.map(function (item, i) {
       if (!item.domain && domainById.has(item.id)) {
         return '<a class="s-result' + (i === 0 ? ' is-active' : '') + '" href="#/domain/' + item.id + '" data-i="' + i + '">' +
           '<span class="s-dot" style="--c:' + item.color + '"></span>' +
-          '<span class="s-main"><strong>' + hl(item.name, query) + '</strong><em>' + h(item.en) + '</em></span>' +
-          '';
+          '<span class="s-main"><strong>' + hl(item.name, query) + '</strong><em>' + h(item.short || '') + '</em></span>' +
+          '<span class="s-meta">Domain</span></a>';
       }
       var d = domainOf(item);
       return '<a class="s-result' + (i === 0 ? ' is-active' : '') + '" href="' + topicHref(item) + '" data-i="' + i + '">' +
         '<span class="s-dot" style="--c:' + d.color + '"></span>' +
-        '<span class="s-main"><strong>' + hl(item.name, query) + '</strong><em>' + h(item.en) + '</em>' +
+        '<span class="s-main"><strong>' + hl(item.name, query) + '</strong>' +
         '<p>' + hl(item.summary, query) + '</p></span>' +
         '<span class="s-meta">' + h(LN(d)) + '<br>' + yearLabel(item.milestones[0] ? item.milestones[0].year : item.year) + '</span></a>';
     }).join('');
@@ -388,7 +391,7 @@
     else if (e.key === 'ArrowUp') { e.preventDefault(); setActiveResult(searchActive - 1); }
     else if (e.key === 'Enter') {
       var active = searchResults.querySelector('.s-result.is-active');
-      if (active) { e.preventDefault(); location.hash = active.getAttribute('href'); closeSearch(); }
+      if (active) { e.preventDefault(); navigate(active.getAttribute('href')); closeSearch(); }
     } else if (e.key === 'Escape') { closeSearch(); }
   });
   searchResults.addEventListener('mousemove', function (e) {
@@ -426,8 +429,8 @@
       '<div class="domain-card-top"><span class="num">' + String(i + 1).padStart(2, '0') + '</span>' +
       '<span class="domain-card-count">' + list.length + ' topics' + '</span></div>' +
       '<h3>' + h(LN(d)) + '</h3>' +
-      '<p class="domain-card-en">' + h(d.en) + '</p>' +
-      '<p class="domain-card-blurb">' + h(d.shortEn) + '. ' + h(names) + '…</p>' +
+      (d.en ? '<p class="domain-card-en">' + h(d.en) + '</p>' : '') +
+      '<p class="domain-card-blurb">' + h(d.short || d.shortEn || '') + '. ' + h(names) + '…</p>' +
       '<span class="domain-card-go">' + 'Enter domain' + ' <span>→</span></span>' +
       '</a>';
   }
@@ -437,8 +440,8 @@
     return '<a class="topic-row reveal" href="' + topicHref(t) + '" style="--c:' + d.color + '">' +
       '<span class="topic-row-year">' + yearLabel(t.year) + '</span>' +
       '<span class="topic-row-main">' +
-      '<span class="topic-row-title"><strong>' + h(LN(t)) + '</strong><em>' + h(LS(t)) + '</em></span>' +
-      '<span class="topic-row-summary">' + h(t.summaryEn) + '</span>' +
+      '<span class="topic-row-title"><strong>' + h(LN(t)) + '</strong>' + (LS(t) ? '<em>' + h(LS(t)) + '</em>' : '') + '</span>' +
+      '<span class="topic-row-summary">' + h(t.summary || t.summaryEn || '') + '</span>' +
       '</span>' +
       '<span class="topic-row-arrow" aria-hidden="true">→</span>' +
       '</a>';
@@ -448,10 +451,10 @@
     var steps = p.steps.map(function (id) { return topicById.get(id); }).filter(Boolean);
     return '<a class="path-card reveal" href="#/path/' + p.id + '">' +
       '<div class="path-card-top"><span class="num">' + String(i + 1).padStart(2, '0') + '</span>' +
-      '<span class="path-level">' + h(p.levelEn || p.level) + '</span></div>' +
-      '<h3>' + h(p.en || p.title) + '</h3>' +
-      '<p class="path-card-en">' + h(p.en) + '</p>' +
-      '<p class="path-card-blurb">' + h(p.blurbEn || p.blurb) + '</p>' +
+      '<span class="path-level">' + h(p.level || p.levelEn || '') + '</span></div>' +
+      '<h3>' + h(p.title || p.en) + '</h3>' +
+      (p.en && p.en !== p.title ? '<p class="path-card-en">' + h(p.en) + '</p>' : '') +
+      '<p class="path-card-blurb">' + h(p.blurb || p.blurbEn || '') + '</p>' +
       '<div class="path-steps">' + steps.slice(0, 4).map(function (t, k) {
         return '<span>' + (k + 1) + '. ' + h(LN(t)) + '</span>';
       }).join('') + (steps.length > 4 ? '<span>… ' + '' + steps.length + ' stops' + '</span>' : '') + '</div>' +
@@ -576,8 +579,8 @@
           '<div class="index-domain-head">' +
           '<span class="index-num">' + String(i + 1).padStart(2, '0') + '</span>' +
           '<div><h2><a href="#/domain/' + d.id + '">' + h(LN(d)) + '</a></h2>' +
-          '<p class="index-en">' + h(d.en) + '</p></div>' +
-          '<p class="index-blurb">' + h(d.blurbEn) + '</p>' +
+          (d.en ? '<p class="index-en">' + h(d.en) + '</p>' : '') + '</div>' +
+          '<p class="index-blurb">' + h(d.blurb || d.blurbEn || '') + '</p>' +
           '</div>' +
           '<div class="index-topics">' + domainTopics(d.id).map(function (t) {
             return '<a href="' + topicHref(t) + '"><span>' + yearLabel(t.year) + '</span>' + h(LN(t)) + '</a>';
@@ -636,10 +639,10 @@
     chronology.sort(function (a, b) { return a.year - b.year; });
     return '<section class="domain-hero" style="--c:' + d.color + '">' +
       '<div class="wrap">' +
-      '<p class="eyebrow">Domain ' + String(idx).padStart(2, '0') + ' — ' + h(d.en) + '</p>' +
+      '<p class="eyebrow">Domain ' + String(idx).padStart(2, '0') + (d.en ? ' — ' + h(d.en) : '') + '</p>' +
       '<h1>' + h(LN(d)) + '</h1>' +
-      '<p class="domain-hero-lead">' + h(d.blurbEn) + '</p>' +
-      '<div class="domain-hero-meta"><span>' + list.length + ' topics' + '</span><span>' + rangeOf(d.id) + '</span><span>' + h(d.shortEn) + '</span></div>' +
+      '<p class="domain-hero-lead">' + h(d.blurb || d.blurbEn || '') + '</p>' +
+      '<div class="domain-hero-meta"><span>' + list.length + ' topics' + '</span><span>' + rangeOf(d.id) + '</span><span>' + h(d.short || d.shortEn || '') + '</span></div>' +
       '</div></section>' +
       '<section class="section section-tight"><div class="wrap">' +
       '<div class="topic-list">' + list.map(topicRow).join('') + '</div>' +
@@ -752,8 +755,8 @@
       ((isEn && t.tagsEn && t.tagsEn.length) ? t.tagsEn : t.tags).map(function (tag) { return '<span class="chip chip-plain">' + h(tag) + '</span>'; }).join('') +
       '</div>' +
       '<h1>' + h(LN(t)) + '</h1>' +
-      '<p class="topic-en">' + h(t.en) + '</p>' +
-      '<p class="topic-summary">' + h(t.summaryEn) + '</p>' +
+      (t.en && t.en !== t.name ? '<p class="topic-en">' + h(t.en) + '</p>' : '') +
+      '<p class="topic-summary">' + h(t.summary || t.summaryEn || '') + '</p>' +
       statusBar(t) +
       topicTool(t) +
       '</header>' +
@@ -806,10 +809,10 @@
     var i = CS.paths.indexOf(p);
     return '<section class="page-head">' +
       '<div class="wrap">' +
-      '<p class="eyebrow">Path ' + String(i + 1).padStart(2, '0') + ' — ' + h(p.en) + '</p>' +
-      '<h1>' + h(p.en || p.title) + '</h1>' +
-      '<p class="page-head-lead">' + h(p.blurbEn || p.blurb) + '</p>' +
-      '<div class="page-head-meta"><span>' + steps.length + ' stops' + '</span><span>' + h(p.levelEn || p.level) + '</span></div>' +
+      '<p class="eyebrow">Path ' + String(i + 1).padStart(2, '0') + (p.en ? ' — ' + h(p.en) : '') + '</p>' +
+      '<h1>' + h(p.title || p.en) + '</h1>' +
+      '<p class="page-head-lead">' + h(p.blurb || p.blurbEn || '') + '</p>' +
+      '<div class="page-head-meta"><span>' + steps.length + ' stops' + '</span><span>' + h(p.level || p.levelEn || '') + '</span></div>' +
       '</div></section>' +
       '<section class="section section-tight"><div class="wrap"><ol class="path-steps-list">' +
       steps.map(function (t, k) {
@@ -819,8 +822,8 @@
           '<div class="step-body">' +
           '<p class="step-domain">' + h(LN(d)) + ' · ' + yearLabel(t.year) + '</p>' +
           '<h2><a href="' + topicHref(t) + '">' + h(LN(t)) + '</a></h2>' +
-          '<p class="step-en">' + h(t.en) + '</p>' +
-          '<p class="step-summary">' + h(t.summaryEn) + '</p>' +
+          (t.en && t.en !== t.name ? '<p class="step-en">' + h(t.en) + '</p>' : '') +
+          '<p class="step-summary">' + h(t.summary || t.summaryEn || '') + '</p>' +
           '<a class="text-link" href="' + topicHref(t) + '">' + 'Read this stop' + ' <span>→</span></a>' +
           '</div></li>';
       }).join('') + '</ol>' +
@@ -903,7 +906,7 @@
       '<div class="next-list">' + (next.length ? next.map(function (t) {
         return '<a class="next-item" href="' + topicHref(t) + '" style="--c:' + domainOf(t).color + '">' +
           '<span class="next-year">' + yearLabel(t.year) + '</span>' +
-          '<span class="next-body"><strong>' + h(LN(t)) + '</strong><em>' + h(LN(domainOf(t))) + '</em><p>' + h(t.summaryEn) + '</p></span>' +
+          '<span class="next-body"><strong>' + h(LN(t)) + '</strong><em>' + h(LN(domainOf(t))) + '</em><p>' + h(t.summary || t.summaryEn || '') + '</p></span>' +
           '<span class="next-go">→</span></a>';
       }).join('') : '<p class="empty-note">'+'Every topic is touched. Go back to the ones you can explain and push them to built.'+'</p>') +
       '</div>' +
@@ -1202,7 +1205,7 @@
     }).join('') + '</g>');
 
     parts.push('<g class="hubs">' + g.hubs.map(function (hub) {
-      return '<g class="hub" data-domain="' + hub.d.id + '" transform="translate(' + hub.x.toFixed(1) + ' ' + hub.y.toFixed(1) + ')" style="--c:' + hub.d.color + '">' +
+      return '<g class="hub" data-domain="' + hub.d.id + '" tabindex="0" role="link" aria-label="' + h(LN(hub.d) + ' · ' + hub.list.length + ' topics') + '" transform="translate(' + hub.x.toFixed(1) + ' ' + hub.y.toFixed(1) + ')" style="--c:' + hub.d.color + '">' +
         '<circle class="hub-ring" r="' + hub.R + '"/>' +
         '<text class="hub-label" y="-1">' + h(LN(hub.d)) + '</text>' +
         '<text class="hub-count" y="17">' + hub.list.length + ' topics</text>' +
@@ -1231,9 +1234,11 @@
       svg.classList.toggle('show-labels', k > 1.65);
     }
     function svgPoint(clientX, clientY) {
+      if (!svg.createSVGPoint) return { x: clientX, y: clientY };
       var pt = svg.createSVGPoint();
       pt.x = clientX; pt.y = clientY;
-      return pt.matrixTransform(svg.getScreenCTM().inverse());
+      var ctm = svg.getScreenCTM();
+      return ctm ? pt.matrixTransform(ctm.inverse()) : { x: clientX, y: clientY };
     }
     function zoomAt(px, py, factor) {
       var k2 = clamp(k * factor, 0.55, 4.5);
@@ -1248,10 +1253,12 @@
        assigning location.hash: a hash change would re-render the whole page and throw
        away the zoom we just set. */
     function setAddress(id) {
-      if (!history.replaceState) return;
-      var base = (window.__ATLAS__ && window.__ATLAS__.base) || '';
-      var url = base + '/map/' + (id && id !== 'all' ? id + '/' : '');
-      history.replaceState(null, '', url);
+      if (!history.replaceState || location.protocol === 'file:') return;
+      try {
+        var base = (window.__ATLAS__ && window.__ATLAS__.base) || '';
+        var url = base + '/map/' + (id && id !== 'all' ? id + '/' : '');
+        history.replaceState(null, '', url);
+      } catch (e) {}
     }
 
     function reset(skipAddress) {
@@ -1295,7 +1302,9 @@
       var p = svgPoint(e.clientX, e.clientY);
       drag = { p: p, tx: tx, ty: ty };
       moved = false;
-      svg.setPointerCapture(e.pointerId);
+      try {
+        if (svg.setPointerCapture) svg.setPointerCapture(e.pointerId);
+      } catch (err) {}
       svg.classList.add('is-dragging');
     });
     svg.addEventListener('pointermove', function (e) {
@@ -1325,15 +1334,17 @@
     svg.addEventListener('click', function (e) {
       if (moved) { moved = false; return; }
       var node = e.target.closest('.node');
-      if (node) { location.hash = '#/topic/' + node.dataset.id; return; }
+      if (node) { navigate('#/topic/' + node.dataset.id); return; }
       var hub = e.target.closest('.hub');
-      if (hub) { location.hash = '#/domain/' + hub.dataset.domain; }
+      if (hub) { navigate('#/domain/' + hub.dataset.domain); }
     });
 
     svg.addEventListener('keydown', function (e) {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       var node = document.activeElement && document.activeElement.closest ? document.activeElement.closest('.node') : null;
-      if (node) { e.preventDefault(); location.hash = '#/topic/' + node.dataset.id; }
+      if (node) { e.preventDefault(); navigate('#/topic/' + node.dataset.id); return; }
+      var hub = document.activeElement && document.activeElement.closest ? document.activeElement.closest('.hub') : null;
+      if (hub) { e.preventDefault(); navigate('#/domain/' + hub.dataset.domain); }
     });
 
     svg.addEventListener('focusin', function (e) {
@@ -1345,9 +1356,9 @@
       if (tip) {
         var d = domainOf(t);
         tip.innerHTML = '<span class="tip-year">' + yearLabel(t.year) + ' · ' + h(LN(d)) + '</span>' +
-          '<strong>' + h(LN(t)) + '</strong><em>' + h(LS(t)) + '</em><p>' + h(t.summaryEn) + '</p>';
+          '<strong>' + h(LN(t)) + '</strong>' + (LS(t) ? '<em>' + h(LS(t)) + '</em>' : '') + '<p>' + h(t.summary || t.summaryEn || '') + '</p>';
         tip.hidden = false;
-        tip.style.transform = 'translate(' + Math.min(nb.right + 8, window.innerWidth - 290) + 'px,' + Math.min(nb.top, window.innerHeight - 160) + 'px)';
+        tip.style.transform = 'translate(' + Math.max(8, Math.min(nb.right + 8, window.innerWidth - 290)) + 'px,' + Math.max(8, Math.min(nb.top, window.innerHeight - 160)) + 'px)';
       }
     });
     svg.addEventListener('focusout', function (e) {
@@ -1370,7 +1381,7 @@
       if (tip) {
         var d = domainOf(t);
         tip.innerHTML = '<span class="tip-year">' + yearLabel(t.year) + ' · ' + h(LN(d)) + '</span>' +
-          '<strong>' + h(LN(t)) + '</strong><em>' + h(LS(t)) + '</em><p>' + h(t.summaryEn) + '</p>';
+          '<strong>' + h(LN(t)) + '</strong>' + (LS(t) ? '<em>' + h(LS(t)) + '</em>' : '') + '<p>' + h(t.summary || t.summaryEn || '') + '</p>';
         tip.hidden = false;
       }
     });
@@ -1381,7 +1392,7 @@
       var w = tip.offsetWidth, hh = tip.offsetHeight;
       if (x + w > window.innerWidth - 12) x = e.clientX - w - pad;
       if (y + hh > window.innerHeight - 12) y = e.clientY - hh - pad;
-      tip.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      tip.style.transform = 'translate(' + Math.max(8, x) + 'px,' + Math.max(8, y) + 'px)';
     });
     svg.addEventListener('mouseout', function (e) {
       if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.node')) return;
@@ -1519,15 +1530,41 @@
 
   var state = { route: 'home', title: '' };
 
+  function navigate(target) {
+    if (!target) return;
+    var clean = target.replace(/^#\/?/, '').replace(/^\//, '');
+    if (window.__ATLAS__ && location.protocol !== 'file:') {
+      var bits = clean.split('#');
+      var sub = bits[0];
+      var hash = bits[1] ? '#' + bits[1] : '';
+      var base = (window.__ATLAS__.base || '') + '/';
+      location.href = base + (sub ? sub + '/' : '') + hash;
+    } else {
+      location.hash = '#/' + clean;
+    }
+  }
+
   function parseHash() {
+    if (location.hash && location.hash.indexOf('#/') === 0) {
+      var raw = location.hash.replace(/^#\/?/, '').split('#')[0];
+      var qi = raw.indexOf('?');
+      if (qi >= 0) raw = raw.slice(0, qi);
+      return raw.split('/').filter(Boolean);
+    }
     if (window.__ATLAS__ && window.__ATLAS__.route) {
       return String(window.__ATLAS__.route).split('/').filter(Boolean);
     }
-    var raw = location.hash.replace(/^#\/?/, '');
-    raw = raw.split('#')[0];
-    var qi = raw.indexOf('?');
-    if (qi >= 0) raw = raw.slice(0, qi);
-    return raw.split('/').filter(Boolean);
+    if (location.hash) {
+      var raw = location.hash.replace(/^#\/?/, '');
+      if (raw.indexOf('/') === -1 && raw.indexOf('#') === -1) {
+        return [];
+      }
+      raw = raw.split('#')[0];
+      var qi = raw.indexOf('?');
+      if (qi >= 0) raw = raw.slice(0, qi);
+      return raw.split('/').filter(Boolean);
+    }
+    return [];
   }
 
   function setNav(route) {
@@ -1537,10 +1574,11 @@
   }
 
   function render() {
-    var seg = (location.hash && location.hash.indexOf('#/') !== 0) ? [] : parseHash();
+    var seg = parseHash();
     var html = '';
     var route = '';
     var title = state.title;
+    var desc = '';
 
     document.body.classList.remove('nav-open');
     menuBtn.setAttribute('aria-expanded', 'false');
@@ -1549,36 +1587,45 @@
       html = viewHome();
       route = 'home';
       title = 'CS Atlas · A map of computer science';
+      desc = 'A living map of computer science: 13 domains, 75 topics and more than 300 milestones, from Euclid’s algorithm to generative AI.';
     } else if (seg[0] === 'map') {
       html = viewMap();
       route = 'map';
-      title = 'The Atlas · CS Atlas';
+      var mapDomain = seg[1] && domainById.get(seg[1]);
+      title = mapDomain ? LN(mapDomain) + ' · The Atlas · CS Atlas' : 'The Atlas · CS Atlas';
+      desc = mapDomain ? 'Interactive atlas graph focused on ' + LN(mapDomain) + ': ' + (mapDomain.short || mapDomain.blurb || '') : 'An interactive, visual map of computer science: 13 domains, 75 topics and milestones.';
     } else if (seg[0] === 'timeline') {
       html = viewTimeline();
       route = 'timeline';
       title = 'Timeline · CS Atlas';
+      desc = 'Chronological timeline of 326 computer science milestones across 13 domains and six eras.';
     } else if (seg[0] === 'domains') {
       html = viewDomains();
       route = 'domains';
       title = 'Domains · CS Atlas';
+      desc = 'Browse all 75 topics across 13 domains of computer science, from foundations to distributed systems.';
     } else if (seg[0] === 'paths') {
       html = viewPaths();
       route = 'paths';
       title = 'Paths · CS Atlas';
+      desc = 'Story-shaped learning paths through computer science: theory, hardware, networking, AI, and software engineering.';
     } else if (seg[0] === 'progress') {
       html = viewProgress();
       route = 'progress';
       title = 'My progress · CS Atlas';
+      desc = 'Track your learning progress, mastery levels, review schedule, and knowledge blind spots.';
     } else if (seg[0] === 'courses' && seg[1] === 'nand2tetris') {
       var slug = hwSlug(seg);
       if (!slug) {
         html = viewHardware();
         route = 'hardware';
         title = 'The hardware course · CS Atlas';
+        desc = 'Fifteen steps from a single NAND gate to a general-purpose computer: gates, ALU, RAM, CPU, and assembler.';
       } else if (HW_PAGES[slug]) {
         html = CS[HW_PAGES[slug].ui].view();
         route = 'hardware';
         title = HW_PAGES[slug].title;
+        desc = HW_PAGES[slug].blurb || '';
       } else {
         html = viewNotFound();
       }
@@ -1586,33 +1633,49 @@
       html = CS.GiantsUI.view();
       route = 'giants';
       title = 'Courses · standing on shoulders · CS Atlas';
+      desc = 'Classic open university courses studied alongside the CS Atlas from MIT, Stanford, Berkeley, and CMU.';
     } else if (seg[0] === 'path' && seg[1]) {
       var p = CS.paths.filter(function (x) { return x.id === seg[1]; })[0];
-      if (p) { html = viewPath(p); route = 'paths'; title = p.title + ' · CS Atlas'; }
+      if (p) {
+        html = viewPath(p);
+        route = 'paths';
+        title = p.title + ' · CS Atlas';
+        desc = p.blurb || '';
+      }
       else html = viewNotFound();
     } else if (seg[0] === 'domain' && seg[1]) {
       var d = domainById.get(seg[1]);
-      if (d) { html = viewDomain(d); route = 'domains'; title = LN(d) + ' · CS Atlas'; }
+      if (d) {
+        html = viewDomain(d);
+        route = 'domains';
+        title = LN(d) + ' · CS Atlas';
+        desc = d.blurb || d.short || '';
+      }
       else html = viewNotFound();
     } else if (seg[0] === 'topic' && seg[1]) {
       var t = topicById.get(seg[1]);
-      if (t) { html = viewTopic(t); route = 'domains'; title = LN(t) + ' · CS Atlas'; }
+      if (t) {
+        html = viewTopic(t);
+        route = 'domains';
+        title = LN(t) + ' · CS Atlas';
+        desc = t.summary || (t.body && t.body[0]) || '';
+      }
       else html = viewNotFound();
     } else if (seg[0] === 'about') {
       html = viewAbout();
       route = '';
       title = 'About · CS Atlas';
+      desc = 'Why CS Atlas exists, its editorial principles, and how to use it.';
     } else if (seg[0] === 'library') {
       html = viewLibrary();
       route = 'library';
       title = 'Library · sources behind the atlas';
+      desc = 'Primary sources, classic papers, books, and encyclopedias cited across the CS Atlas.';
     } else if (seg[0] === 'random') {
-      // A real page at /cs/random/ so the link works when prerendered. The redirect
-      // happens after mount, once the topic list exists: during the build we render
-      // the placeholder and let the page redirect itself in the visitor's browser.
       html = viewRandom();
       route = 'random';
       title = 'A random topic · CS Atlas';
+      desc = 'One of the 75 topics chosen at random.';
     } else {
       html = viewNotFound();
     }
@@ -1620,6 +1683,8 @@
     state.route = route;
     state.title = title;
     document.title = title;
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc && desc) metaDesc.setAttribute('content', desc);
 
     main.innerHTML = html;
     main.classList.remove('view-in');
@@ -1921,20 +1986,15 @@
     if (!a) return;
     e.preventDefault();
     var pick = TOPICS[Math.floor(Math.random() * TOPICS.length)];
-    if (pick) location.hash = '#/topic/' + pick.id;
+    if (pick) navigate('#/topic/' + pick.id);
   });
 
   document.addEventListener('click', function (e) {
-    if (!window.__ATLAS__) return;
+    if (!window.__ATLAS__ || location.protocol === 'file:') return;
     var a = e.target && e.target.closest ? e.target.closest('a[href^="#/"]') : null;
     if (!a) return;
     e.preventDefault();
-    var raw = a.getAttribute('href').slice(2);
-    var bits = raw.split('#');
-    var sub = bits[0];
-    var hash = bits[1] ? '#' + bits[1] : '';
-    var base = (window.__ATLAS__.base || '') + '/';
-    location.href = base + (sub ? sub + '/' : '') + hash;
+    navigate(a.getAttribute('href'));
   });
 
   window.addEventListener('hashchange', function () {

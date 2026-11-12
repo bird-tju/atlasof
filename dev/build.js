@@ -2,6 +2,12 @@
    Output: dist/<atlas>/<route>/index.html + dist/index.html portal + sitemap + robots
    Usage: node dev/build.js
 */
+/**
+ * [INPUT]: reads atlases/<id>/index.html and data files, uses jsdom for prerendering
+ * [OUTPUT]: generates dist/ directory with static HTML, sitemap.xml, robots.txt, _headers
+ * [POS]: static site generator and prerender build pipeline
+ * [PROTOCOL]: Update this header on change, then check GEMINI.md
+ */
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -278,6 +284,7 @@ async function main() {
 
       let out = rewrite(html, entry, route, version);
       out = out.replace('</head>', headLinks(entry, route, title, desc) + '\n</head>');
+      if (route === 'random') out = out.replace('</head>', '<meta name="robots" content="noindex">\n</head>');
       const dir = path.join(DIST, entry.base.slice(1), route);
       mkdir(dir);
       fs.writeFileSync(path.join(dir, 'index.html'), out, 'utf8');
@@ -298,10 +305,13 @@ async function main() {
   fs.writeFileSync(path.join(DIST, 'index.html'), portal(live), 'utf8');
   fs.writeFileSync(path.join(DIST, '404.html'), notFound(live), 'utf8');
 
+  urls.unshift({ base: '', route: '' });
+  const today = new Date().toISOString().split('T')[0];
+  const sitemapUrls = urls.filter(function (u) { return u.route !== 'random'; });
   const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    urls.map(function (u) {
-      return '  <url><loc>' + SITE + u.base + '/' + (u.route ? u.route + '/' : '') + '</loc></url>';
+    sitemapUrls.map(function (u) {
+      return '  <url>\n    <loc>' + SITE + u.base + '/' + (u.route ? u.route + '/' : '') + '</loc>\n    <lastmod>' + today + '</lastmod>\n  </url>';
     }).join('\n') +
     '\n</urlset>\n';
   fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemap, 'utf8');

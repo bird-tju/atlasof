@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: loads atlases/cs/index.html via jsdom, simulates browser interactions
+ * [OUTPUT]: asserts 40+ behavioral checks (routes, widgets, search, DOM structures)
+ * [POS]: headless end-to-end smoke test suite
+ * [PROTOCOL]: Update this header on change, then check GEMINI.md
+ */
 const fs = require('fs');
 const path = require('path');
 const { JSDOM, VirtualConsole } = require('jsdom');
@@ -84,7 +90,34 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   await go('#/domains');
   check('domains', () => {
-    if ($('.index-domain').length < 8) throw new Error('domain cards: ' + $('.index-domain').length);
+    if ($$('.index-domain').length < 8) throw new Error('domain cards: ' + $$('.index-domain').length);
+    const blurb = doc.querySelector('.index-blurb');
+    if (!blurb || !blurb.textContent.trim()) throw new Error('domain index blurb is empty');
+  });
+
+  await go('#/domain/foundations');
+  check('domain page', () => {
+    const lead = doc.querySelector('.domain-hero-lead');
+    if (!lead || !lead.textContent.trim()) throw new Error('domain hero lead is empty');
+    const meta = doc.querySelector('.domain-hero-meta span:last-child');
+    if (!meta || !meta.textContent.trim()) throw new Error('domain hero meta short text is empty');
+  });
+
+  await go('#/topic/formal-logic');
+  check('topic page', () => {
+    const summary = doc.querySelector('.topic-summary');
+    if (!summary || !summary.textContent.trim()) throw new Error('topic summary is empty');
+  });
+
+  check('search input', () => {
+    const input = doc.getElementById('search-input');
+    if (!input) throw new Error('search input not found');
+    input.value = 'compiler';
+    input.dispatchEvent(new win.Event('input', { bubbles: true }));
+    const count = doc.getElementById('search-count');
+    if (!count || !count.textContent) throw new Error('search failed for compiler');
+    input.value = '';
+    input.dispatchEvent(new win.Event('input', { bubbles: true }));
   });
 
   await go('#/paths');
