@@ -8,7 +8,14 @@ CS.addTopics([
     year: 1945,
     tags: ['Stored program', 'Architecture', 'Prototype'],
     summary: 'Put program and data in the same memory and a machine can run any task by rewriting its own instructions: the prototype of the modern computer.',
-    body: ['In 1945 the EDVAC report described the stored-program computer: five parts — arithmetic unit, control unit, memory, input and output — with instructions and data sharing memory, fetched and executed in address order. Before it, ENIAC was programmed by hand-patching cables; the stored program made software a thing independent of hardware.', 'The price is the “von Neumann bottleneck”: bandwidth between CPU and memory caps throughput. Hence caches, pipelines, multicore and prefetching. High-performance processors still bargain with that 1945 structure, while GPUs and neuromorphic chips try to route around it.'],
+    body: [
+      'Before 1945 a computer was a machine wired for one job. ENIAC could be reprogrammed, but that meant days of pulling cables and setting switches: the program lived in the physical arrangement of the machine, not in its memory. The EDVAC report changed where the program lives. Instructions became numbers, stored in the same memory as the data they operate on, and a machine with one fixed structure could then run any task by loading different numbers.',
+      'The structure that made this work is five parts: an arithmetic unit, a control unit, a memory, and input and output. The control unit reads an instruction from memory at the address the program counter holds, decodes it, and drives the arithmetic unit; the program counter advances, and the cycle repeats. Nothing in the hardware knows what job it is doing — that knowledge sits entirely in memory, which is why the same machine can be a word processor at 10am and a compiler at 11.',
+      'This is also why "programs can modify programs" became possible. If instructions are just words at addresses, a program can compute an address and write to it, changing what runs next: loaders, compilers, debuggers and self-modifying code all rest on that. It is a powerful property and a dangerous one, which is why later systems invented protection: read-only pages, execute-only regions, and the split between code and data segments.',
+      'The cost is the bottleneck. Instructions and data come from the same memory over the same path, so every cycle spent fetching an instruction is a cycle not spent fetching an operand, and memory is far slower than the logic that consumes it. The 1945 answer — one memory, one path — has been negotiated with ever since: caches put a small fast memory between CPU and main memory, pipelines overlap fetch with execute, prefetching guesses what comes next, and multicore shares the same memory among several workers, which moves the bottleneck rather than removing it.',
+      'Two corrections to the usual story. First, the report carried only von Neumann\'s name, but it summarised discussions with Eckert, Mauchly and others on the Moore School team; calling the design "von Neumann\'s" was an accident of authorship. Second, the label "von Neumann architecture" later became a contrast with Harvard architecture — separate instruction and data memories — even though the two are engineering trade-offs, not rival doctrines.',
+      'What survives is not a layout but an assumption: code and data are both bits, in one address space, and meaning comes from how they are read. Security vulnerabilities, virtual memory, JIT compilers and the ability to download a program at all are consequences of that single decision.'
+    ],
     milestones: [
       [1945, 'The EDVAC report', 'The classic description of the stored-program architecture.', 1],
       [1948, 'The Manchester Baby', 'The first machine to run a stored program.'],
@@ -18,7 +25,12 @@ CS.addTopics([
     concepts: [['Stored program', 'Instructions and data live in one addressable memory.'], ['The five parts', 'Arithmetic unit, control unit, memory, input and output.'], ['Von Neumann bottleneck', 'Bandwidth between CPU and memory becomes the performance ceiling.']],
     people: [['John von Neumann', '1903 – 1957', 'Proposed the stored-program architecture and game theory.'], ['Maurice Wilkes', '1913 – 2010', 'Led EDSAC and pioneered microprogramming.']],
     related: ['transistor-ic', 'microprocessor', 'memory-hierarchy'],
-    reading: [['First Draft of a Report on the EDVAC', 'John von Neumann', '1945'], ['Computer Organization and Design', 'Patterson & Hennessy', '1994']],
+    reading: [
+      ['First Draft of a Report on the EDVAC', 'John von Neumann', '1945', 'https://web.mit.edu/STS.035/www/PDFs/edvac.pdf', 'paper'],
+      ['Von Neumann architecture', 'Wikipedia', '2024', 'https://en.wikipedia.org/wiki/Von_Neumann_architecture', 'wiki'],
+      ['Computer Architecture: A Quantitative Approach', 'Hennessy & Patterson', '1990', '', 'book'],
+      ['Can Programming Be Liberated from the von Neumann Style?', 'John Backus', '1978', '', 'paper']
+    ],
     practice: 'Write a 30-line interpreter for a tiny stored-program machine: memory holds both instructions and data'
   },
 
